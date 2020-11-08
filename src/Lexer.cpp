@@ -1,23 +1,4 @@
 
-/**
- * This the example lexical analyzer code in pages 173 - 177 of the
- * textbook,
- *
- * Sebesta, R. W. (2012). Concepts of Programming Languages.
- * Pearson, 10th edition.
- *
- */
-
-/* front.c - a lexical analyzer system for simple arithmetic expressions */
-//#include <stdio.h>
-#include <ctype.h>
-//#include <string.h>
-/*#include <vector>
-#include <utility>
-#include <string>*/
-#include <iostream>
-//#include <fstream>
-//#include "../header/Lexer.h"
 #include "../header/Lexer.h"
 
 /******************************************
@@ -200,9 +181,6 @@ int Lexer::lex() {
 vector<pair<int, string> > Lexer::get_Token(){
 
     getline(cin, input);
-
-    /*cout << "input : " << input << endl;
-    cout << "size : " <<input.size()<<endl;*/
 
     getChar();
 
