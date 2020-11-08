@@ -4,6 +4,8 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <ctype.h>
+#include <iostream>
 
 /* Character classes */
 #define LETTER 0
