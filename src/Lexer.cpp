@@ -9,83 +9,22 @@
  */
 
 /* front.c - a lexical analyzer system for simple arithmetic expressions */
-#include <stdio.h>
+//#include <stdio.h>
 #include <ctype.h>
-#include <string.h>
-#include <vector>
+//#include <string.h>
+/*#include <vector>
 #include <utility>
-#include <string>
+#include <string>*/
 #include <iostream>
-#include <fstream>
-
-using namespace std;
-
-/* Global Variable */
-int nextToken;
-int charClass;
-char lexeme [100];
-char nextChar;
-int lexLen;
-int token;
-//int nextToken;
-
-FILE *in_fp;
-FILE *out_fp;
-FILE *test_fp;
-
-vector<pair<int,string>> ret;
-
-/* Local Function declarations */
-void addChar();
-void getChar();
-void getNonBlank();
-int lex();
-
-/* Character classes */
-#define LETTER 0
-#define DIGIT 1
-#define OPERATOR 2
-#define UNKNOWN 99
-
-/* Token codes */
-#define INT_LIT 10
-#define IDENT 11
-
-/* Arithmetic Operations */
-#define LEFT_PAREN 20
-#define RIGHT_PAREN 21
-#define SEMI 22
-#define FUNCTION 23
-#define QUOATE 24
-/* Reserved Words */
-
-vector<pair<int,string>> get_Token(){
-    
-    /* Open the input data file and process its contents */
-    out_fp = fopen("code.out", "w");
-    
-//    if ((in_fp = fopen("test.in", "r")) == NULL) {
-//        printf("ERROR - cannot open code.in \n");
-//    } else {
-//        getChar();
-//        do {
-//            lex();
-//        } while (nextToken != EOF);
-//    }
-     
-    getchar();
-    do{
-        lex();
-    } while (nextToken != EOF);
-     
-    return ret;
-}
+//#include <fstream>
+//#include "../header/Lexer.h"
+#include "../header/Lexer.h"
 
 /******************************************
  * lookup - a function to lookup operators
  * and parentheses and return the token
  ******************************************/
-int lookup(char ch) {
+int Lexer::lookup(char ch) {
     switch (ch) {
         case '(':
             addChar();
@@ -133,7 +72,7 @@ int lookup(char ch) {
  *          ATOM, NULL, NUMBERP, ZEROP, MINUSP, EQUAL, <, >, <= >=, STRINGP, IF, COND
  */
 
-int is_Function(){
+int Lexer::is_Function(){
    if(!strcmp(lexeme, "SETQ") || !strcmp(lexeme, "LIST") ||!strcmp(lexeme, "CAR") ||!strcmp(lexeme, "CDR") ||!strcmp(lexeme, "NTH") ||!strcmp(lexeme, "CONS") ||!strcmp(lexeme, "REVERSE") ||!strcmp(lexeme, "APPEND") ||!strcmp(lexeme, "LENGTH") ||!strcmp(lexeme, "MEMBER") ||!strcmp(lexeme, "ASSOC") ||!strcmp(lexeme, "REMOVE") ||!strcmp(lexeme, "SUBST") ||!strcmp(lexeme, "ATOM") ||!strcmp(lexeme, "NULL") ||!strcmp(lexeme, "NUMBERP") ||!strcmp(lexeme, "ZEROP") ||!strcmp(lexeme, "MINUSP") ||!strcmp(lexeme, "EQUAL") ||!strcmp(lexeme, "<=") ||!strcmp(lexeme, ">=")||!strcmp(lexeme, ">")||!strcmp(lexeme, "<") ||!strcmp(lexeme, "STRINGP") ||!strcmp(lexeme, "IF") ||!strcmp(lexeme, "COND")){
       return FUNCTION;
    }
@@ -147,7 +86,7 @@ int is_Function(){
 /**************************************************/
 /* addChar - a function to add nextChar to lexeme */
 /**************************************************/
-void addChar() {
+void Lexer::addChar() {
     if (lexLen <= 98) {  // max length of Lexime is 99
         lexeme[lexLen++] = nextChar;
         lexeme[lexLen] = 0; // '\0'
@@ -160,8 +99,9 @@ void addChar() {
 /* getChar - a function to get the next character
           of input and determine its character class */
 /*****************************************************/
-void getChar() {
-    if ((nextChar = getc(stdin)) != EOF) {
+void Lexer::getChar() {
+    if (input.size() != 0) {
+        nextChar = input.front();
         if (isalpha(nextChar))
             charClass = LETTER;
         else if (isdigit(nextChar))
@@ -169,7 +109,14 @@ void getChar() {
         else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
             charClass = OPERATOR;
         else
-         charClass = UNKNOWN;
+            charClass = UNKNOWN;
+
+        if(input.size() == 1){
+            input = '\0';
+            charClass = EOF;
+        }else{
+            input = input.substr(1, input.length() - 1);
+        }
     } else {
         charClass = EOF;
     }
@@ -179,33 +126,16 @@ void getChar() {
 /* getNonBlank - a function to call getChar until it
            returns a non-whitespace character        */
 /*****************************************************/
-void getNonBlank() {
+void Lexer::getNonBlank() {
     while (isspace(nextChar))
       getChar();
 }
-
-void writeFile(int token, char *lexeme, FILE *fp) {
-   
-   char buffer1[100] = "Next token is : ";
-   char buffer2[100] = ", Next lexeme is ";
-   char c_token[10];
-   
-   sprintf(c_token, "%d", token);
-   
-   strcat(buffer1, c_token);
-   strcat(buffer2, lexeme);
-   strcat(buffer1, buffer2);
-   buffer1[strlen(buffer1)] = '\n';
-   
-   fputs(buffer1, fp);
-}
-
 
 /*****************************************************/
 /* lex - a simple lexical analyzer for arithmetic
          expressions                                 */
 /*****************************************************/
-int lex() {
+int Lexer::lex() {
     lexLen = 0;
     getNonBlank();
 
@@ -259,55 +189,26 @@ int lex() {
     } /* End of switch */
 
     printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
+
     string str(lexeme);
+
     ret.push_back(make_pair(nextToken, lexeme));
-    //writeFile(nextToken, lexeme, out_fp);
+
     return nextToken;
-} /* End of function lex */
-
-/******************************************/
-/* main driver             */
-/******************************************/
-
-string input(){
-    string s;
-    cin >> s;
-    return s;
 }
 
-int main()
-{
-    /* Open the input data file and process its contents */
-    
-    /*
-    out_fp = fopen("code.out", "w");
-    if ((in_fp = fopen("code.in", "r")) == NULL) {
-        printf("ERROR - cannot open code.in \n");
-    } else {
-        getChar();
-        do {
-            lex();
-        } while (nextToken != EOF);
-    }
-   */
-    /*
-    test_fp = fopen("test.in", "w");
-    string input_string = input();
-    char input_char[1024];
-    strcpy(input_char, input_string.c_str());
-    //fputs(input_char, test_fp);
-    cout << input_char;
-    */
-    /*
-    string filePath = "test.in";
-    
-    ofstream writeFile(filePath.data());
-    if(writeFile.is_open()){
-        writeFile << input();
-    }
-    */
-    
-    vector<pair<int,string>> vec = get_Token();
-           
-    return 0;
+vector<pair<int, string> > Lexer::get_Token(){
+
+    getline(cin, input);
+
+    /*cout << "input : " << input << endl;
+    cout << "size : " <<input.size()<<endl;*/
+
+    getChar();
+
+    do{
+        lex();
+    } while (nextToken != EOF);
+     
+    return ret;
 }
