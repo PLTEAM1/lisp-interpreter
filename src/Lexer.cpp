@@ -58,7 +58,7 @@ int Lexer::is_Function(){
       return FUNCTION;
    }
    else if(!strcmp(lexeme,"\'")){
-       printf("quote");
+       //printf("quote");
        return FUNCTION;
    }
    else return IDENT;
