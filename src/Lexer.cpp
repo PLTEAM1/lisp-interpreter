@@ -82,6 +82,7 @@ void Lexer::addChar() {
 /*****************************************************/
 void Lexer::getChar() {
     if (input.size() != 0) {
+        
         nextChar = input.front();
         if (isalpha(nextChar))
             charClass = LETTER;
@@ -89,6 +90,8 @@ void Lexer::getChar() {
             charClass = DIGIT;
         else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
             charClass = OPERATOR;
+        else if(nextChar == '"')
+            charClass = QUOTE;
         else
             charClass = UNKNOWN;
 
@@ -151,6 +154,19 @@ int Lexer::lex() {
                 getChar();
             }
             nextToken = INT_LIT;
+            break;
+
+        /* Parse Strings */
+        case QUOTE:
+            do{
+                addChar();
+                getChar();
+            }while(nextChar != '"');
+
+            addChar();
+            getChar();
+ 
+            nextToken = STRING;
             break;
 
         /* Parentheses and operators */

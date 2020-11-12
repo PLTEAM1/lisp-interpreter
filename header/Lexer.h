@@ -7,6 +7,10 @@
 #include <ctype.h>
 #include <iostream>
 
+/* String */
+#define QUOTE 5
+#define STRING 12
+
 /* Character classes */
 #define LETTER 0
 #define DIGIT 1

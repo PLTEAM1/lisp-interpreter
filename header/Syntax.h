@@ -17,13 +17,13 @@ class Syntax {
         /* 기본 함수 */
         void basic_Function();
         /* predicate 함수 */
-        void predicate_Finction();
+        void predicate_Function();
         /* 조건문 */
         void conditional();
 
     public:
         /* syntax 분석 */
         void analyze(vector< pair<int, string> > token);
-}
+};
 
 #endif

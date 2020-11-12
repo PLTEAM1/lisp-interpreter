@@ -10,7 +10,7 @@ int main(){
     Syntax syntax;
 
     vector< pair<int, string> > token = lexer.get_Token();
-
+    
     syntax.analyze(token);
 
     return 0;
