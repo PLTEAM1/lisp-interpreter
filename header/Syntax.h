@@ -4,14 +4,17 @@
 #include <utility>
 #include <vector>
 #include <string>
+//#include "./Basic.h"
 
 using namespace std;
 
 class Syntax {
     private:
-        vector< pair<string, string> > variables;
+        //vector< pair<string, string> > variables;
+        //Basic basic;
+
         /* syntax 판단 함수 */
-        void check_Syntax();
+        string check_Syntax(vector< pair<int, string> > token);
         /* 산술 연산 */
         void arithmetic_Operation();
         /* 기본 함수 */
@@ -23,7 +26,7 @@ class Syntax {
 
     public:
         /* syntax 분석 */
-        void analyze(vector< pair<int, string> > token);
+        string analyze(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
 };
 
 #endif
