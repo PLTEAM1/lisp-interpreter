@@ -10,6 +10,8 @@ using namespace std;
 class Syntax {
     private:
         vector< pair<int, string> > token;
+        /* 괄호의 갯수 확인 함수 */
+        bool is_valid_paren(vector<pair<int,string>>);
         /* syntax 판단 함수 */
         void check_Syntax();
         /* 산술 연산 */
@@ -24,6 +26,6 @@ class Syntax {
     public:
         /* syntax 분석 */
         void analyze(vector< pair<int, string> > token);
-}
+};
 
 #endif
