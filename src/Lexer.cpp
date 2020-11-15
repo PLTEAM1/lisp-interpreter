@@ -1,5 +1,6 @@
 
 #include "../header/Lexer.h"
+#include <fstream>
 
 /******************************************
  * lookup - a function to lookup operators
@@ -58,7 +59,6 @@ int Lexer::is_Function(){
       return FUNCTION;
    }
    else if(!strcmp(lexeme,"\'")){
-       //printf("quote");
        return FUNCTION;
    }
    else return IDENT;
@@ -81,22 +81,6 @@ void Lexer::addChar() {
           of input and determine its character class */
 /*****************************************************/
 void Lexer::getChar() {
-    /*
-    if ((nextChar = getc(stdin)) != EOF){
-        if (isalpha(nextChar))
-            charClass = LETTER;
-        else if (isdigit(nextChar))
-            charClass = DIGIT;
-        else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
-            charClass = OPERATOR;
-        else
-            charClass = UNKNOWN;
-    }
-    else{
-        charClass = EOF;
-    }*/
-    
-    
     if (input.size() != 0) {
         nextChar = input.front();
         if (isalpha(nextChar))
@@ -185,7 +169,7 @@ int Lexer::lex() {
             break;
     } /* End of switch */
 
-    printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
+    //printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
 
     string str(lexeme);
 
@@ -196,13 +180,34 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
+    /*
     getline(cin, input);
     
     getChar();
-
+    
     do{
         lex();
     } while (nextToken != EOF);
      
+*/
+    
+    //test.in파일을 통해 테스트
+    ifstream readFile;
+    
+    readFile.open("test.in");
+    if(readFile.is_open()){
+        while(!readFile.eof()){
+            getline(readFile,input);
+            getChar();
+            
+            do{
+                lex();
+            } while (nextToken != EOF);
+            
+        }
+    }
+    
+
+    
     return ret;
 }
