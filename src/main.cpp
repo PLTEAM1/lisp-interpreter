@@ -8,10 +8,18 @@ int main(){
 
     Lexer lexer;
     Syntax syntax;
+    vector< pair<string, string> > variables;
+    string result;
 
     vector< pair<int, string> > token = lexer.get_Token();
 
-    syntax.analyze(token);
+    result = syntax.analyze(token, &variables);
+
+    cout << endl << "result : " << result << endl << endl;
+
+    for(int i=0;i<variables.size();i++){
+        cout << variables[i].first << " : " << variables[i].second << endl;
+    }
 
     return 0;
 }
