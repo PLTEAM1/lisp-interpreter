@@ -81,6 +81,22 @@ void Lexer::addChar() {
           of input and determine its character class */
 /*****************************************************/
 void Lexer::getChar() {
+    /*
+    if ((nextChar = getc(stdin)) != EOF){
+        if (isalpha(nextChar))
+            charClass = LETTER;
+        else if (isdigit(nextChar))
+            charClass = DIGIT;
+        else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
+            charClass = OPERATOR;
+        else
+            charClass = UNKNOWN;
+    }
+    else{
+        charClass = EOF;
+    }*/
+    
+    
     if (input.size() != 0) {
         
         nextChar = input.front();
@@ -95,7 +111,7 @@ void Lexer::getChar() {
         else
             charClass = UNKNOWN;
 
-        if(input.size() == 1){
+        if(input.size() == 0){
             input = '\0';
             charClass = EOF;
         }else{
@@ -203,7 +219,7 @@ int Lexer::lex() {
 vector<pair<int, string> > Lexer::get_Token(){
 
     getline(cin, input);
-
+    
     getChar();
 
     do{

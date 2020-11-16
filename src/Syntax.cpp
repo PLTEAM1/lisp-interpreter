@@ -1,4 +1,24 @@
 #include "../header/Syntax.h"
+#include <iostream>
+
+bool Syntax::is_valid_paren(vector<pair<int, string> > t){
+    
+    int Left_paren_count = 0;
+    int Right_paren_count = 0;
+    
+    for(auto &item : t){
+
+        if(item.second == "("){
+            Left_paren_count++;
+        }
+        else if(item.second == ")"){
+            Right_paren_count++;
+        }
+    }
+    
+    if(Left_paren_count == Right_paren_count) return true;
+    else return false;
+}
 
 #include <iostream>
 #include <cctype>
@@ -140,16 +160,16 @@ void Syntax::conditional(){
 void Syntax::analyze(vector< pair<int, string> > t){
 
     token = t;
-
-    /* syntax check - type, grammar...
+    
+    if(is_valid_paren(t)){
+        cout << "\nvalid";
+    }
+    else{
+        cout << "\nparen error";
+    }
+    
     while(!token.empty()){
         check_Syntax();
     }
-    */
-
-    /* yaewon 
-    token.erase(token.begin());
-    predicate_Function(token);
-    */
-    
 }
+
