@@ -39,6 +39,14 @@ int Lexer::lookup(char ch) {
             addChar();
             nextToken = FUNCTION;
             break;
+        case '\\':
+            addChar();
+            nextToken = BACKSLASH;
+            break;
+        case '#':
+            addChar();
+            nextToken = SHARP;
+            break;
         default:
             addChar();
             nextToken = EOF;
@@ -196,6 +204,7 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
+    
     getline(cin, input);
     
     getChar();
@@ -204,5 +213,25 @@ vector<pair<int, string> > Lexer::get_Token(){
         lex();
     } while (nextToken != EOF);
      
+
+    /*
+    //test.in파일을 통해 테스트
+    ifstream readFile;
+    
+    readFile.open("test.in");
+    if(readFile.is_open()){
+        while(!readFile.eof()){
+            getline(readFile,input);
+            getChar();
+            
+            do{
+                lex();
+            } while (nextToken != EOF);
+            
+        }
+    }
+    */
+
+    
     return ret;
 }
