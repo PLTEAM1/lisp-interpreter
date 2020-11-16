@@ -15,6 +15,7 @@ int main(){
 
     vector< pair<int, string> > token = lexer.get_Token();
 
+    token.erase(token.begin());
     result = syntax.analyze(token, &variables);
 
     for(int i=0;i<variables.size();i++){

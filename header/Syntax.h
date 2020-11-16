@@ -20,9 +20,6 @@ class Syntax {
         void arithmetic_Operation();
         /* 기본 함수 */
         void basic_Function(vector< pair<int, string> > token);
-        /* predicate 함수 */
-        bool isNumber(string str);
-        void predicate_Function(vector< pair<int, string> > t);
 
         /* 조건문 */
         void conditional();
