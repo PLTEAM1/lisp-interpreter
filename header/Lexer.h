@@ -28,6 +28,8 @@
 #define SEMI 22
 #define FUNCTION 23
 #define QUOATE 24
+#define BACKSLASH 25
+#define SHARP 26
 
 using namespace std;
 
