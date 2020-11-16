@@ -1,4 +1,6 @@
 #include "../header/Syntax.h"
+#include "../header/Basic.h"
+#include <cctype>
 #include <iostream>
 
 bool Syntax::is_valid_paren(vector<pair<int, string> > t){
@@ -20,12 +22,11 @@ bool Syntax::is_valid_paren(vector<pair<int, string> > t){
     else return false;
 }
 
-#include <iostream>
-#include <cctype>
-
-void Syntax::check_Syntax(){
+string Syntax::check_Syntax(vector< pair<int, string> > token){
 
     /* Syntax 판별 기능 구현 */
+
+    return "1";
 }
 
 void Syntax::arithmetic_Operation(){
@@ -33,9 +34,10 @@ void Syntax::arithmetic_Operation(){
     /* 산술 연산 기능 구현 */
 }
 
-void Syntax::basic_Function(){
+void Syntax::basic_Function(vector< pair<int, string> > token){
 
     /* 기본 함수 기능 구현 */
+        
 }
 
 bool Syntax::isNumber(string str){
@@ -157,19 +159,71 @@ void Syntax::conditional(){
     /* 조건문 구현 */
 }
 
-void Syntax::analyze(vector< pair<int, string> > t){
+string Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
 
-    token = t;
-    
-    if(is_valid_paren(t)){
-        cout << "\nvalid";
+    Basic basic;
+
+    string function_Name = token[0].second;
+
+    if(function_Name == "SETQ"){
+        /* SETQ Function ex) SETQ X (1 2 3)); */
+        return basic.setq(token, variables);
+
+    }else if(function_Name == "LIST"){
+        /* LIST Function */
+        return basic.list(token, variables);
+
+    }else if(function_Name == "CAR"){
+        /* CAR Function */
+        return basic.car(token);
+
+    }else if(function_Name == "CDR"){
+        /* CDR Function */
+        return basic.cdr(token);
+
+    }else if(function_Name == "CADDR"){
+        /* CADDR Function */
+        return basic.caddr(token);
+
+    }else if(function_Name == "NTH"){
+        /* NTH Function */
+        return basic.nth(token);
+      
+    }else if(function_Name == "CONS"){
+        /* CONS Function */
+        return basic.cons(token);
+
+    }else if(function_Name == "REVERSE"){
+        /* REVERSE Function */
+        return basic.reverse(token);
+
+    }else if(function_Name == "APPEND"){
+        /* APPEND Function */
+        return basic.append(token);
+
+    }else if(function_Name == "LENGTH"){
+        /* LENGTH Function */
+        return basic.length(token);
+
+    }else if(function_Name == "MEMBER"){
+        /* MEMBER Function */
+        return basic.member(token);
+
+    }else if(function_Name == "ASSOC"){
+        /* ASSOC Function */
+        return basic.assoc(token);
+
+    }else if(function_Name == "REMOVE"){
+        /* REMOVE Function */
+        return basic.remove(token);
+
+    }else if(function_Name == "SUBST"){
+        /* SUBST Function */
+        return basic.subst(token);
+
+    }else{
+        return "1";
     }
-    else{
-        cout << "\nparen error";
-    }
-    
-    while(!token.empty()){
-        check_Syntax();
-    }
+
+    return "0";
 }
-
