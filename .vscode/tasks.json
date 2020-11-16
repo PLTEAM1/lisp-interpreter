@@ -43,7 +43,8 @@
             "label": "exec",
             "type": "shell",
             "command": "${fileDirname}/${fileBasenameNoExtension}.out",
-            "group": "build"
+            "group": "build",
+            "problemMatcher": []
         }
     ]
 }

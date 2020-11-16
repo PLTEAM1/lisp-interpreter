@@ -4,15 +4,14 @@
 #include <utility>
 #include <vector>
 #include <string>
-//#include "./Basic.h"
 
 using namespace std;
 
 class Syntax {
     private:
-        //vector< pair<string, string> > variables;
-        //Basic basic;
-
+        vector< pair<int, string> > token;
+        /* 괄호의 갯수 확인 함수 */
+        bool is_valid_paren(vector<pair<int,string>>);
         /* syntax 판단 함수 */
         string check_Syntax(vector< pair<int, string> > token);
         /* 산술 연산 */
@@ -20,7 +19,9 @@ class Syntax {
         /* 기본 함수 */
         void basic_Function(vector< pair<int, string> > token);
         /* predicate 함수 */
-        void predicate_Finction();
+        bool isNumber(string str);
+        void predicate_Function(vector< pair<int, string> > t);
+
         /* 조건문 */
         void conditional();
 
