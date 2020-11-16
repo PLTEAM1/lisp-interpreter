@@ -54,7 +54,7 @@ int Lexer::lookup(char ch) {
  */
 
 int Lexer::is_Function(){
-   if(!strcmp(lexeme, "SETQ") || !strcmp(lexeme, "LIST") ||!strcmp(lexeme, "CAR") ||!strcmp(lexeme, "CDR") ||!strcmp(lexeme, "NTH") ||!strcmp(lexeme, "CONS") ||!strcmp(lexeme, "REVERSE") ||!strcmp(lexeme, "APPEND") ||!strcmp(lexeme, "LENGTH") ||!strcmp(lexeme, "MEMBER") ||!strcmp(lexeme, "ASSOC") ||!strcmp(lexeme, "REMOVE") ||!strcmp(lexeme, "SUBST") ||!strcmp(lexeme, "ATOM") ||!strcmp(lexeme, "NULL") ||!strcmp(lexeme, "NUMBERP") ||!strcmp(lexeme, "ZEROP") ||!strcmp(lexeme, "MINUSP") ||!strcmp(lexeme, "EQUAL") ||!strcmp(lexeme, "<=") ||!strcmp(lexeme, ">=")||!strcmp(lexeme, ">")||!strcmp(lexeme, "<") ||!strcmp(lexeme, "STRINGP") ||!strcmp(lexeme, "IF") ||!strcmp(lexeme, "COND")){
+   if(!strcasecmp(lexeme, "SETQ") || !strcasecmp(lexeme, "LIST") ||!strcasecmp(lexeme, "CAR") ||!strcasecmp(lexeme, "CDR") ||!strcasecmp(lexeme, "NTH") ||!strcasecmp(lexeme, "CONS") ||!strcasecmp(lexeme, "REVERSE") ||!strcasecmp(lexeme, "APPEND") ||!strcasecmp(lexeme, "LENGTH") ||!strcasecmp(lexeme, "MEMBER") ||!strcasecmp(lexeme, "ASSOC") ||!strcasecmp(lexeme, "REMOVE") ||!strcasecmp(lexeme, "SUBST") ||!strcasecmp(lexeme, "ATOM") ||!strcasecmp(lexeme, "NULL") ||!strcasecmp(lexeme, "NUMBERP") ||!strcasecmp(lexeme, "ZEROP") ||!strcasecmp(lexeme, "MINUSP") ||!strcasecmp(lexeme, "EQUAL") ||!strcasecmp(lexeme, "<=") ||!strcasecmp(lexeme, ">=")||!strcasecmp(lexeme, ">")||!strcasecmp(lexeme, "<") ||!strcasecmp(lexeme, "STRINGP") ||!strcasecmp(lexeme, "IF") ||!strcasecmp(lexeme, "COND")){
       return FUNCTION;
    }
    else if(!strcmp(lexeme,"\'")){
@@ -98,6 +98,7 @@ void Lexer::getChar() {
     
     
     if (input.size() != 0) {
+        
         nextChar = input.front();
         if (isalpha(nextChar))
             charClass = LETTER;
@@ -105,6 +106,8 @@ void Lexer::getChar() {
             charClass = DIGIT;
         else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
             charClass = OPERATOR;
+        else if(nextChar == '"')
+            charClass = QUOTE;
         else
             charClass = UNKNOWN;
 
@@ -167,6 +170,25 @@ int Lexer::lex() {
                 getChar();
             }
             nextToken = INT_LIT;
+            break;
+
+        /* Parse Strings */
+        case QUOTE:
+            addChar();
+            getChar();
+            
+            while(charClass == LETTER || charClass == DIGIT){
+                addChar();
+                getChar();
+            }
+            if(nextChar == '"'){
+                addChar();
+                getChar();
+            }else{
+                printf("Error - String is NOT completed\n");
+            }
+           
+            nextToken = STRING;
             break;
 
         /* Parentheses and operators */
