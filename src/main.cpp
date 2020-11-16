@@ -13,6 +13,7 @@ int main(){
 
     vector< pair<int, string> > token = lexer.get_Token();
 
+    token.erase(token.begin());
     result = syntax.analyze(token, &variables);
 
     cout << endl << "result : " << result << endl << endl;
