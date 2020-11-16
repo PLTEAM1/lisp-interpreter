@@ -17,7 +17,8 @@ int main(){
     try{
         vector< pair<int, string> > token = lexer.get_Token();
 
-        result = syntax.analyze(token, &variables);
+    token.erase(token.begin());
+    result = syntax.analyze(token, &variables);
 
         for(int i=0;i<variables.size();i++){
             cout << variables[i].first << " : ";
