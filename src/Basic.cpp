@@ -94,8 +94,9 @@ string Basic::list(vector< pair<int, string> > token, vector< pair<string, strin
                     string temp = (*variables)[i].second;
 
                     if(temp[0] == '('){
+                        string s;
                         for(int k=1; k<temp.length(); k++){
-                            string s;
+                            //string s;
                             if(temp[k] != ' ' && temp[k] != ')'){
                                 s.append(1, temp[k]);
                             }else{
@@ -133,51 +134,159 @@ string Basic::list(vector< pair<int, string> > token, vector< pair<string, strin
 
     return value;
 }
-string Basic::car(vector< pair<int, string> > token){
+string Basic::car(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
+    string value;
+    Syntax syntax;
+
+    for(int i=1;i<token.size();i++){
+        if(token[i].second == "\'"){
+            i+=2;
+            value = token[i].second;
+
+            if(value == "("){
+                // CAR '((X) Y Z))
+                for(int j=i+1;j<token.size();j++){
+                    if(token[j].first != 21){
+                        if(value.length() == 1){
+                            value += token[j].second;
+                        }else{
+                            value += " " + token[j].second;
+                        }
+                    }else{
+                        value += ")";
+                        break;
+                    }
+                }
+            }else if(value == "\'"){
+                // CAR '('X Y Z))
+                i+=1;
+                value = token[i].second;
+            }else{
+                if(token[i].first == 11){
+                    int check = 0;
+                    for(int j=0; variables->size(); j++){
+                        if((*variables)[i].first == token[i].second){
+                            check = 1;
+                            string temp = (*variables)[i].second;
+
+                            if(temp[0] == '('){
+                                string s;
+                                for(int k=1; k<temp.length(); k++){
+                                    //string s;
+                                    if(temp[k] != ' ' && temp[k] != ')'){
+                                        s.append(1, temp[k]);
+                                    }else{
+                                        if(value.length() == 1){
+                                            value += s;
+                                        }else{
+                                            value += " " + s;
+                                        }
+
+                                        s = "";
+                                        break;
+                                    }
+                                }
+                            }else{
+                                value = "error";
+                                break;
+                            }
+                        }
+                    }
+
+                    if(check == 0){
+                        value = "error";
+                        break;
+                    }
+                }
+            }
+
+            break;
+        }else {
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                string function_result;
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
+
+                function_result = syntax.analyze(new_token, variables);
+
+                if(function_result[0] == '('){
+                    if(function_result[1] == '('){
+                        for(int j=1; function_result.length();j++){
+                            if(function_result[j] != ')'){
+                                value.append(1, function_result[j]);
+                            }else{
+                                value.append(1, ')');
+                                break;
+                            }
+                        }
+                    }else{
+                        for(int j=1;function_result.length();j++){
+                            if(function_result[j] != ' '){
+                                value.append(1, function_result[j]);
+                            }else{
+                                break;
+                            }
+                        }
+                    }
+                }else{
+                    value = "error";
+                }
+
+                break;
+            }else{
+                value = "error";
+                break;
+            }
+        }
+    }
+
+    return value;
+
+}
+string Basic::cdr(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::cdr(vector< pair<int, string> > token){
+string Basic::caddr(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::caddr(vector< pair<int, string> > token){
+string Basic::nth(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::nth(vector< pair<int, string> > token){
+string Basic::cons(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::cons(vector< pair<int, string> > token){
+string Basic::reverse(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::reverse(vector< pair<int, string> > token){
+string Basic::append(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::append(vector< pair<int, string> > token){
+string Basic::length(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::length(vector< pair<int, string> > token){
+
+string Basic::member(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::member(vector< pair<int, string> > token){
+string Basic::assoc(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::assoc(vector< pair<int, string> > token){
+string Basic::remove(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }
-string Basic::remove(vector< pair<int, string> > token){
-    return "1";
-
-}
-string Basic::subst(vector< pair<int, string> > token){
+string Basic::subst(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
     return "1";
 
 }

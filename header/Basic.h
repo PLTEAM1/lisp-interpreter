@@ -13,18 +13,18 @@ class Basic{
     public:
         string setq(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
         string list(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string car(vector< pair<int, string> > token);
-        string cdr(vector< pair<int, string> > token);
-        string caddr(vector< pair<int, string> > token);
-        string nth(vector< pair<int, string> > token);
-        string cons(vector< pair<int, string> > token);
-        string reverse(vector< pair<int, string> > token);
-        string append(vector< pair<int, string> > token);
-        string length(vector< pair<int, string> > token);
-        string member(vector< pair<int, string> > token);
-        string assoc(vector< pair<int, string> > token);
-        string remove(vector< pair<int, string> > token);
-        string subst(vector< pair<int, string> > token);
+        string car(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string cdr(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string caddr(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string nth(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string cons(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string reverse(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string append(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string length(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string member(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string assoc(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string remove(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        string subst(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
 };
 
 #endif
