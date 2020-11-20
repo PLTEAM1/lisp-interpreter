@@ -40,6 +40,8 @@ class List{
         }
         
         void addList(class List list){
+            add("dummy");
+
             NODE* temp = list.head;
             if(head == NULL){
                 head = temp;
@@ -65,8 +67,49 @@ class List{
             }
         }
 
+        void insertValue(string data, int index){
+            NODE* node = new NODE;
+            node->data = data;
+            node->next = NULL;
+            node->list = NULL;
+
+            NODE* previous = head;
+            NODE* after = head;
+
+            for(int i=0;i<index;i++){
+                previous = after;
+                after = after->next;
+            }
+            previous->next = node;
+            node->next = after;
+            size++;
+        }
+
+        void insertList(class List list, int index){
+            NODE* node = new NODE;
+            node->data = "dummy";
+            node->next = NULL;
+            node->list = list.head;
+
+            NODE* previous = head;
+            NODE* after = head;
+
+            for(int i=0;i<index;i++){
+                previous = after;
+                after = after->next;
+            }
+
+            previous->next = node;
+            node->next = after;
+            size++;
+        }
+
         string back(){
             return tail->data;
+        }
+
+        string front(){
+            return head->data;
         }
 
         NODE* getHead(){
