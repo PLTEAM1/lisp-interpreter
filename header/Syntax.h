@@ -1,9 +1,11 @@
-#ifndef SYNTAX_H
-#define SYNTAX_H 
+#ifndef _SYNTAX_H
+#define _SYNTAX_H
 
 #include <utility>
 #include <vector>
 #include <string>
+#include "./Lisplist.h"
+#include "./Basic.h"
 
 using namespace std;
 
@@ -27,7 +29,7 @@ class Syntax {
 
     public:
         /* syntax 분석 */
-        string analyze(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        List analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
 };
 
 #endif
