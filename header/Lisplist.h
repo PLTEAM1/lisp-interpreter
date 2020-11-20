@@ -15,10 +15,12 @@ typedef struct NODE{
 class List{
     private:
         NODE *head, *tail;
+        int size;
     public:
         List(){
             head = NULL;
             tail = NULL;
+            size = 0;
         }
 
         void add(string data){
@@ -34,6 +36,7 @@ class List{
                 tail->next = temp;
                 tail = tail->next;
             }
+            size++;
         }
         
         void addList(class List list){
@@ -62,8 +65,16 @@ class List{
             }
         }
 
+        string back(){
+            return tail->data;
+        }
+
         NODE* getHead(){
             return head;
+        }
+
+        int getSize(){
+            return size;
         }
 };
 
