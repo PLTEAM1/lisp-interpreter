@@ -1,6 +1,8 @@
 #include "../header/Lexer.h"
+#include "../header/Lisplist.h"
 #include "../header/Syntax.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -8,18 +10,22 @@ int main(){
 
     Lexer lexer;
     Syntax syntax;
-    vector< pair<string, string> > variables;
-    string result;
+    vector< pair<string, List> > variables;
+    List result;
 
     vector< pair<int, string> > token = lexer.get_Token();
 
     result = syntax.analyze(token, &variables);
 
-    cout << endl << "result : " << result << endl << endl;
-
     for(int i=0;i<variables.size();i++){
-        cout << variables[i].first << " : " << variables[i].second << endl;
+        cout << variables[i].first << " : ";
+
+        variables[i].second.traverse(variables[i].second.getHead());
+
+        cout << endl;
     }
+
+    result.traverse(result.getHead());
 
     return 0;
 }

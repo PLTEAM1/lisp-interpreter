@@ -1,5 +1,6 @@
 #include "../header/Syntax.h"
-#include "../header/Basic.h"
+//#include "../header/Basic.h"
+//#include "../header/Lisplist.h"
 #include <cctype>
 #include <iostream>
 
@@ -159,7 +160,7 @@ void Syntax::conditional(){
     /* 조건문 구현 */
 }
 
-string Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
+List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
     Basic basic;
 
@@ -175,55 +176,55 @@ string Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, s
 
     }else if(function_Name == "CAR"){
         /* CAR Function */
-        return basic.car(token);
+        return basic.car(token, variables);
 
     }else if(function_Name == "CDR"){
         /* CDR Function */
-        return basic.cdr(token);
+        return basic.cdr(token, variables);
 
     }else if(function_Name == "CADDR"){
         /* CADDR Function */
-        return basic.caddr(token);
+        return basic.caddr(token, variables);
 
     }else if(function_Name == "NTH"){
         /* NTH Function */
-        return basic.nth(token);
+        return basic.nth(token, variables);
       
     }else if(function_Name == "CONS"){
         /* CONS Function */
-        return basic.cons(token);
+        return basic.cons(token, variables);
 
     }else if(function_Name == "REVERSE"){
         /* REVERSE Function */
-        return basic.reverse(token);
+        return basic.reverse(token, variables);
 
     }else if(function_Name == "APPEND"){
         /* APPEND Function */
-        return basic.append(token);
+        return basic.append(token, variables);
 
     }else if(function_Name == "LENGTH"){
         /* LENGTH Function */
-        return basic.length(token);
+        return basic.length(token, variables);
 
     }else if(function_Name == "MEMBER"){
         /* MEMBER Function */
-        return basic.member(token);
+        return basic.member(token, variables);
 
     }else if(function_Name == "ASSOC"){
         /* ASSOC Function */
-        return basic.assoc(token);
+        return basic.assoc(token, variables);
 
     }else if(function_Name == "REMOVE"){
         /* REMOVE Function */
-        return basic.remove(token);
+        return basic.remove(token, variables);
 
     }else if(function_Name == "SUBST"){
         /* SUBST Function */
-        return basic.subst(token);
+        return basic.subst(token, variables);
 
     }else{
-        return "1";
+        return List();
     }
 
-    return "0";
+    return List();
 }
