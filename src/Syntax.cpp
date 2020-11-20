@@ -1,5 +1,6 @@
 #include "../header/Syntax.h"
-#include "../header/Basic.h"
+//#include "../header/Basic.h"
+//#include "../header/Lisplist.h"
 #include <cctype>
 #include <iostream>
 
@@ -159,7 +160,7 @@ void Syntax::conditional(){
     /* 조건문 구현 */
 }
 
-string Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
+List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
     Basic basic;
 
@@ -222,8 +223,8 @@ string Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, s
         return basic.subst(token, variables);
 
     }else{
-        return "1";
+        return List();
     }
 
-    return "0";
+    return List();
 }
