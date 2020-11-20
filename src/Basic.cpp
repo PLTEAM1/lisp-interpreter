@@ -1,8 +1,10 @@
 #include "../header/Basic.h"
-//#include "../header/Syntax.h"
-//#include "../header/Lisplist.h"
 #include <iostream>
 
+/**********************************************************/
+/* addQuoteList - a function to add quote list '(1 2 (3 4))
+            returns next token index                      */
+/**********************************************************/
 int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List& origin){
     for(int i = index; i < token.size() ; i++){
         if(token[i].second == "("){
@@ -30,6 +32,11 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
     return token.size();
 }
 
+/**********************************************************/
+/* setq - a function to set variable(symbol and list) 
+            returns List - linked list
+                    symbol also a list with one node      */
+/**********************************************************/
 List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     string name = "";
     List return_Variable;
@@ -49,7 +56,8 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 variable.add(token[i].second);
 
                 variables->push_back(make_pair(name, variable));
-                return_Variable = variables->back().second;
+                //return_Variable = variables->back().second;
+                return_Variable = variable;
                 name = "";
             }else{
                 //error
@@ -60,31 +68,36 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 variable.add(token[i].second);
 
                 variables->push_back(make_pair(name, variable));
-                return_Variable = variables->back().second;
+                //return_Variable = variables->back().second;
+                return_Variable = variable;
                 name = "";
             }else{
                 name = token[i].second;
             }
         }else if(token[i].second == "\'"){
             if(name != ""){
+                i += 1;
                 vector< pair<int, string> > new_token;
                 
-                for(int j=i+2;j<token.size();j++){
+                for(int j=i+1;j<token.size();j++){
                     new_token.push_back(token[j]);
                 }
 
-                i = addQuoteList(new_token, 0, variable);
+                i += addQuoteList(new_token, 0, variable);
+
+                cout << "i : "<<i << endl;
 
                 variables->push_back(make_pair(name, variable));
-                return_Variable = variables->back().second;
+                //return_Variable = variables->back().second;
+                return_Variable = variable;
                 name = "";
             }else{
                 //error
                 return List();
             }
         }else{
-            if(name != ""){
-                if(token[i].first == 20){
+            if(token[i].first == 20){
+                if(name != ""){
                     vector< pair<int, string> > new_token;
                     int left_count = 0;
                     int check =0;
@@ -119,91 +132,72 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         variable.addList(newList);
                     }
 
-                }else if(token[i].first == 21 || token[i].first == -1){
-                    break;
+                    return_Variable = variable;
                 }else{
+                    //error
                     return List();
                 }
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
             }else{
-                //error
                 return List();
             }
         }
     }
 
+    cout << "return variable" << endl;
+
     return return_Variable;
 }
 
+/**********************************************************/
+/* list - a function to create list  
+            returns List - linked list                    */
+/**********************************************************/
 List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
-    return List();
-}
+    List variable;
 
-/*string Basic::list(vector< pair<int, string> > token, vector< pair<string, string> > *variables){
-    string value = "(";
-
-    for(int i=1; token.size();i++){
+    for(int i=1; token.size(); i++){
         if(token[i].first == 10 || token[i].first == 12){
-            if(value.length() == 1){
-                value += token[i].second;
-            }else{
-                value += " " + token[i].second;
-            }
+            variable.add(token[i].second);
         }else if(token[i].second == "\'"){
-            i += 1;
-            if(value.length() == 1){
-                value += token[i].second;
-            }else{
-                value += " " + token[i].second;
-            }
+            ++i;
+            variable.add(token[i].second);
         }else if(token[i].first == 11){
             int check = 0;
-            for(int j=0; variables->size(); j++){
+            for(int j=0; variables->size();j++){
                 if((*variables)[i].first == token[i].second){
                     check = 1;
-                    string temp = (*variables)[i].second;
 
-                    if(temp[0] == '('){
-                        string s;
-                        for(int k=1; k<temp.length(); k++){
-                            //string s;
-                            if(temp[k] != ' ' && temp[k] != ')'){
-                                s.append(1, temp[k]);
-                            }else{
-                                if(value.length() == 1){
-                                    value += s;
-                                }else{
-                                    value += " " + s;
-                                }
+                    List temp = (*variables)[i].second;
 
-                                s = "";
-                            }
-                        }
+                    if(temp.getSize() == 1){
+                        variable.add(temp.back());
                     }else{
-                        if(value.length() == 1){
-                            value += temp;
-                        }else{
-                            value += " " + temp;
-                        }
+                        variable.add("dummy");
+
+                        variable.addList(temp);
                     }
+
+                    break;
                 }
             }
 
             if(check == 0){
-                value = "error";
-                break;
+                //error
+                return List();
             }
         }else if(token[i].first == 21){
-            value += ")";
             break;
         }else{
-            value = "error";
-            break;
+            //error
+            return List();
         }
     }
 
-    return value;
-}*/
+    return variable;
+}
 
 List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     string value;

@@ -44,7 +44,9 @@
             "type": "shell",
             "command": "${fileDirname}/${fileBasenameNoExtension}.out",
             "group": "build",
-            "problemMatcher": []
+            "problemMatcher": [
+                "$jshint-stylish"
+            ]
         }
     ]
 }
