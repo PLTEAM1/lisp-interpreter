@@ -1,30 +1,30 @@
-#ifndef BASIC_H
-#define BASIC_H 
+#ifndef _BASIC_H
+#define _BASIC_H
 
 #include <string>
 #include <vector>
-//#include "Syntax.h"
-
+#include "./Lisplist.h"
+#include "./Syntax.h"
 using namespace std;
 
 class Basic{
     private:
-        //Syntax syntax;
+        int addQuoteList(vector< pair<int, string> > token, int index, class List& origin);
     public:
-        string setq(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string list(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string car(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string cdr(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string caddr(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string nth(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string cons(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string reverse(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string append(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string length(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string member(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string assoc(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string remove(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
-        string subst(vector< pair<int, string> > token, vector< pair<string, string> > *variables);
+        List setq(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List list(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List car(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List caddr(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List nth(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List cons(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List append(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List length(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List member(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List assoc(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List remove(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
+        List subst(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
 };
 
 #endif
