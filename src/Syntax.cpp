@@ -136,6 +136,33 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     }else if(function_Name == "STRINGP"){
         return predicate.stringp(token, variables);
 
+    }else if(function_Name == "ATOM"){
+        return predicate.atom(token, variables);
+
+    }else if(function_Name == "NULL"){
+        return predicate.null(token, variables);
+
+    }else if(function_Name == "NUMBERP"){
+        return predicate.numberp(token, variables);
+
+    }else if(function_Name == "ZEROP"){
+        return predicate.zerop(token, variables);
+
+    }else if(function_Name == "MINUSP"){
+        return predicate.minusp(token, variables);
+
+    }else if(function_Name == "EQUAL"){
+        return predicate.equal(token, variables);
+
+    }else if(function_Name == "<"){
+        return predicate.isLess(token, variables);
+
+    }else if(function_Name == ">="){
+        return predicate.isGreater(token, variables);
+
+    }else if(function_Name == "STRINGP"){
+        return predicate.stringp(token, variables);
+
     }else{
         return List();
     }
