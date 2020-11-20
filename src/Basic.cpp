@@ -8,20 +8,17 @@
 int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List& origin){
     for(int i = index; i < token.size() ; i++){
         if(token[i].second == "("){
-            origin.add("dummy");
-
             List newList;
             int ret = addQuoteList(token, i+1, newList);
             origin.addList(newList);
             i = ret;
 
         }else if(token[i].second == "\'"){
-            origin.add("dummy");
-
             List newList;
             int ret = addQuoteList(token, i, newList);
             origin.addList(newList);
             i = ret;
+
         }else if(token[i].second == ")"){
             return i;
         }else{
@@ -56,7 +53,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 variable.add(token[i].second);
 
                 variables->push_back(make_pair(name, variable));
-                //return_Variable = variables->back().second;
                 return_Variable = variable;
                 name = "";
             }else{
@@ -68,7 +64,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 variable.add(token[i].second);
 
                 variables->push_back(make_pair(name, variable));
-                //return_Variable = variables->back().second;
                 return_Variable = variable;
                 name = "";
             }else{
@@ -85,10 +80,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
                 i += addQuoteList(new_token, 0, variable);
 
-                cout << "i : "<<i << endl;
-
                 variables->push_back(make_pair(name, variable));
-                //return_Variable = variables->back().second;
                 return_Variable = variable;
                 name = "";
             }else{
@@ -127,8 +119,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                     if(newList.getSize() == 1){
                         variable.add(newList.back());
                     }else{
-                        variable.add("dummy");
-
                         variable.addList(newList);
                     }
 
@@ -144,8 +134,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
             }
         }
     }
-
-    cout << "return variable" << endl;
 
     return return_Variable;
 }
@@ -175,8 +163,6 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
                     if(temp.getSize() == 1){
                         variable.add(temp.back());
                     }else{
-                        variable.add("dummy");
-
                         variable.addList(temp);
                     }
 
