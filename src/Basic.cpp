@@ -517,17 +517,25 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
     }
 }
 
-    return List();
-
-}
+/**********************************************************/
+/* cons - a function to add a new element 
+            to the beginning of the list. 
+        returns List - all elements                       */
+/**********************************************************/
 List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
 }
+
+/**********************************************************/
+/* reverse - a function to reverse the order of list elements
+        returns List - all elements                       */
+/**********************************************************/
 List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
 }
+
 List Basic::append(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
