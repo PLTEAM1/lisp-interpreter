@@ -155,10 +155,10 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
         }else if(token[i].first == 11){
             int check = 0;
             for(int j=0; variables->size();j++){
-                if((*variables)[i].first == token[i].second){
+                if((*variables)[j].first == token[i].second){
                     check = 1;
 
-                    List temp = (*variables)[i].second;
+                    List temp = (*variables)[j].second;
 
                     if(temp.getSize() == 1){
                         variable.add(temp.back());
@@ -185,245 +185,357 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
     return variable;
 }
 
+/**********************************************************/
+/* car - a function to return the first element of a list 
+            returns List - firtst element                 */
+/**********************************************************/
 List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    string value;
-    Syntax syntax;
+    List variable;
+    Syntax syntax;;
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
-            i+=2;
-            value = token[i].second;
-
-            if(value == "("){
-                // CAR '((X) Y Z))
-                for(int j=i+1;j<token.size();j++){
-                    if(token[j].first != 21){
-                        if(value.length() == 1){
-                            value += token[j].second;
-                        }else{
-                            value += " " + token[j].second;
-                        }
-                    }else{
-                        value += ")";
-                        break;
-                    }
-                }
-            }else if(value == "\'"){
-                // CAR '('X Y Z))
-                i+=1;
-                value = token[i].second;
-            }else{
-                if(token[i].first == 11){
-                    int check = 0;
-                    for(int j=0; variables->size(); j++){
-                        if((*variables)[i].first == token[i].second){
-                            check = 1;
-                            //string temp = (*variables)[i].second;
-                            string temp;
-                            
-                            if(temp[0] == '('){
-                                string s;
-                                for(int k=1; k<temp.length(); k++){
-                                    //string s;
-                                    if(temp[k] != ' ' && temp[k] != ')'){
-                                        s.append(1, temp[k]);
-                                    }else{
-                                        if(value.length() == 1){
-                                            value += s;
-                                        }else{
-                                            value += " " + s;
-                                        }
-
-                                        s = "";
-                                        break;
-                                    }
-                                }
-                            }else{
-                                value = "error";
-                                break;
-                            }
-                        }
-                    }
-
-                    if(check == 0){
-                        value = "error";
-                        break;
-                    }
-                }
+            List quote_result;
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
             }
 
-            break;
-        }else {
+            i += addQuoteList(new_token, 0, quote_result);
+
+            NODE *head = quote_result.getHead();
+            if(head->data != "dummy"){
+                variable.add(head->data);
+            }else{
+                head->next = NULL;
+
+                variable.setHead(head);
+            }
+        }else{
             if(token[i].first == 20){
-                //CAR (CAR ((1 2) 4 5 6))
                 vector< pair<int, string> > new_token;
-                string function_result;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
                 for(int j=i+1;j<token.size();j++){
                     new_token.push_back(token[j]);
-                }
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
 
-                //function_result = syntax.analyze(new_token, variables); // "(1 2)"
-
-                if(function_result[0] == '('){
-                    if(function_result[1] == '('){
-                        for(int j=1; function_result.length();j++){
-                            if(function_result[j] != ')'){
-                                value.append(1, function_result[j]);
-                            }else{
-                                value.append(1, ')');
-                                break;
-                            }
-                        }
-                    }else{
-                        for(int j=1;function_result.length();j++){
-                            if(function_result[j] != ' '){
-                                value.append(1, function_result[j]);
-                            }else{
-                                break;
-                            }
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
                         }
                     }
-                }else{
-                    value = "error";
                 }
 
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead();
+                if(head->data != "dummy"){
+                    variable.add(head->data);
+                }else{
+                    head->next = NULL;
+
+                    variable.setHead(head);
+                }
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        List temp = (*variables)[j].second;
+
+                        NODE *head = temp.getHead();
+                        if(head->data != "dummy"){
+                            variable.add(head->data);
+                        }else{
+                            head->next = NULL;
+
+                            variable.setHead(head);
+                        }
+
+                        break;
+                    }
+                }
+
+                if(check == 0){
+                    //error
+                    return List();
+                }
+            }else if(token[i].first == 21 || token[i].first == -1){
                 break;
             }else{
-                value = "error";
-                break;
+                return List();
             }
+            
         }
     }
 
-    return List();
-
+    return variable;
 }
+
+/**********************************************************/
+/* cdr - a function to return the all elements 
+            except the first element of a list 
+        returns List - all elements 
+                        except the first element          */
+/**********************************************************/
 List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
+    List variable;
+    Syntax syntax;;
+
+    for(int i=1;i<token.size();i++){
+        if(token[i].second == "\'"){
+            List quote_result;
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
+            }
+
+            i += addQuoteList(new_token, 0, quote_result);
+
+            NODE *head = quote_result.getHead()->next;
+
+            variable.setHead(head);
+        }else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
+
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
+                        }
+                    }
+                }
+
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead()->next;
+
+                variable.setHead(head);
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        List temp = (*variables)[j].second;
+
+                        NODE *head = temp.getHead()->next;
+
+                        variable.setHead(head);
+
+                        break;
+                    }
+                }
+
+                if(check == 0){
+                    //error
+                    return List();
+                }
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
+            }else{
+                return List();
+            }
+            
+        }
+    }
+
+    return variable;
 
 }
+
+/**********************************************************/
+/* caddr -  
+        returns List -               */
+/**********************************************************/
 List Basic::caddr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
 }
+
+/**********************************************************/
+/* nth - a function to returns the n'th element of a list 
+        returns List - one element of a list              */
+/**********************************************************/
 List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    string value;
-    string index;
+    List variable;
+    int index = 0;
     Syntax syntax;
-    vector<string> v;
 
     if(token[1].first == 10){
-        index = token[1].second;
+        index = stoi(token[1].second);
     }else{
-        value ="error";
-
         return List();
     }
 
     for(int i=2;i<token.size();i++){
-            if(token[i].second == "\'"){
-                i+=2;
-                string s;
-                if(token[i].first == 20){
-                    for(int j=i;j<token.size();j++){
-                        i += 1;
-                        if(token[j].first != 21){
-                            if(s.length() < 2){
-                                s += token[j].second;
-                            }else{
-                                s += " " + token[j].second;
-                            }
-                        }else{
-                            s += ")";
-                            break;
-                        }
+        if(token[i].second == "\'"){
+            List quote_result;
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
+            }
+
+            i += addQuoteList(new_token, 0, quote_result);
+
+            NODE *head = quote_result.getHead()->next;
+
+            for(int j=0;j<index;j++){
+                if(head->next != NULL){
+                    head = head->next;
+                }else{
+                    return List();
+                }
+            }
+
+            if(head->data != "dummy"){
+                variable.add(head->data);
+            }else{
+                head->next = NULL;
+
+                variable.setHead(head);
+            }
+        }else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
                     }
 
-                    v.push_back(s);
-                }else{
-                    if(token[i].first != 21){
-                        v.push_back(token[i].second);
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
+                        }
+                    }
+                }
+
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead();
+
+                for(int j=0;j<index;j++){
+                    if(head->next != NULL){
+                        head = head->next;
                     }else{
+                        return List();
+                    }
+                }
+
+                if(head->data != "dummy"){
+                    variable.add(head->data);
+                }else{
+                    head->next = NULL;
+
+                    variable.setHead(head);
+                }
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        List temp = (*variables)[j].second;
+
+                        NODE *head = temp.getHead()->next;
+
+                        for(int k=0;k<index;k++){
+                            if(head->next != NULL){
+                                head = head->next;
+                            }else{
+                                return List();
+                            }
+                        }
+
+                        if(head->data != "dummy"){
+                            variable.add(head->data);
+                        }else{
+                            head->next = NULL;
+
+                            variable.setHead(head);
+                        }
+
                         break;
                     }
                 }
 
-            }else{
-                if(token[i].first == 20){
-                    vector< pair<int, string> > new_token;
-                    string function_result;
-                    for(int j=i+1;j<token.size();j++){
-                        new_token.push_back(token[j]);
-                    }
-
-                    //function_result = syntax.analyze(new_token, variables);
-
-                    if(function_result[0] == '('){
-
-                        for(int j=1; function_result.length();j++){
-                            if(function_result[j] == '('){
-                                for(int k=j; function_result.length();k++){
-                                    j += 1;
-                                    if(function_result[k] != ')'){
-                                        value.append(1, function_result[k]);
-                                    }else{
-                                        value.append(1, ')');
-                                        break;
-                                    }
-                                }
-
-                                v.push_back(value);
-                                value = "";
-                            }else{
-                                for(int k=j;function_result.length();k++){
-                                    j += 1;
-                                    if(function_result[k] != ' '){
-                                        value.append(1, function_result[j]);
-                                    }else{
-                                        break;
-                                    }
-                                }
-
-                                v.push_back(value);
-                                value = "";
-                            }
-                        }
-                    }else{
-                        value = "error";
-                    }
-
-                    break;
-                }else{
-                    value = "error";
-                    break;
+                if(check == 0){
+                    //error
+                    return List();
                 }
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
+            }else{
+                return List();
             }
+        }
+        
     }
-
-    cout <<"value : " << value << endl;
-    cout << "vector" << endl;
-
-    for(int i=0;i<v.size();i++){
-        cout << v[i] << endl;
-    }
-
-    if(stoi(index) < v.size() && value != "error"){
-        value = v[stoi(index)];
-    }else{
-        value = "error";
-    }
-
-    return List();
-
 }
+
+/**********************************************************/
+/* cons - a function to add a new element 
+            to the beginning of the list. 
+        returns List - all elements                       */
+/**********************************************************/
 List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
 }
+
+/**********************************************************/
+/* reverse - a function to reverse the order of list elements
+        returns List - all elements                       */
+/**********************************************************/
 List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
 }
+
 List Basic::append(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     return List();
 
