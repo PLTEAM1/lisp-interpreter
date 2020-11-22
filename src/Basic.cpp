@@ -155,10 +155,10 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
         }else if(token[i].first == 11){
             int check = 0;
             for(int j=0; variables->size();j++){
-                if((*variables)[i].first == token[i].second){
+                if((*variables)[j].first == token[i].second){
                     check = 1;
 
-                    List temp = (*variables)[i].second;
+                    List temp = (*variables)[j].second;
 
                     if(temp.getSize() == 1){
                         variable.add(temp.back());
