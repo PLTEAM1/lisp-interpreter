@@ -116,6 +116,10 @@ class List{
             return head;
         }
 
+        void setHead(NODE *head){
+            this->head = head;
+        }
+
         int getSize(){
             return size;
         }
