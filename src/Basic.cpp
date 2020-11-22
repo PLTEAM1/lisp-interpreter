@@ -185,70 +185,107 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
     return variable;
 }
 
+/**********************************************************/
+/* car - a function to return the first element of a list 
+            returns List - firtst element                 */
+/**********************************************************/
 List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    string value;
-    Syntax syntax;
+    List variable;
+    Syntax syntax;;
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
-            i+=2;
-            value = token[i].second;
+            List quote_result;
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
+            }
 
-            if(value == "("){
-                // CAR '((X) Y Z))
+            i += addQuoteList(new_token, 0, quote_result);
+
+            NODE *head = quote_result.getHead();
+            if(head->data != "dummy"){
+                variable.add(head->data);
+            }else{
+                head->next = NULL;
+
+                variable.setHead(head);
+            }
+        }else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
                 for(int j=i+1;j<token.size();j++){
-                    if(token[j].first != 21){
-                        if(value.length() == 1){
-                            value += token[j].second;
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
+
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
                         }else{
-                            value += " " + token[j].second;
+                            left_count--;
                         }
-                    }else{
-                        value += ")";
+                    }
+                }
+
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead();
+                if(head->data != "dummy"){
+                    variable.add(head->data);
+                }else{
+                    head->next = NULL;
+
+                    variable.setHead(head);
+                }
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        List temp = (*variables)[j].second;
+
+                        NODE *head = temp.getHead();
+                        if(head->data != "dummy"){
+                            variable.add(head->data);
+                        }else{
+                            head->next = NULL;
+
+                            variable.setHead(head);
+                        }
+
                         break;
                     }
                 }
-            }else if(value == "\'"){
-                // CAR '('X Y Z))
-                i+=1;
-                value = token[i].second;
+
+                if(check == 0){
+                    //error
+                    return List();
+                }
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
             }else{
-                if(token[i].first == 11){
-                    int check = 0;
-                    for(int j=0; variables->size(); j++){
-                        if((*variables)[i].first == token[i].second){
-                            check = 1;
-                            //string temp = (*variables)[i].second;
-                            string temp;
-                            
-                            if(temp[0] == '('){
-                                string s;
-                                for(int k=1; k<temp.length(); k++){
-                                    //string s;
-                                    if(temp[k] != ' ' && temp[k] != ')'){
-                                        s.append(1, temp[k]);
-                                    }else{
-                                        if(value.length() == 1){
-                                            value += s;
-                                        }else{
-                                            value += " " + s;
-                                        }
+                return List();
+            }
+            
+        }
+    }
 
-                                        s = "";
-                                        break;
-                                    }
-                                }
-                            }else{
-                                value = "error";
-                                break;
-                            }
-                        }
-                    }
+    return variable;
+}
 
-                    if(check == 0){
-                        value = "error";
-                        break;
-                    }
                 }
             }
 
