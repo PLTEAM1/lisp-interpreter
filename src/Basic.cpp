@@ -286,57 +286,94 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
     return variable;
 }
 
-                }
+/**********************************************************/
+/* cdr - a function to return the all elements 
+            except the first element of a list 
+        returns List - all elements 
+                        except the first element          */
+/**********************************************************/
+List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
+    List variable;
+    Syntax syntax;;
+
+    for(int i=1;i<token.size();i++){
+        if(token[i].second == "\'"){
+            List quote_result;
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
             }
 
-            break;
-        }else {
+            i += addQuoteList(new_token, 0, quote_result);
+
+            NODE *head = quote_result.getHead()->next;
+
+            variable.setHead(head);
+        }else{
             if(token[i].first == 20){
-                //CAR (CAR ((1 2) 4 5 6))
                 vector< pair<int, string> > new_token;
-                string function_result;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
                 for(int j=i+1;j<token.size();j++){
                     new_token.push_back(token[j]);
-                }
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
 
-                //function_result = syntax.analyze(new_token, variables); // "(1 2)"
-
-                if(function_result[0] == '('){
-                    if(function_result[1] == '('){
-                        for(int j=1; function_result.length();j++){
-                            if(function_result[j] != ')'){
-                                value.append(1, function_result[j]);
-                            }else{
-                                value.append(1, ')');
-                                break;
-                            }
-                        }
-                    }else{
-                        for(int j=1;function_result.length();j++){
-                            if(function_result[j] != ' '){
-                                value.append(1, function_result[j]);
-                            }else{
-                                break;
-                            }
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
                         }
                     }
-                }else{
-                    value = "error";
                 }
 
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead()->next;
+
+                variable.setHead(head);
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        List temp = (*variables)[j].second;
+
+                        NODE *head = temp.getHead()->next;
+
+                        variable.setHead(head);
+
+                        break;
+                    }
+                }
+
+                if(check == 0){
+                    //error
+                    return List();
+                }
+            }else if(token[i].first == 21 || token[i].first == -1){
                 break;
             }else{
-                value = "error";
-                break;
+                return List();
             }
+            
         }
     }
 
-    return List();
+    return variable;
 
 }
-List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
 
 }
 List Basic::caddr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
