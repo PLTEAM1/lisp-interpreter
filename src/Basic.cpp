@@ -515,6 +515,8 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
         }
         
     }
+
+    return variable;
 }
 
 /**********************************************************/
