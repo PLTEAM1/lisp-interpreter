@@ -51,6 +51,22 @@ class List{
             }
         }
 
+        void addNode(NODE* node){
+            NODE* temp = new NODE;
+            temp->data = node->data;
+            temp->next = NULL;
+            temp->list = node->list;
+
+            if(head == NULL){
+                head = temp;
+                tail = temp;
+            }else{
+                tail->next = temp;
+                tail = tail->next;
+            }
+            size++;
+        }
+
         void traverse(NODE* head){
             NODE* temp = head;
 
@@ -102,6 +118,16 @@ class List{
             previous->next = node;
             node->next = after;
             size++;
+        }
+
+        void reverse(List& reverse_list, NODE* head){
+            if(head->next == NULL){
+                reverse_list.addNode(head);
+            }else{
+                reverse(reverse_list, head->next);
+
+                reverse_list.addNode(head);
+            }
         }
 
         string back(){
