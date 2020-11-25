@@ -1,4 +1,5 @@
 #include "../header/Basic.h"
+#include "../header/Exception.h"
 #include <iostream>
 
 /**********************************************************/
@@ -20,7 +21,7 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
             i = ret;
 
         }else if(token[i].second == ")"){
-            return i;
+            return i + 1;
         }else{
             origin.add(token[i].second);
         }
@@ -43,7 +44,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
         name = token[1].second;
     }else{
         //error
-        return List();
+        throw Exception(1);
     }
 
     for(int i=2;i<token.size();i++){
@@ -127,18 +128,50 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     i += addQuoteList(new_token, 0, variable);
 
-                    variables->push_back(make_pair(name, variable));
-                    return_Variable = variable;
-                    name = "";
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
+
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
+
                 }else if(token[i+1].first == 11){
                     i += 1;
                     variable.add(token[i].second);
 
-                    variables->push_back(make_pair(name, variable));
-                    return_Variable = variable;
-                    name = "";
-                }else{
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
 
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
+                }else{
+                    //error
+                    return List();
                 }
             }else{
                 //error
