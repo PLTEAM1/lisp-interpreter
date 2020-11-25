@@ -127,18 +127,50 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     i += addQuoteList(new_token, 0, variable);
 
-                    variables->push_back(make_pair(name, variable));
-                    return_Variable = variable;
-                    name = "";
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
+
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
+
                 }else if(token[i+1].first == 11){
                     i += 1;
                     variable.add(token[i].second);
 
-                    variables->push_back(make_pair(name, variable));
-                    return_Variable = variable;
-                    name = "";
-                }else{
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
 
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
+                }else{
+                    //error
+                    return List();
                 }
             }else{
                 //error
