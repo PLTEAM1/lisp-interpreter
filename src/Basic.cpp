@@ -20,7 +20,7 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
             i = ret;
 
         }else if(token[i].second == ")"){
-            return i;
+            return i + 1;
         }else{
             origin.add(token[i].second);
         }
