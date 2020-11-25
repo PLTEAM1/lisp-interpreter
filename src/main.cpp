@@ -1,6 +1,7 @@
 #include "../header/Lexer.h"
 #include "../header/Lisplist.h"
 #include "../header/Syntax.h"
+#include "../header/Exception.h"
 #include <iostream>
 #include <string>
 
@@ -13,19 +14,24 @@ int main(){
     vector< pair<string, List> > variables;
     List result;
 
-    vector< pair<int, string> > token = lexer.get_Token();
+    try{
+        vector< pair<int, string> > token = lexer.get_Token();
 
-    result = syntax.analyze(token, &variables);
+        result = syntax.analyze(token, &variables);
 
-    for(int i=0;i<variables.size();i++){
-        cout << variables[i].first << " : ";
+        for(int i=0;i<variables.size();i++){
+            cout << variables[i].first << " : ";
 
-        variables[i].second.traverse(variables[i].second.getHead());
+            variables[i].second.traverse(variables[i].second.getHead());
 
-        cout << endl;
+            cout << endl;
+        }
+
+        result.traverse(result.getHead());
+
+    }catch(Exception e){
+        e.print();
     }
-
-    result.traverse(result.getHead());
 
     return 0;
 }
