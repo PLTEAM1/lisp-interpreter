@@ -1,4 +1,5 @@
 #include "../header/Basic.h"
+#include "../header/Exception.h"
 #include <iostream>
 
 /**********************************************************/
@@ -43,7 +44,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
         name = token[1].second;
     }else{
         //error
-        return List();
+        throw Exception(1);
     }
 
     for(int i=2;i<token.size();i++){
