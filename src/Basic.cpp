@@ -128,6 +128,8 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     i += addQuoteList(new_token, 0, variable);
 
+                    variable.setList();
+
                     int check = 0;
                     for(int j=0;j<variables->size();j++){
                         if((*variables)[j].first == name){
@@ -209,6 +211,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                     if(newList.getSize() == 1){
                         variable.add(newList.back());
                     }else{
+                        newList.setList();
                         variable.addList(newList);
                     }
 
