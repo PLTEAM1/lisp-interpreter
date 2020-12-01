@@ -131,7 +131,15 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                         throw Exception(100);
                     }
 
-                    item.add(token[i].second);
+                    if(token[i].first == 10 || token[i].first == 12){
+                        item.add("IS NUMBER");
+                    }
+                    else if(token[i].first == 13){
+                        //문자일 때
+                        item.add("IS CHAR");
+                    }else{
+                        item.add(token[i].second);
+                    }
                     newToken.clear();
                     count++;
                 }
@@ -141,10 +149,10 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
     }
    
     string value = item.getHead()->data;
-    if(value == "'") ret.add("NIL");
-    else if(value == "#") cout << "11: " << value << endl; //ret.add("T");
-    else if(isNumber(value)) ret.add("T");
-    else if(value[0] == '#') ret.add("T"); //문자일때, #\AB 같이 두개들어오는 그런 것들은 에러처리 하나?
+    if(value == "'") ret.add("NIL"); //리스트
+    else if(value == "#") ret.add("T"); //배열
+    else if(value == "IS NUMBER") ret.add("T");
+    else if(value == "IS CHAR") ret.add("T");
     else if(value =="NIL") ret.add("T");
     else{
         //변수인지 확인
@@ -161,7 +169,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
 List Predicate::null(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* NULL 
         * X가 NIL일 때만 참(true)을 반환함. / 변수가 아니면 error */
-        List ret;
+    List ret;
 
     Syntax syntax;
     List item;
@@ -224,7 +232,17 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-
+                    
+                    if(token[i].first == 10 || token[i].first == 12){
+                        item.add("IS NUMBER");
+                    }
+                    /*
+                    else if(){
+                        //문자일 때
+                        item.add("IS CHAR");
+                    }
+                    아래는 else로 묶기
+                    */
                     item.add(token[i].second);
                     newToken.clear();
                     count++;
@@ -241,9 +259,9 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
    
     string value = item.getHead()->data;
     if(value == "'") ret.add("NIL");
-    else if(value == "#") cout << "11: " << value << endl; //ret.add("T");
-    else if(isNumber(value)) ret.add("T");
-    else if(value[0] == '#') ret.add("T"); //문자일때, #\AB 같이 두개들어오는 그런 것들은 에러처리 하나?
+    else if(value == "#") ret.add("NIL");
+    else if(value == "IS NUMBER") ret.add("NIL");
+    else if(value == "IS CHAR") ret.add("NIL");
     else if(value =="NIL") ret.add("T");
     else{
         //변수인지 확인
@@ -294,7 +312,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
         }
         
     }
-    */
+    
     Syntax syntax;
     List ret;
     string value;
@@ -342,7 +360,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
         ret.add("NIL");
         return ret;
     }
-
+*/
 }
 
 List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
