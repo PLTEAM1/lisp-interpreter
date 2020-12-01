@@ -10,7 +10,7 @@
 
 /* String */
 #define QUOTE 5
-#define STRING 12
+#define STRING 30
 
 /* Character classes */
 #define LETTER 0
