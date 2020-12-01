@@ -60,6 +60,8 @@ class List{
             }else{
                 tail->list = temp;
             }
+
+            size++;
         }
 
         void addNode(NODE* node){
