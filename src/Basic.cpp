@@ -49,7 +49,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
     for(int i=2;i<token.size();i++){
         List variable;
-        if(token[i].first == 10){
+        if(token[i].first == 10 || token[i].first == 12){
             if(name != ""){
                 variable.add(token[i].second);
 
@@ -149,7 +149,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         name = "";
                     }
 
-                }else if(token[i+1].first == 11 || token[i+1].first == 10){
+                }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12){
                     i += 1;
                     variable.add(token[i].second);
 
@@ -215,7 +215,24 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         variable.addList(newList);
                     }
 
-                    return_Variable = variable;
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
+
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
                 }else{
                     //variable name error
                     throw Exception(1);
