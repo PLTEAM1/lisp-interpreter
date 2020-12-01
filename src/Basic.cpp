@@ -185,7 +185,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                     int check =0;
                     int index = 0;
 
-                    for(int j=i+1;j<token.size();j++){
+                    for(int j=i;j<token.size();j++){
                         new_token.push_back(token[j]);
                         index++;
                         if(token[j].first == 20){
@@ -193,7 +193,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         }
 
                         if(token[j].first == 21){
-                            if(left_count == 0 && check == 0){
+                            if(left_count == 1 && check == 0){
                                 i+=index;
                                 check = 1;
                             }else{
@@ -312,7 +312,7 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
                 int check =0;
                 int index = 0;
 
-                for(int j=i+1;j<token.size();j++){
+                for(int j=i;j<token.size();j++){
                     new_token.push_back(token[j]);
                     index++;
                     if(token[j].first == 20){
@@ -320,7 +320,7 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
                     }
 
                     if(token[j].first == 21){
-                        if(left_count == 0 && check == 0){
+                        if(left_count == 1 && check == 0){
                             i+=index;
                             check = 1;
                         }else{
@@ -410,7 +410,7 @@ List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > 
                 int check =0;
                 int index = 0;
 
-                for(int j=i+1;j<token.size();j++){
+                for(int j=i;j<token.size();j++){
                     new_token.push_back(token[j]);
                     index++;
                     if(token[j].first == 20){
@@ -418,7 +418,7 @@ List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > 
                     }
 
                     if(token[j].first == 21){
-                        if(left_count == 0 && check == 0){
+                        if(left_count == 1 && check == 0){
                             i+=index;
                             check = 1;
                         }else{
@@ -527,7 +527,7 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                 int check =0;
                 int index = 0;
 
-                for(int j=i+1;j<token.size();j++){
+                for(int j=i;j<token.size();j++){
                     new_token.push_back(token[j]);
                     index++;
                     if(token[j].first == 20){
@@ -535,7 +535,7 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                     }
 
                     if(token[j].first == 21){
-                        if(left_count == 0 && check == 0){
+                        if(left_count == 1 && check == 0){
                             i+=index;
                             check = 1;
                         }else{
@@ -646,7 +646,7 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                 int check =0;
                 int index = 0;
 
-                for(int j=i+1;j<token.size();j++){
+                for(int j=i;j<token.size();j++){
                     new_token.push_back(token[j]);
                     index++;
                     if(token[j].first == 20){
@@ -654,7 +654,7 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                     }
 
                     if(token[j].first == 21){
-                        if(left_count == 0 && check == 0){
+                        if(left_count == 1 && check == 0){
                             i+=index;
                             check = 1;
                         }else{
