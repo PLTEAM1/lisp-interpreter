@@ -14,23 +14,63 @@ class Exception{
             switch (code)
             {
             case 1:
-                /* code */
-                cout << "SETQ variable error." << endl;
+                /* Variable name error */
+                cout << "Variable name is not a symbol." << endl;
                 break;
 
             case 2:
-                /* code */
-                cout << "code2" << endl;
+                /* Unbound-variable*/
+                cout << "The variable is unbound" << endl;
                 break;
 
             case 3:
-                /* code */
-                cout << "code3" << endl;
+                /* quote format error */
+                cout << "Quote format error" << endl;
                 break;
 
             case 4:
-                /* code */
-                cout << "code4" << endl;
+                /* SETQ format error */
+                cout << "SETQ format error" << endl;
+                break;
+
+            case 5:
+                /* LIST format error */
+                cout << "LIST format error" << endl;
+                break;
+
+            case 6:
+                /* CAR format error */
+                cout << "CAR format error" << endl;
+                break;
+
+            case 8:
+                /* CDR format error */
+                cout << "CDR format error" << endl;
+                break;
+
+            case 9:
+                /*  NTH index error */
+                cout << "NTH index error" << endl;
+                break;
+
+            case 10:
+                /* NTH format error */
+                cout << "NTH format error" << endl;
+                break;
+
+            case 11:
+                /* invalid number of arguments */
+                cout << "Invalid number of arguments" << endl;
+                break;
+
+            case 12:
+                /* CONS format error */
+                cout << "CONS format error" << endl;
+                break;
+
+            case 13:
+                /* REVERSE format error */
+                cout << "REVERSE format error" << endl;
                 break;
             
             case 100:
