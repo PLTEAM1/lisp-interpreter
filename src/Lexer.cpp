@@ -1,5 +1,7 @@
 
 #include "../header/Lexer.h"
+#include "../header/Syntax.h"
+#include <fstream>
 
 /******************************************
  * lookup - a function to lookup operators
@@ -21,11 +23,11 @@ int Lexer::lookup(char ch) {
            break;
         case '+':
            addChar();
-           nextToken = FUNCTION;
+           nextToken = ARITHMETIC;
            break;
         case '-':
            addChar();
-           nextToken = FUNCTION;
+           nextToken = ARITHMETIC;
            break;
         case '*':
            addChar();
@@ -89,21 +91,6 @@ void Lexer::addChar() {
           of input and determine its character class */
 /*****************************************************/
 void Lexer::getChar() {
-    /*
-    if ((nextChar = getc(stdin)) != EOF){
-        if (isalpha(nextChar))
-            charClass = LETTER;
-        else if (isdigit(nextChar))
-            charClass = DIGIT;
-        else if(nextChar == '>' || nextChar == '<' || nextChar == '=')
-            charClass = OPERATOR;
-        else
-            charClass = UNKNOWN;
-    }
-    else{
-        charClass = EOF;
-    }*/
-    
     
     if (input.size() != 0) {
         
@@ -116,6 +103,12 @@ void Lexer::getChar() {
             charClass = OPERATOR;
         else if(nextChar == '"')
             charClass = QUOTE;
+        else if(nextChar == '#')
+            charClass = SHARP;
+        else if(nextChar == '\\')
+            charClass = BACKSLASH;
+        else if(nextChar == '-')
+            charClass = ARITHMETIC;
         else
             charClass = UNKNOWN;
 
@@ -162,6 +155,7 @@ int Lexer::lex() {
         case OPERATOR:
             addChar();
             getChar();
+            
             while(charClass == OPERATOR){
                 addChar();
                 getChar();
@@ -173,11 +167,22 @@ int Lexer::lex() {
         case DIGIT:
             addChar();
             getChar();
+
             while (charClass == DIGIT) {
                 addChar();
                 getChar();
             }
-            nextToken = INT_LIT;
+            if(nextChar == '.'){
+                addChar();
+                getChar();
+                while (charClass == DIGIT) {
+                    addChar();
+                    getChar();
+                }
+                nextToken = FLOAT;
+            }
+            else
+                nextToken = INT_LIT;
             break;
 
         /* Parse Strings */
@@ -197,6 +202,60 @@ int Lexer::lex() {
             }
            
             nextToken = STRING;
+            break;
+            
+        /* SHARP CASE */
+        case SHARP:
+            
+            addChar();
+            getChar();
+            
+            if(charClass == BACKSLASH){
+                addChar();
+                getChar();
+                int i = 0;
+                while(charClass == LETTER){
+                    addChar();
+                    getChar();
+                    i++;
+                }
+                if(i == 0){
+                    printf("%s is Error \n", lexeme);
+                    cout << "Lexer error only #\\\n";
+                }
+                nextToken = SHARP_LETTER;
+                break;
+            }
+            else if(nextChar == '('){
+                nextToken = SHARP;
+                break;
+            }
+            else{
+                cout << "Error " << nextChar << " can't come after #\n";
+                exit(0);
+            }
+            
+        case ARITHMETIC:
+            addChar();
+            getChar();
+            while(charClass == DIGIT){
+                addChar();
+                getChar();
+            }
+            if(nextChar == ' ' && lexLen == 1){
+                nextToken = FUNCTION;
+            }
+            else if(nextChar == '.'){
+                addChar();
+                getChar();
+                while (charClass == DIGIT) {
+                    addChar();
+                    getChar();
+                }
+                nextToken = FLOAT;
+            }
+            else
+                nextToken = INT_LIT;
             break;
 
         /* Parentheses and operators */
@@ -234,26 +293,45 @@ vector<pair<int, string> > Lexer::get_Token(){
     do{
         lex();
     } while (nextToken != EOF);
-     
-
+    
     /*
+    Syntax syntax;
+    vector< pair<string, List> > variables;
+    List result;
+    
     //test.in파일을 통해 테스트
     ifstream readFile;
     
     readFile.open("test.in");
     if(readFile.is_open()){
         while(!readFile.eof()){
+            ret.clear();
             getline(readFile,input);
+            cout << "> " << input << "\n";
             getChar();
             
             do{
                 lex();
             } while (nextToken != EOF);
+            if(ret.size() > 3){
+                ret.erase(ret.begin());
+            }
             
-        }
-    }
-    */
+            result = syntax.analyze(ret, &variables);
 
+            for(int i=0;i<variables.size();i++){
+                cout << variables[i].first << " : ";
+
+                variables[i].second.traverse(variables[i].second.getHead());
+
+                cout << endl;
+            }
+
+            cout << "result : ";
+            result.traverse(result.getHead());
+            cout << endl << endl;
+        }
+    }*/
     
     return ret;
 }
