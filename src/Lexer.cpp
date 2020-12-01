@@ -1,5 +1,7 @@
 
 #include "../header/Lexer.h"
+#include "../header/Syntax.h"
+#include <fstream>
 
 /******************************************
  * lookup - a function to lookup operators
@@ -226,7 +228,9 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    
+    //cin.ignore();
+    //string test;
+    ret.clear();
     getline(cin, input);
     
     getChar();
@@ -237,23 +241,42 @@ vector<pair<int, string> > Lexer::get_Token(){
      
 
     /*
+    Syntax syntax;
+    vector< pair<string, List> > variables;
+    List result;
+    
     //test.in파일을 통해 테스트
     ifstream readFile;
     
     readFile.open("test.in");
     if(readFile.is_open()){
         while(!readFile.eof()){
+            ret.clear();
             getline(readFile,input);
+            cout << "> " << input << "\n";
             getChar();
             
             do{
                 lex();
             } while (nextToken != EOF);
-            
+            result = syntax.analyze(ret, &variables);
+
+            for(int i=0;i<variables.size();i++){
+                cout << variables[i].first << " : ";
+
+                variables[i].second.traverse(variables[i].second.getHead());
+
+                cout << endl;
+            }
+
+            cout << "result : ";
+            result.traverse(result.getHead());
+            cout << endl << endl;
         }
     }
-    */
-
+    
+    return ret;
+*/
     
     return ret;
 }

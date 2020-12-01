@@ -16,11 +16,22 @@ class List{
     private:
         NODE *head, *tail;
         int size;
+        //yae
+        bool flag;
     public:
         List(){
             head = NULL;
             tail = NULL;
+            //yae
+            flag = false;
             size = 0;
+        }
+        //yae
+        void setList(){
+            flag = true;
+        }
+        bool isList(){
+            return flag;
         }
 
         void add(string data){
@@ -40,7 +51,7 @@ class List{
         }
         
         void addList(class List list){
-            add("dummy");
+            add("dummy"); // yae, 특문으로 바꾸기
 
             NODE* temp = list.head;
             if(head == NULL){
@@ -74,16 +85,16 @@ class List{
                 if(temp->data != "dummy"){
                     cout << temp->data << " ";
                 }else{
-                    cout << "(";
+                    cout << "( ";
                     traverse(temp->list);
-                    cout << ")";
+                    cout << ") ";
                 }
 
                 temp = temp->next;
             }
         }
 
-        void insertValue(string data, int index){
+        void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
             node->data = data;
             node->next = NULL;
@@ -101,8 +112,8 @@ class List{
             size++;
         }
 
-        void insertList(class List list, int index){
-            NODE* node = new NODE;
+        void insertList(class List list, int index){ // 사이에 리ㅡㅅ트넣기
+            NODE* node = new NODE; 
             node->data = "dummy";
             node->next = NULL;
             node->list = list.head;
@@ -134,11 +145,11 @@ class List{
             return tail->data;
         }
 
-        string front(){
+        string front(){ // 리스트 맨 앞 데이터
             return head->data;
         }
 
-        NODE* getHead(){
+        NODE* getHead(){ // private head 구하기
             return head;
         }
 

@@ -51,121 +51,108 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     Basic basic;
     Predicate predicate;
 
-    string function_Name = token[0].second;
+    List error;
 
-    if(function_Name == "SETQ"){
-        /* SETQ Function ex) SETQ X (1 2 3)); */
-        return basic.setq(token, variables);
-
-    }else if(function_Name == "LIST"){
-        /* LIST Function */
-        return basic.list(token, variables);
-
-    }else if(function_Name == "CAR"){
-        /* CAR Function */
-        return basic.car(token, variables);
-
-    }else if(function_Name == "CDR"){
-        /* CDR Function */
-        return basic.cdr(token, variables);
-
-    }else if(function_Name == "CADDR"){
-        /* CADDR Function */
-        return basic.caddr(token, variables);
-
-    }else if(function_Name == "NTH"){
-        /* NTH Function */
-        return basic.nth(token, variables);
-      
-    }else if(function_Name == "CONS"){
-        /* CONS Function */
-        return basic.cons(token, variables);
-
-    }else if(function_Name == "REVERSE"){
-        /* REVERSE Function */
-        return basic.reverse(token, variables);
-
-    }else if(function_Name == "APPEND"){
-        /* APPEND Function */
-        return basic.append(token, variables);
-
-    }else if(function_Name == "LENGTH"){
-        /* LENGTH Function */
-        return basic.length(token, variables);
-
-    }else if(function_Name == "MEMBER"){
-        /* MEMBER Function */
-        return basic.member(token, variables);
-
-    }else if(function_Name == "ASSOC"){
-        /* ASSOC Function */
-        return basic.assoc(token, variables);
-
-    }else if(function_Name == "REMOVE"){
-        /* REMOVE Function */
-        return basic.remove(token, variables);
-
-    }else if(function_Name == "SUBST"){
-        /* SUBST Function */
-        return basic.subst(token, variables);
-
-    }else if(function_Name == "ATOM"){
-        return predicate.atom(token, variables);
-
-    }else if(function_Name == "NULL"){
-        return predicate.null(token, variables);
-
-    }else if(function_Name == "NUMBERP"){
-        return predicate.numberp(token, variables);
-
-    }else if(function_Name == "ZEROP"){
-        return predicate.zerop(token, variables);
-
-    }else if(function_Name == "MINUSP"){
-        return predicate.minusp(token, variables);
-
-    }else if(function_Name == "EQUAL"){
-        return predicate.equal(token, variables);
-
-    }else if(function_Name == "<"){
-        return predicate.isLess(token, variables);
-
-    }else if(function_Name == ">="){
-        return predicate.isGreater(token, variables);
-
-    }else if(function_Name == "STRINGP"){
-        return predicate.stringp(token, variables);
-
-    }else if(function_Name == "ATOM"){
-        return predicate.atom(token, variables);
-
-    }else if(function_Name == "NULL"){
-        return predicate.null(token, variables);
-
-    }else if(function_Name == "NUMBERP"){
-        return predicate.numberp(token, variables);
-
-    }else if(function_Name == "ZEROP"){
-        return predicate.zerop(token, variables);
-
-    }else if(function_Name == "MINUSP"){
-        return predicate.minusp(token, variables);
-
-    }else if(function_Name == "EQUAL"){
-        return predicate.equal(token, variables);
-
-    }else if(function_Name == "<"){
-        return predicate.isLess(token, variables);
-
-    }else if(function_Name == ">="){
-        return predicate.isGreater(token, variables);
-
-    }else if(function_Name == "STRINGP"){
-        return predicate.stringp(token, variables);
-
-    }else{
-        return List();
+    if(token[0].second != "("){
+        for(int i = 0 ; i < (*variables).size() ; i++){
+            if((*variables)[i].first == token[0].second){
+                return (*variables)[i].second;
+            }
+        }
+        error.add("No variables\n");
+        return error;  
     }
+    else{
+        token.erase(token.begin());
+        string function_Name = token[0].second;
+        
+        if(function_Name == "SETQ"){
+            /* SETQ Function ex) SETQ X (1 2 3)); */
+            return basic.setq(token, variables);
 
-    return List();
+        }else if(function_Name == "LIST"){
+            /* LIST Function */
+            return basic.list(token, variables);
+
+        }else if(function_Name == "CAR"){
+            /* CAR Function */
+            return basic.car(token, variables);
+
+        }else if(function_Name == "CDR"){
+            /* CDR Function */
+            return basic.cdr(token, variables);
+
+        }else if(function_Name == "CADDR"){
+            /* CADDR Function */
+            return basic.caddr(token, variables);
+
+        }else if(function_Name == "NTH"){
+            /* NTH Function */
+            return basic.nth(token, variables);
+        
+        }else if(function_Name == "CONS"){
+            /* CONS Function */
+            return basic.cons(token, variables);
+
+        }else if(function_Name == "REVERSE"){
+            /* REVERSE Function */
+            return basic.reverse(token, variables);
+
+        }else if(function_Name == "APPEND"){
+            /* APPEND Function */
+            return basic.append(token, variables);
+
+        }else if(function_Name == "LENGTH"){
+            /* LENGTH Function */
+            return basic.length(token, variables);
+
+        }else if(function_Name == "MEMBER"){
+            /* MEMBER Function */
+            return basic.member(token, variables);
+
+        }else if(function_Name == "ASSOC"){
+            /* ASSOC Function */
+            return basic.assoc(token, variables);
+
+        }else if(function_Name == "REMOVE"){
+            /* REMOVE Function */
+            return basic.remove(token, variables);
+
+        }else if(function_Name == "SUBST"){
+            /* SUBST Function */
+            return basic.subst(token, variables);
+
+        }else if(function_Name == "ATOM"){
+            return predicate.atom(token, variables);
+
+        }else if(function_Name == "NULL"){
+            return predicate.null(token, variables);
+
+        }else if(function_Name == "NUMBERP"){
+            return predicate.numberp(token, variables);
+
+        }else if(function_Name == "ZEROP"){
+            return predicate.zerop(token, variables);
+
+        }else if(function_Name == "MINUSP"){
+            return predicate.minusp(token, variables);
+
+        }else if(function_Name == "EQUAL"){
+            return predicate.equal(token, variables);
+
+        }else if(function_Name == "<"){
+            return predicate.isLess(token, variables);
+
+        }else if(function_Name == ">="){
+            return predicate.isGreater(token, variables);
+
+        }else if(function_Name == "STRINGP"){
+            return predicate.stringp(token, variables);
+
+        }else{
+            error.add("No function\n");
+            return error;
+        }
+    }
+    return error;
 }
