@@ -617,8 +617,156 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
         returns List - all elements                       */
 /**********************************************************/
 List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
+    // (CONS 'A '(B C D))
+    List insert_variable;
+    List variable;
+    Syntax syntax;
 
+    for(int i=1;i<token.size();i++){
+        if(token[i].second == "\'"){
+            i += 1;
+            if(token[i].first == 11 || token[i].first == 10){
+                if(insert_variable.getSize() == 0){
+                    insert_variable.add(token[i].second);
+                    
+                }else if(variable.getSize() == 0){
+                    variable.add(token[i].second);
+
+                    if(insert_variable.getSize() == 1){
+                        variable.insertValue(insert_variable.front(), 0);
+                    }else{
+                        variable.insertList(insert_variable, 0);
+                    }
+                }else{
+                    //error
+                    throw Exception(1);
+                }
+            }else if(token[i].first == 20){
+                if(insert_variable.getSize() == 0){
+                    vector< pair<int, string> > new_token;
+
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    i += addQuoteList(new_token, 0, insert_variable);
+
+                }else if(variable.getSize() == 0){
+                    vector< pair<int, string> > new_token;
+
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    i += addQuoteList(new_token, 0, variable);
+
+                    variable.insertList(insert_variable, 0);
+                }else{
+                    //error
+                    throw Exception(1);
+                }
+            }else{
+                //error
+                throw Exception(7);
+            }
+
+        }else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
+                for(int j=i;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
+
+                    if(token[j].first == 21){
+                        if(left_count == 1 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
+                        }
+                    }
+                }
+
+                if(insert_variable.getSize() == 0){
+                    insert_variable = syntax.analyze(new_token, variables);
+                }else if(variable.getSize() == 0){
+                    variable = syntax.analyze(new_token, variables);
+
+                    if(insert_variable.getSize() == 1){
+                        variable.insertValue(insert_variable.front(), 0);
+                    }else{
+                        variable.insertList(insert_variable, 0);
+                    }
+                }else{
+                    //error
+                    throw Exception(1);
+                }
+
+            }else if(token[i].first == 11){
+                int check = 0;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        if(insert_variable.getSize() == 0){
+                            insert_variable = (*variables)[j].second;
+
+                            break;
+                        }else if(variable.getSize() == 0){
+                            variable = (*variables)[j].second;
+
+                            if(insert_variable.getSize() == 1){
+                                variable.insertValue(insert_variable.front(), 0);
+                            }else{
+                                variable.insertList(insert_variable, 0);
+                            }
+
+                            break;
+                        }else{
+                            //error
+                            throw Exception(1);
+                        }
+                    }
+                }
+
+                if(check == 0){
+                    //error
+                    throw Exception(1);
+                }
+
+            }else if(token[i].first == 10){
+                if(insert_variable.getSize() == 0){
+                    insert_variable.add(token[i].second);
+
+                }else if(variable.getSize() == 0){
+                    variable.add(token[i].second);
+
+                    if(insert_variable.getSize() == 1){
+                        variable.insertValue(insert_variable.front(), 0);
+                    }else{
+                        variable.insertList(insert_variable, 0);
+                    }
+                }else{
+                    //error
+                    throw Exception(1);
+                }
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
+            }else{
+                //error
+                throw Exception(1);
+            }
+        }
+    }
+
+    return variable;
 }
 
 /**********************************************************/
