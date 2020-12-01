@@ -7,6 +7,7 @@
             returns next token index                      */
 /**********************************************************/
 int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List& origin){
+    origin.setList();
     for(int i = index; i < token.size() ; i++){
         if(token[i].second == "("){
             List newList;
@@ -128,8 +129,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     i += addQuoteList(new_token, 0, variable);
 
-                    variable.setList();
-
                     int check = 0;
                     for(int j=0;j<variables->size();j++){
                         if((*variables)[j].first == name){
@@ -204,16 +203,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         }
                     }
 
-                    List newList;
-
-                    newList = syntax.analyze(new_token, variables);
-
-                    if(newList.getSize() == 1){
-                        variable.add(newList.back());
-                    }else{
-                        newList.setList();
-                        variable.addList(newList);
-                    }
+                    variable = syntax.analyze(new_token, variables);
 
                     check = 0;
                     for(int j=0;j<variables->size();j++){
@@ -264,7 +254,21 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
             variable.add(token[i].second);
         }else if(token[i].second == "\'"){
             ++i;
-            variable.add(token[i].second);
+            if(token[i].first == 10 || token[i].first == 11 || token[i].first == 12){
+                variable.add(token[i].second);
+            }else if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
+
+                List newList;
+
+                i += addQuoteList(new_token, 0, newList);
+
+                variable.addList(newList);
+            }
         }else if(token[i].first == 11){
             int check = 0;
             for(int j=0; variables->size();j++){
