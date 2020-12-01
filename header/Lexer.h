@@ -21,6 +21,8 @@
 /* Token codes */
 #define INT_LIT 10
 #define IDENT 11
+#define FLOAT 12
+#define SHARP_LETTER 13
 
 /* Arithmetic Operations */
 #define LEFT_PAREN 20
@@ -30,10 +32,11 @@
 #define QUOATE 24
 #define BACKSLASH 25
 #define SHARP 26
+#define ARITHMETIC 27
 
 using namespace std;
 
-class Lexer { 
+class Lexer {
     private:
         /* Global Variable */
         int nextToken;
@@ -58,6 +61,7 @@ class Lexer {
 
     public: 
         vector<pair<int, string> > get_Token();
+
 }; 
 
 #endif
