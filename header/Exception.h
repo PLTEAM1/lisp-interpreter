@@ -33,6 +33,13 @@ class Exception{
                 cout << "code4" << endl;
                 break;
             
+            case 100:
+                cout << "Invalid number of arguments."<< endl;
+                break;
+            
+            case 101:
+                cout << "The variable is unbound." << endl;
+            
             default:
                 break;
             }

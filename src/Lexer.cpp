@@ -285,7 +285,7 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    
+    ret.clear();
     getline(cin, input);
     
     getChar();
@@ -313,6 +313,7 @@ vector<pair<int, string> > Lexer::get_Token(){
             do{
                 lex();
             } while (nextToken != EOF);
+            
             if(ret.size() > 3){
                 ret.erase(ret.begin());
             }

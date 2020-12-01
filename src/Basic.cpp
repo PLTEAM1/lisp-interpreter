@@ -235,6 +235,8 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
     List variable;
+    //yae
+    variable.setList(); // set this variable is list
 
     for(int i=1; token.size(); i++){
         if(token[i].first == 10 || token[i].first == 12){
