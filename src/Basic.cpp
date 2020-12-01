@@ -215,7 +215,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         variable.addList(newList);
                     }
 
-                    int check = 0;
+                    check = 0;
                     for(int j=0;j<variables->size();j++){
                         if((*variables)[j].first == name){
                             (*variables)[j].second = variable;
