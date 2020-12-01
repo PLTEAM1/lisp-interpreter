@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <unordered_map>
+#include <sstream>
 
 using namespace std;
 
@@ -16,22 +18,29 @@ class List{
     private:
         NODE *head, *tail;
         int size;
-        //yae
-        bool flag;
+        int flag; // 0 : symbol, 1 : List, 2 : array
+        string list_Check;
+        string array_Check;
+        
     public:
         List(){
             head = NULL;
             tail = NULL;
-            //yae
-            flag = false;
+            flag = 0;
             size = 0;
-        }
-        //yae
-        void setList(){
-            flag = true;
-        }
-        bool isList(){
-            return flag;
+
+            hash<string> hasher;
+            stringstream ss;
+
+            size_t hash = hasher("listdummy");
+            ss << hash;
+
+            list_Check = ss.str();
+
+            hash = hasher("arraydummy");
+            ss << hash;
+
+            array_Check = ss.str();
         }
 
         void add(string data){
@@ -51,7 +60,11 @@ class List{
         }
         
         void addList(class List list){
-            add("dummy"); // yae, 특문으로 바꾸기
+            if(list.getFlag() == 1){
+                add(list_Check);
+            }else{
+                add(array_Check);
+            }
 
             NODE* temp = list.head;
             if(head == NULL){
@@ -83,17 +96,31 @@ class List{
         void traverse(NODE* head){
             NODE* temp = head;
 
-            while(temp!= NULL){
-                if(temp->data != "dummy"){
-                    cout << temp->data << " ";
+            if(this->flag == 1){
+                cout << "(";
+            }else if(this->flag == 2){
+                cout << "#(";
+            }
+
+            while(temp != NULL){
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    newList.traverse(newList.getHead());
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    newList.traverse(newList.getHead());
                 }else{
-                    cout << "( ";
-                    traverse(temp->list);
-                    cout << ") ";
+                    cout << temp->data << " ";
                 }
 
                 temp = temp->next;
             }
+
+            cout << ") ";
         }
 
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
@@ -179,6 +206,14 @@ class List{
 
         int getSize(){
             return size;
+        }
+
+        void setFlag(int flag){
+            this->flag = flag;
+        }
+
+        int getFlag(){
+            return flag;
         }
 };
 
