@@ -1,6 +1,7 @@
 #include "../header/Syntax.h"
 #include "../header/Basic.h"
 #include "../header/Predicate.h"
+#include "../header/Exception.h"
 #include <cctype>
 #include <iostream>
 
@@ -59,8 +60,8 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
                 return (*variables)[i].second;
             }
         }
-        error.add("No variables\n");
-        return error;  
+        
+        throw Exception(2);
     }
     else{
         token.erase(token.begin());
@@ -150,9 +151,8 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
             return predicate.stringp(token, variables);
 
         }else{
-            error.add("No function\n");
-            return error;
+            throw Exception(1);
         }
     }
-    return error;
+    throw Exception(1);
 }
