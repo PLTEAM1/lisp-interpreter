@@ -102,6 +102,15 @@ class List{
             node->next = NULL;
             node->list = NULL;
 
+            if(index == 0){
+                node->next = head;
+                head = node;
+
+                size++;
+
+                return;
+            }
+
             NODE* previous = head;
             NODE* after = head;
 
@@ -119,6 +128,15 @@ class List{
             node->data = "dummy";
             node->next = NULL;
             node->list = list.head;
+
+            if(index == 0){
+                node->next = head;
+                head = node;
+
+                size++;
+
+                return;
+            }
 
             NODE* previous = head;
             NODE* after = head;
