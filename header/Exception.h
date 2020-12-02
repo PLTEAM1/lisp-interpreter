@@ -81,7 +81,7 @@ class Exception{
             case 80:
                 cout << "Right variable is not a LIST." << endl;
                 break;
-                
+
             case 81:
                 cout << "There is no LIST variable in LIST." << endl;
                 break;

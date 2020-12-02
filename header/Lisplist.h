@@ -190,14 +190,11 @@ class List{
         List getRemove(string key){
             List ret;
             NODE* temp = head;
-            bool addFlag = false;
 
             if(this->flag == 1){
                 ret.add("(");
-                addFlag = true;
             }else if(this->flag == 2){
                 ret.add("#(");
-                addFlag = true;
             }
 
             while(temp != NULL){
@@ -240,6 +237,49 @@ class List{
 
             ret.add(")");
         }
+
+        void find(string key, List replaced){
+            NODE* temp = head;
+
+            while(temp != NULL){
+
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    newList.find(key, replaced);
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    newList.find(key, replaced);
+                }else{
+                    if(temp->data == key){
+                        NODE* pChange = replaced.getHead();
+                        string result = "";
+                        
+                        if(replaced.getFlag() == 1 ) result.append("(");
+                        else if(replaced.getFlag()==2) result.append("#(");
+
+                        while(pChange != NULL){
+                            result.append(pChange->data);
+                            result.append(" ");
+                            pChange = pChange->next;
+                        }
+                        
+                        cout << "BEFORE : " << temp->data << " ";
+                        if(replaced.getFlag() == 1 || replaced.getFlag()==2) result.append(")");
+                        temp->data = result;
+                        cout << "AFTER : " << temp->data << endl;
+                        
+                    }
+                }
+
+                temp = temp->next;
+            }
+     
+        }
+
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
             node->data = data;

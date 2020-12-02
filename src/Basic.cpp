@@ -1457,7 +1457,7 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
         delVar(variables, isSetq);
         throw Exception(100);
     }
-    
+  
     if(itemFlag == 0){
         string itemData = item.getHead()->data;
         item = getValue(variables, itemData);
@@ -1481,6 +1481,185 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
 
 }
 List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
+    List ret;
+
+    Syntax syntax;
+    List item;
+    List compared;
+    List change;
+    vector< pair<int, string> > newToken;
+
+    // 0 = not symbol, 1 = symbol
+    int itemFlag = 0;
+    int comparedFlag = 0;
+    int changeFlag = 0;
+
+    int leftCount = 0;
+    int check = 0;
+    int count = 0;
+    
+    int isSetq = 0;
+
+    for(int i = 1 ; i < token.size(); i++){
+
+            newToken.push_back(token[i]);
+            if(token[i].second=="("){
+                leftCount++;
+            }
+            else if(token[i].second==")"){
+                if(leftCount == 1){
+                    
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+
+                    if(newToken[1].second == "SETQ"){
+                        isSetq++;
+                    }
+                   
+                    if(item.getSize()==0){
+                        itemFlag = 1;
+                        item = syntax.analyze(newToken, variables);
+                    } 
+                    else if(compared.getSize()==0){
+                        comparedFlag =1;
+                        compared = syntax.analyze(newToken, variables);
+                    }else{
+                        changeFlag =1;
+                        change = syntax.analyze(newToken, variables);
+                    }
+                    
+
+                    newToken.clear();
+        
+                    count++;
+                    check++;
+                    leftCount--;
+                }else{
+                    leftCount--;
+                }
+            }else if(leftCount == 0){
+
+                if((token[i].second =="#" &&token[i+1].second =="(") || (token[i].second == "'" &&token[i+1].second =="(" ) ){
+
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+                    
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        if(token[i].second == "'"){ 
+                            i = addQuoteList(token, i+2, item);
+                            item.setFlag(1);
+                            i--;
+                        }           
+                        else item = getArr(i, token);
+         
+                    }else if(compared.getSize()==0){
+                        comparedFlag =1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, compared);
+                            compared.setFlag(1);
+                            i--;
+                        }         
+                        else compared = getArr(i, token);   
+                    }else{
+                        changeFlag=1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, change);
+                            change.setFlag(1);
+                            i--;
+                        }         
+                        else{
+                            change = getArr(i, token);   
+                            change.setFlag(2);
+                        } 
+                    } 
+
+                    newToken.clear();
+                    count++;
+                }else if(token[i].second == "'"){
+                    
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item.add(token[i+1].second);
+                        i++;
+                        
+                    }else if(compared.getSize()==0){
+                        comparedFlag =1;
+                        compared.add(token[i+1].second);
+                        i++;
+                    }else{
+                        changeFlag =1;
+                        change.add(token[i+1].second);
+                        i++;
+                    } 
+                    count++;
+                }else if(token[i].second!="EOF"){
+
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        }else if(compared.getSize()==0){
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }else{
+                            changeFlag =1;
+                            change.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else if(compared.getSize()==0) compared.add(token[i].second);
+                        else change.add(token[i].second);
+                    }
+
+                    newToken.clear();
+                    count++;
+                }
+
+            }
+            
+    }    
+    
+    if(count <= 2){
+        delVar(variables, isSetq);
+        throw Exception(100);
+    }
+    
+    
+    
+    if(itemFlag == 0){
+        string itemData = item.getHead()->data;
+        item = getValue(variables, itemData);
+        if(item.getHead()==NULL) throw Exception(105);
+
+    }
+    if(comparedFlag==0){
+        string comparedData = compared.getHead()->data;
+        compared = getValue(variables, comparedData);
+
+        if(compared.getHead()==NULL) throw Exception(106);
+       
+    }
+    if(changeFlag==0){
+        string changeData = change.getHead()->data;
+        change = getValue(variables, changeData);
+
+        if(change.getHead()==NULL) throw Exception(106);
+    }
+    if(change.getFlag() ==2) return change;
+    if(compared.getSize() != 1) return change;
+
+    change.find(compared.getHead()->data, item);
+    
+    return change;
 
 }
