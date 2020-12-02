@@ -124,6 +124,25 @@ class List{
                 cout << ") ";
             }
         }
+        
+        bool compare(NODE* pHead,NODE* qHead){
+            NODE* origin = pHead;
+            NODE* compared = qHead;
+
+            while(origin != NULL){
+                if(origin->data != compared->data) return false;
+                else if(origin->data == "dummy"){
+                    bool flag = compare(origin->list, compared->list);
+                    if(flag == false) return false;
+                }
+
+                origin = origin->next;
+                compared =compared->next;
+            }
+
+            return true;
+
+        }
 
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
