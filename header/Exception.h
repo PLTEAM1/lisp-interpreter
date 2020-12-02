@@ -98,6 +98,13 @@ class Exception{
                 cout << "Right argument is not a REAL." << endl;
                 break;
                 
+            case 105:
+                cout << "Left variable is unbound." << endl;
+                break;
+                
+            case 106:
+                cout << "Right variable is ubound." << endl;
+                break;
             default:
                 break;
             }
