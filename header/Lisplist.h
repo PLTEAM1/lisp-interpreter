@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -142,6 +143,141 @@ class List{
 
             return true;
 
+        }
+
+        bool isListIn(){
+            NODE* temp = head;
+
+            while(temp != NULL){
+                if(temp->data==list_Check) return true;
+                temp =temp->next;
+            }
+            return false;
+        }
+
+        string getAssoc(string key){
+            NODE* temp = head;
+            NODE* ret;
+            while(temp!= NULL){
+                if(temp->data==list_Check){
+
+                    ret = _getAssoc(key, temp->list);
+                    if(ret != NULL){
+                        NODE* listTemp = temp->list;
+                        string result = "( ";
+                        while(listTemp != NULL){
+                            result.append(listTemp->data);
+                            result.append(" ");
+                            listTemp = listTemp->next;
+                        }
+                        result.append(")");
+                        return result;
+                    }
+                }
+                temp = temp->next;
+            }
+            
+            return "NIL";
+        }
+
+        NODE* _getAssoc(string key, NODE* connected){
+            if(connected->data == key){ 
+                return connected;
+            }
+            else return NULL;
+        }
+
+        List getRemove(string key){
+            List ret;
+            NODE* temp = head;
+
+            if(this->flag == 1){
+                ret.add("(");
+            }else if(this->flag == 2){
+                ret.add("#(");
+            }
+
+            while(temp != NULL){
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    _getRemove(ret, newList);
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    _getRemove(ret, newList);
+                }else{
+                    if(temp->data != key) ret.add(temp->data.append(" "));
+                }
+
+                temp = temp->next;
+            }
+
+            if(this->flag != 0){
+                ret.add(") ");
+            }
+            return ret;
+        }
+
+        void _getRemove(List& ret, List input){
+            NODE* temp = input.getHead();
+
+            if(input.flag == 1){
+                ret.add("(");
+            }else if(input.flag == 2){
+                ret.add("#(");
+            }
+
+            while(temp!=NULL){
+                ret.add(temp->data.append(" "));
+                temp = temp->next;
+            }
+
+            ret.add(")");
+        }
+
+        void find(string key, List replaced){
+            NODE* temp = head;
+
+            while(temp != NULL){
+
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    newList.find(key, replaced);
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    newList.find(key, replaced);
+                }else{
+                    if(temp->data == key){
+                        NODE* pChange = replaced.getHead();
+                        string result = "";
+                        
+                        if(replaced.getFlag() == 1 ) result.append("(");
+                        else if(replaced.getFlag()==2) result.append("#(");
+
+                        while(pChange != NULL){
+                            result.append(pChange->data);
+                            result.append(" ");
+                            pChange = pChange->next;
+                        }
+                        
+                        cout << "BEFORE : " << temp->data << " ";
+                        if(replaced.getFlag() == 1 || replaced.getFlag()==2) result.append(")");
+                        temp->data = result;
+                        cout << "AFTER : " << temp->data << endl;
+                        
+                    }
+                }
+
+                temp = temp->next;
+            }
+     
         }
 
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
