@@ -120,7 +120,9 @@ class List{
                 temp = temp->next;
             }
 
-            cout << ") ";
+            if(this->flag != 0){
+                cout << ") ";
+            }
         }
 
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
@@ -214,6 +216,14 @@ class List{
 
         int getFlag(){
             return flag;
+        }
+
+        string getListCheck(){
+            return list_Check;
+        }
+
+        string getArrayCheck(){
+            return array_Check;
         }
 };
 
