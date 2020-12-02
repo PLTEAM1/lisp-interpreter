@@ -7,7 +7,7 @@
             returns next token index                      */
 /**********************************************************/
 int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List& origin){
-    origin.setList();
+    origin.setFlag(1);
     for(int i = index; i < token.size() ; i++){
         if(token[i].second == "("){
             List newList;
@@ -18,6 +18,14 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
         }else if(token[i].second == "\'"){
             List newList;
             int ret = addQuoteList(token, i, newList);
+            origin.addList(newList);
+            i = ret;
+
+        }else if(token[i].first == 26){
+            i+=2;
+            List newList;
+            int ret = addQuoteList(token, i, newList);
+            newList.setFlag(2);
             origin.addList(newList);
             i = ret;
 
@@ -148,6 +156,42 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         name = "";
                     }
 
+                }else if(token[i+1].first == 26){
+                    i += 1;
+                    if(token[i+1].first == 20){
+                        i += 1;
+                        vector< pair<int, string> > new_token;
+                         
+                        for(int j=i+1;j<token.size();j++){
+                            new_token.push_back(token[j]);
+                        }
+
+                        i += addQuoteList(new_token, 0, variable);
+
+                        variable.setFlag(2);
+
+                        int check = 0;
+                        for(int j=0;j<variables->size();j++){
+                            if((*variables)[j].first == name){
+                                (*variables)[j].second = variable;
+
+                                return_Variable = variable;
+                                check = 1;
+                                name = "";
+
+                                break;
+                            }
+                        }
+
+                        if(check == 0){
+                            variables->push_back(make_pair(name, variable));
+                            return_Variable = variable;
+                            name = "";
+                        }
+                    }else{
+                        //array format error 
+                        throw Exception(14);
+                    }
                 }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12){
                     i += 1;
                     variable.add(token[i].second);
@@ -173,6 +217,47 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 }else{
                     //quote format error 
                     throw Exception(3);
+                }
+            }else{
+                //variable name error
+                throw Exception(1);
+            }
+        }else if(token[i].first == 26){
+            if(name != ""){
+                if(token[i+1].first == 20){
+                    i += 1;
+                    vector< pair<int, string> > new_token;
+                    
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    i += addQuoteList(new_token, 0, variable);
+
+                    variable.setFlag(2);
+
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
+
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
+
+                }else{
+                    //array format error 
+                    throw Exception(14);
                 }
             }else{
                 //variable name error
@@ -247,7 +332,7 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
 
     List variable;
     //yae
-    variable.setList(); // set this variable is list
+    variable.setFlag(1); // set this variable is list
 
     for(int i=1; token.size(); i++){
         if(token[i].first == 10 || token[i].first == 12){
@@ -277,7 +362,7 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     List temp = (*variables)[j].second;
 
-                    if(temp.getSize() == 1){
+                    if(temp.getFlag() == 0){
                         variable.add(temp.back());
                     }else{
                         variable.addList(temp);
@@ -323,12 +408,37 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
             i += addQuoteList(new_token, 0, quote_result);
 
             NODE *head = quote_result.getHead();
-            if(head->data != "dummy"){
-                variable.add(head->data);
-            }else{
-                head->next = NULL;
 
-                variable.setHead(head);
+            if(head->data == variable.getListCheck()){
+                NODE *tempNode = head->list;
+
+                while(tempNode != NULL){
+                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                        variable.addNode(tempNode);
+                    }else{
+                        variable.add(tempNode->data);
+                    }
+
+                    tempNode = tempNode->next;
+                }
+
+                variable.setFlag(1);
+            }else if(head->data == variable.getArrayCheck()){
+                NODE *tempNode = head->list;
+
+                while(tempNode != NULL){
+                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                        variable.addNode(tempNode);
+                    }else{
+                        variable.add(tempNode->data);
+                    }
+
+                    tempNode = tempNode->next;
+                }
+                
+                variable.setFlag(2);
+            }else{
+                variable.add(head->data);
             }
         }else{
             if(token[i].first == 20){
@@ -359,12 +469,37 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
                 newList = syntax.analyze(new_token, variables);
 
                 NODE *head = newList.getHead();
-                if(head->data != "dummy"){
-                    variable.add(head->data);
-                }else{
-                    head->next = NULL;
+                
+                if(head->data == variable.getListCheck()){
+                    NODE *tempNode = head->list;
 
-                    variable.setHead(head);
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+
+                    variable.setFlag(1);
+                }else if(head->data == variable.getArrayCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+                    
+                    variable.setFlag(2);
+                }else{
+                    variable.add(head->data);
                 }
             }else if(token[i].first == 11){
                 int check = 0;
@@ -375,12 +510,37 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
                         List temp = (*variables)[j].second;
 
                         NODE *head = temp.getHead();
-                        if(head->data != "dummy"){
-                            variable.add(head->data);
-                        }else{
-                            head->next = NULL;
+                        
+                        if(head->data == variable.getListCheck()){
+                            NODE *tempNode = head->list;
 
-                            variable.setHead(head);
+                            while(tempNode != NULL){
+                                if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                                    variable.addNode(tempNode);
+                                }else{
+                                    variable.add(tempNode->data);
+                                }
+
+                                tempNode = tempNode->next;
+                            }
+
+                            variable.setFlag(1);
+                        }else if(head->data == variable.getArrayCheck()){
+                            NODE *tempNode = head->list;
+
+                            while(tempNode != NULL){
+                                if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                                    variable.addNode(tempNode);
+                                }else{
+                                    variable.add(tempNode->data);
+                                }
+
+                                tempNode = tempNode->next;
+                            }
+                            
+                            variable.setFlag(2);
+                        }else{
+                            variable.add(head->data);
                         }
 
                         break;
@@ -412,6 +572,8 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
 List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable;
     Syntax syntax;;
+
+    variable.setFlag(1);
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
@@ -507,11 +669,11 @@ List Basic::caddr(vector< pair<int, string> > token, vector< pair<string, List> 
 /**********************************************************/
 List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable;
-    int index = 0;
+    int nthIndex = 0;
     Syntax syntax;
 
     if(token[1].first == 10){
-        index = stoi(token[1].second);
+        nthIndex = stoi(token[1].second);
     }else{
         /* 변수가 들어오면 변수에 담긴 값을 보고 판단해야함을 발견 - 수정 필요 */
         throw Exception(9);
@@ -529,9 +691,9 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
 
             i += addQuoteList(new_token, 0, quote_result);
 
-            NODE *head = quote_result.getHead()->next;
+            NODE *head = quote_result.getHead();
 
-            for(int j=0;j<index;j++){
+            for(int j=0;j<nthIndex;j++){
                 if(head->next != NULL){
                     head = head->next;
                 }else{
@@ -539,12 +701,36 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                 }
             }
 
-            if(head->data != "dummy"){
-                variable.add(head->data);
-            }else{
-                head->next = NULL;
+            if(head->data == variable.getListCheck()){
+                NODE *tempNode = head->list;
 
-                variable.setHead(head);
+                while(tempNode != NULL){
+                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                        variable.addNode(tempNode);
+                    }else{
+                        variable.add(tempNode->data);
+                    }
+
+                    tempNode = tempNode->next;
+                }
+
+                variable.setFlag(1);
+            }else if(head->data == variable.getArrayCheck()){
+                NODE *tempNode = head->list;
+
+                while(tempNode != NULL){
+                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                        variable.addNode(tempNode);
+                    }else{
+                        variable.add(tempNode->data);
+                    }
+
+                    tempNode = tempNode->next;
+                }
+                
+                variable.setFlag(2);
+            }else{
+                variable.add(head->data);
             }
         }else{
             if(token[i].first == 20){
@@ -576,7 +762,7 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
 
                 NODE *head = newList.getHead();
 
-                for(int j=0;j<index;j++){
+                for(int j=0;j<nthIndex;j++){
                     if(head->next != NULL){
                         head = head->next;
                     }else{
@@ -585,12 +771,36 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                     }
                 }
 
-                if(head->data != "dummy"){
-                    variable.add(head->data);
-                }else{
-                    head->next = NULL;
+                if(head->data == variable.getListCheck()){
+                    NODE *tempNode = head->list;
 
-                    variable.setHead(head);
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+
+                    variable.setFlag(1);
+                }else if(head->data == variable.getArrayCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+                    
+                    variable.setFlag(2);
+                }else{
+                    variable.add(head->data);
                 }
             }else if(token[i].first == 11){
                 int check = 0;
@@ -600,22 +810,47 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
 
                         List temp = (*variables)[j].second;
 
-                        NODE *head = temp.getHead()->next;
+                        NODE *head = temp.getHead();
 
-                        for(int k=0;k<index;k++){
+                        for(int k=0;k<nthIndex;k++){
                             if(head->next != NULL){
                                 head = head->next;
                             }else{
+                                //리스트 index를 넘어가는 경우 NIL 반환 - 수정 필요
                                 return List();
                             }
                         }
 
-                        if(head->data != "dummy"){
-                            variable.add(head->data);
-                        }else{
-                            head->next = NULL;
+                        if(head->data == variable.getListCheck()){
+                            NODE *tempNode = head->list;
 
-                            variable.setHead(head);
+                            while(tempNode != NULL){
+                                if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                                    variable.addNode(tempNode);
+                                }else{
+                                    variable.add(tempNode->data);
+                                }
+
+                                tempNode = tempNode->next;
+                            }
+
+                            variable.setFlag(1);
+                        }else if(head->data == variable.getArrayCheck()){
+                            NODE *tempNode = head->list;
+
+                            while(tempNode != NULL){
+                                if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                                    variable.addNode(tempNode);
+                                }else{
+                                    variable.add(tempNode->data);
+                                }
+
+                                tempNode = tempNode->next;
+                            }
+                            
+                            variable.setFlag(2);
+                        }else{
+                            variable.add(head->data);
                         }
 
                         break;

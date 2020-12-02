@@ -72,6 +72,11 @@ class Exception{
                 /* REVERSE format error */
                 cout << "REVERSE format error" << endl;
                 break;
+
+            case 14:
+                /* REVERSE format error */
+                cout << "Array(#) format error" << endl;
+                break;
             
             case 100:
                 cout << "Invalid number of arguments."<< endl;
