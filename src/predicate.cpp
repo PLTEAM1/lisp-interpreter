@@ -76,7 +76,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
     int leftCount = 0;
     int check = 0;
     int count = 0;
-    
+    int symbolFlag = 0;
     int isSetq = 0;
 
     for(int i = 1 ; i < token.size(); i++){
@@ -99,6 +99,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                     }
 
                     item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
                     newToken.clear();
         
                     count++;
@@ -115,7 +116,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-                    
+                    symbolFlag = 1;
                     item = getArr(i, token);
                     newToken.clear();
                     count++;
@@ -127,12 +128,9 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                         throw Exception(100);
                     }
 
-                    if(token[i].first == 10 || token[i].first == 12){
-                        item.add("IS NUMBER");
-                    }
-                    else if(token[i].first == 13){
-                        //문자일 때
-                        item.add("IS CHAR");
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==13  || token[i].first == 30 || token[i].second =="NIL"){
+                        symbolFlag =1;
+                        item.add(token[i].second);
                     }else{
                         item.add(token[i].second);
                     }
@@ -141,27 +139,24 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                 }
 
             }
-            
     }
-   
-    if(check == 0 ){
+
+    if(check == 0){
         string value = item.getHead()->data;
-        if(value == "'") ret.add("NIL"); //리스트
-        else if(value == "#") ret.add("T"); //배열
-        else if(value == "IS NUMBER") ret.add("T");
-        else if(value == "IS CHAR") ret.add("T");
-        else if(value =="NIL") ret.add("T");
-        else{
-            //변수인지 확인
+        if(symbolFlag){
+            if(value == "'") ret.add("NIL"); //리스트
+            else ret.add("T");
+        }else{
+
             List temp;
             temp = getValue(variables, value);
-
             if(temp.getHead()==NULL) throw Exception(101);
-            if(temp.isList() == 0)  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
-            else    ret.add("NIL");
+            if(temp.getFlag() == 1)  ret.add("NIL"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            else    ret.add("T");
         }
     }else{
-        if(item.isList()) ret.add("NIL");
+        //함수를 통해 온 인자
+        if(item.getFlag()==1) ret.add("NIL");
         else ret.add("T");
     }
     
@@ -180,13 +175,12 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
     int leftCount = 0;
     int check = 0;
     int count = 0;
-    
+    int symbolFlag = 0;
     int isSetq = 0;
 
     for(int i = 1 ; i < token.size(); i++){
 
             newToken.push_back(token[i]);
-            //index++;
 
             if(token[i].second=="("){
                 leftCount++;
@@ -204,6 +198,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                     }
 
                     item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
                     newToken.clear();
         
                     count++;
@@ -222,6 +217,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                     }
                     
                     item = getArr(i, token);
+                    symbolFlag = 1;
                     newToken.clear();
                     count++;
                 }
@@ -231,31 +227,26 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-                    
-                    if(token[i].first == 10 || token[i].first == 12){
-                        item.add("IS NUMBER");
-                    }else if(token[i].first == 13){
-                        item.add("IS CHAR");
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==13  || token[i].first == 30 || token[i].second =="NIL"){
+                        symbolFlag =1;
+                        item.add(token[i].second);
                     }else{
                         item.add(token[i].second);
                     }
                     newToken.clear();
                     count++;
                 }
-
+                
             }
             
     }
-   
-    if(check ==0 ){
+    if(check == 0){
         string value = item.getHead()->data;
-        if(value == "'") ret.add("NIL");
-        else if(value == "#") ret.add("NIL");
-        else if(value == "IS NUMBER") ret.add("NIL");
-        else if(value == "IS CHAR") ret.add("NIL");
-        else if(value =="NIL") ret.add("T");
-        else{
-            //변수인지 확인
+        if(symbolFlag){
+            if(value == "NIL") ret.add("T"); //리스트
+            else ret.add("NIL");
+        }else{
+
             List temp;
             temp = getValue(variables, value);
 
@@ -264,8 +255,9 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
             else    ret.add("NIL");
         }
     }else{
+        //함수를 통해 온 인자
         if(item.getHead()->data == "NIL") ret.add("T");
-        else ret.add("T");
+        else ret.add("NIL");
     }
     
     return ret;
@@ -284,7 +276,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
     int leftCount = 0;
     int check = 0;
     int count = 0;
-    
+    int symbolFlag = 0;
     int isSetq = 0;
 
     for(int i = 1 ; i < token.size(); i++){
@@ -307,6 +299,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
                     }
 
                     item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
                     newToken.clear();
         
                     count++;
@@ -325,6 +318,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
                     }
                     
                     item = getArr(i, token);
+                    symbolFlag = 1;
                     newToken.clear();
                     count++;
                 }
@@ -336,9 +330,11 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
                     }
                     
                     if(token[i].first == 10 || token[i].first == 12){
+                        symbolFlag = 1;
                         item.add("IS NUMBER");
-                    }else if(token[i].first == 13){
-                        item.add("IS CHAR");
+                    }else if(token[i].first == 13 || token[i].first == 30 || token[i].second == "NIL"){
+                        symbolFlag =1;
+                        item.add(token[i].second);
                     }else{
                         item.add(token[i].second);
                     }
@@ -350,28 +346,24 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
             
     }
 
-    string value = item.getHead()->data;
+    if(check == 0){
+        string value = item.getHead()->data;
+        if(symbolFlag){
+            if(value == "IS NUMBER") ret.add("T"); //리스트
+            else ret.add("NIL");
+        }else{
 
-    if(check ==0 ){
-        if(value == "'") ret.add("NIL");
-        else if(value == "#") ret.add("NIL");
-        else if(value == "IS NUMBER") ret.add("T");
-        else if(value == "IS CHAR") ret.add("NIL");
-        else if(value =="NIL") ret.add("NIL");
-        else{
-            //변수인지 확인
             List temp;
             temp = getValue(variables, value);
 
             if(temp.getHead()==NULL) throw Exception(101);
-    
             string num = temp.getHead()->data;
-            if(num[0] == '-' || isdigit(num[0])) ret.add("T");
+            if(temp.getFlag() == 1 || temp.getFlag()== 2) ret.add("NIL");
+            else if(num[0] == '-' || isdigit(num[0])) ret.add("T");
             else    ret.add("NIL");
         }
     }else{
-        if(item.isList()){
-            //배열일 때도 마찬가지
+        if(item.getFlag()== 1 || item.getFlag()== 2){
             ret.add("NIL");
         }
         else if(isNumber(item.getHead()->data)) ret.add("T");
@@ -394,7 +386,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
     int leftCount = 0;
     int check = 0;
     int count = 0;
-    
+    int symbolFlag = 0;
     int isSetq = 0;
 
     for(int i = 1 ; i < token.size(); i++){
@@ -417,6 +409,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                     }
 
                     item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
                     newToken.clear();
         
                     count++;
@@ -435,6 +428,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                     }
                     
                     item = getArr(i, token);
+                    symbolFlag = 1;
                     newToken.clear();
                     count++;
                 }
@@ -447,16 +441,19 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                     
                     if(token[i].first == 10){
                         //일반 정수
+                        symbolFlag = 1;
                         if(token[i].second == "0") item.add("IS ZERO");
                         else item.add("IS NUMBER");
 
                     }else if(token[i].first == 12){
                         //실수
+                        symbolFlag = 1;
                         if(token[i].second[0] == '0' && token[i].second[2]== '0' && token[i].second.length() ==3 ) item.add("IS ZERO");
                         else item.add("IS NUMBER");
 
-                    }else if(token[i].first == 13){
-                        item.add("IS CHAR");
+                    }else if(token[i].first == 13 || token[i].first == 30 || token[i].second == "NIL"){
+                        symbolFlag = 1;
+                        item.add(token[i].second);
                     }else{
                         item.add(token[i].second);
                     }
@@ -467,47 +464,43 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
             }
             
     }
-   
-    if(check == 0 ){
+    
+    if(check == 0){
         string value = item.getHead()->data;
-        if(value == "IS ZERO") ret.add("T");
-        else if(value == "IS NUMBER") ret.add("NIL");
-        else if(value == "'") throw Exception(102);
-        else if(value == "#") throw Exception(102);
-        else if(value == "IS CHAR") throw Exception(102);
-        else if(value =="NIL") throw Exception(102);
-        else{
-            //변수인지 확인
+        if(symbolFlag){
+            if(value == "IS ZERO") ret.add("T"); //리스트
+            else if(value == "IS NUMBER") ret.add("NIL");
+            else throw Exception(102);
+        }else{
+
             List temp;
             temp = getValue(variables, value);
 
             if(temp.getHead()==NULL) throw Exception(101);
-            
-            //정수 실수의 판별이 필요합니다..
             string num = temp.getHead()->data;
-            if(num[0] == '0'){
+
+            if(temp.getFlag() == 1 || temp.getFlag()== 2) throw Exception(102);
+            else if(num[0] == '0'){
                 if(num[1]=='.' && num[2]== '0' && num.length() == 3) ret.add("T");
                 else if(num.length()==1) ret.add("T");
             }else if(isNumber(num)) ret.add("NIL");
             else throw Exception(102);
-        
+
         }
     }else{
-        string funcVal = item.getHead()->data;
-        if(item.isList()){
-            //배열일 때에도!
+        if(item.getFlag()== 1 || item.getFlag()== 2){
             throw Exception(102);
         }
-        else if(funcVal[0] == '0'){
-                if(funcVal[1]=='.' && funcVal[2]== '0' && funcVal.length() == 3) ret.add("T");
-                else if(funcVal.length()==1) ret.add("T");
-        }else if(isNumber(funcVal)) ret.add("NIL");
-        else throw Exception(102);
 
+        string num = item.getHead()->data;
+        if(num[0] == '0'){
+                if(num[1]=='.' && num[2]== '0' && num.length() == 3) ret.add("T");
+                else if(num.length()==1) ret.add("T");
+        }else if(isNumber(num)) ret.add("NIL");
+        else throw Exception(102);
     }
     
     return ret;
-
 }
 
 List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
@@ -522,7 +515,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
     int leftCount = 0;
     int check = 0;
     int count = 0;
-    
+    int symbolFlag = 0;
     int isSetq = 0;
     for(int i = 1 ; i < token.size(); i++){
 
@@ -544,6 +537,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
                     }
 
                     item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
                     newToken.clear();
         
                     count++;
@@ -562,6 +556,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
                     }
                     
                     item = getArr(i, token);
+                    symbolFlag = 1;
                     newToken.clear();
                     count++;
                 }
@@ -573,10 +568,12 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
                     }
                     
                     if(token[i].first == 10 || token[i].first == 12){
+                        symbolFlag = 1;
                         if(token[i].second[0]== '-') item.add("IS MINUS");
                         else    item.add("IS NUMBER");
-                    }else if(token[i].first == 13){
-                        item.add("IS CHAR");
+                    }else if(token[i].first == 13 || token[i].first == 30 || token[i].second == "NIL"){
+                        symbolFlag = 1;
+                        item.add(token[i].second);
                     }else{
                         item.add(token[i].second);
                     }
@@ -587,39 +584,39 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
             }
             
     }
-   
-    if(check == 0 ){
+    
+    if(check == 0){
         string value = item.getHead()->data;
-        if(value == "IS MINUS") ret.add("T");
-        else if(value == "IS NUMBER") ret.add("NIL");
-        else if(value == "'") throw Exception(102);
-        else if(value == "#") throw Exception(102);
-        else if(value == "IS CHAR") throw Exception(102);
-        else if(value =="NIL") throw Exception(102);
-        else{
-            //변수인지 확인
+        if(symbolFlag){
+            if(value == "IS MINUS") ret.add("T"); //리스트
+            else if(value == "IS NUMBER") ret.add("NIL");
+            else throw Exception(102);
+        }else{
+
             List temp;
             temp = getValue(variables, value);
 
             if(temp.getHead()==NULL) throw Exception(101);
-    
             string num = temp.getHead()->data;
-            if(num[0] == '-') ret.add("T");
+
+            if(temp.getFlag() == 1 || temp.getFlag()== 2) throw Exception(102);
+            else if(num[0] == '-') ret.add("T");
             else if(isNumber(num)) ret.add("NIL");
             else throw Exception(102);
+
         }
     }else{
-        string funcVal = item.getHead()->data;
-        if(item.isList()){
-            //배열일 때에도!
+        if(item.getFlag()== 1 || item.getFlag()== 2){
             throw Exception(102);
         }
-        else if(funcVal[0] == '-'){
-            ret.add("T");
-        }else if(isNumber(funcVal)) ret.add("NIL");
+
+        string num = item.getHead()->data;
+        if(num[0] == '-') ret.add("T");
+        else if(isNumber(num)) ret.add("NIL");
         else throw Exception(102);
     }
     return ret;
+    
 }
 
 List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
@@ -631,7 +628,11 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
     List item;
     List compared;
     vector< pair<int, string> > newToken;
-    
+
+    // 0 = not symbol, 1 = symbol
+    int itemFlag = 0;
+    int comparedFlag = 0;
+
     int leftCount = 0;
     int check = 0;
     int count = 0;
@@ -657,8 +658,14 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
                         isSetq++;
                     }
                    
-                    if(item.getSize()==0) item = syntax.analyze(newToken, variables);
-                    else compared = syntax.analyze(newToken, variables);
+                    if(item.getSize()==0){
+                        itemFlag = 1;
+                        item = syntax.analyze(newToken, variables);
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = syntax.analyze(newToken, variables);
+                    }
                     
 
                     newToken.clear();
@@ -678,8 +685,15 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
                         throw Exception(100);
                     }
                     
-                    if(item.getSize()==0) item = getArr(i, token);
-                    else compared = getArr(i, token);
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item = getArr(i, token);
+                        
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = getArr(i, token);
+                    } 
 
                     newToken.clear();
                     count++;
@@ -690,8 +704,21 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-                    if(item.getSize()==0) item.add(token[i].second);
-                    else compared.add(token[i].second);
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        } 
+                        else{
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else compared.add(token[i].second);
+                        
+                    }
 
                     newToken.clear();
                     count++;
@@ -700,9 +727,75 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
             }
             
     }    
+    /*
+    cout << "item : ";
+    item.traverse(item.getHead());
+    cout << "flag : "<< itemFlag<< endl;
 
-    if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
-    else ret.add("NIL");
+    cout << "comapred: ";
+    compared.traverse(compared.getHead());
+    cout << "flag : "<< comparedFlag<< endl;
+    */
+
+    
+    if(itemFlag == 1 && comparedFlag ==1){
+        if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
+        else ret.add("NIL");
+    }else if(itemFlag == 0 & comparedFlag == 1){
+        // Left가 변수일 때
+        string itemData = item.getHead()->data;
+        item = getValue(variables, itemData);
+
+        if(item.getHead()==NULL) throw Exception(105);
+        
+        if(item.getFlag() == 1){
+            item.insertValue("'", 0);
+            item.insertValue("(", 1);
+            item.insertValue(")", item.getSize());
+        }
+        else if(item.getFlag()==2){
+            item.insertValue("#", 0);
+            item.insertValue("(", 1);
+            item.insertValue(")", item.getSize());
+        }
+
+        if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
+        else ret.add("NIL");
+
+    }else if(itemFlag == 1 & comparedFlag == 0){
+        string comparedData = compared.getHead()->data;
+        compared = getValue(variables, comparedData);
+
+        if(compared.getHead()==NULL) throw Exception(106);
+
+        if(compared.getFlag() == 1){
+            compared.insertValue("'", 0);
+            compared.insertValue("(", 1);
+            compared.insertValue(")", item.getSize());
+        }
+        else if(compared.getFlag()==2){
+            compared.insertValue("#", 0);
+            compared.insertValue("(", 1);
+            compared.insertValue(")", compared.getSize());
+        }
+
+        if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
+        else ret.add("NIL");
+    }else if(itemFlag == 0 & comparedFlag == 0){
+
+        string itemData = item.getHead()->data;
+        string comparedData = compared.getHead()->data;
+
+        item = getValue(variables, itemData);
+        compared = getValue(variables, comparedData);
+
+        if(item.getHead()==NULL) throw Exception(105);      
+        if(compared.getHead()==NULL) throw Exception(106);
+
+        if(item.getFlag() != compared.getFlag()) ret.add("NIL");
+        else if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
+        else ret.add("NIL"); 
+    }
     
     return ret;
 }
@@ -710,13 +803,18 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
 List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* < 
          * X < Y 이면 참(true)을 반환함. 숫자가 아니면 error */
+
     List ret;
 
     Syntax syntax;
     List item;
     List compared;
     vector< pair<int, string> > newToken;
-    
+
+    // 0 = not symbol, 1 = symbol
+    int itemFlag = 0;
+    int comparedFlag = 0;
+
     int leftCount = 0;
     int check = 0;
     int count = 0;
@@ -741,9 +839,15 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
                     if(newToken[1].second == "SETQ"){
                         isSetq++;
                     }
-          
-                    if(item.getSize()==0) item = syntax.analyze(newToken, variables);
-                    else compared = syntax.analyze(newToken, variables);
+                   
+                    if(item.getSize()==0){
+                        itemFlag = 1;
+                        item = syntax.analyze(newToken, variables);
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = syntax.analyze(newToken, variables);
+                    }
                     
 
                     newToken.clear();
@@ -763,8 +867,15 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
                         throw Exception(100);
                     }
                     
-                    if(item.getSize()==0) item = getArr(i, token);
-                    else compared = getArr(i, token);
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item = getArr(i, token);
+                        
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = getArr(i, token);
+                    } 
 
                     newToken.clear();
                     count++;
@@ -775,8 +886,21 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-                    if(item.getSize()==0) item.add(token[i].second);
-                    else compared.add(token[i].second);
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        } 
+                        else{
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else compared.add(token[i].second);
+                        
+                    }
 
                     newToken.clear();
                     count++;
@@ -786,19 +910,41 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
             
     }    
 
-    if(item.getSize() != 1) throw Exception(103);
-    else if(item.getSize() != 1) throw Exception(104);
-    else{
-        string pnum= item.getHead()->data;
-        string qnum = compared.getHead()->data;
+    if(itemFlag == 1 && comparedFlag ==1){
+        
+    }else if(itemFlag == 0 & comparedFlag == 1){
 
-        if(!isNumber(pnum)) throw Exception(103);
-        else if(!isNumber(qnum)) throw Exception(104);
+        string itemData = item.getHead()->data;
+        item = getValue(variables, itemData);
 
-        if(stof(pnum) < stof(qnum)) ret.add("T");
-        else ret.add("NIL");
+        if(item.getHead()==NULL) throw Exception(105);
 
+
+    }else if(itemFlag == 1 & comparedFlag == 0){
+        string comparedData = compared.getHead()->data;
+        compared = getValue(variables, comparedData);
+
+        if(compared.getHead()==NULL) throw Exception(106);
+
+    }else if(itemFlag == 0 & comparedFlag == 0){
+        string itemData = item.getHead()->data;
+        string comparedData = compared.getHead()->data;
+
+        item = getValue(variables, itemData);
+        compared = getValue(variables, comparedData);
+
+        if(item.getHead()==NULL) throw Exception(105);      
+        if(compared.getHead()==NULL) throw Exception(106);
     }
+
+    string pnum= item.getHead()->data;
+    string qnum = compared.getHead()->data;
+
+    if(!isNumber(pnum)) throw Exception(103);
+    else if(!isNumber(qnum)) throw Exception(104);
+
+    if(stof(pnum) < stof(qnum)) ret.add("T");
+    else ret.add("NIL");
 
     return ret;
     
@@ -813,7 +959,11 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
     List item;
     List compared;
     vector< pair<int, string> > newToken;
-    
+
+    // 0 = not symbol, 1 = symbol
+    int itemFlag = 0;
+    int comparedFlag = 0;
+
     int leftCount = 0;
     int check = 0;
     int count = 0;
@@ -838,9 +988,15 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
                     if(newToken[1].second == "SETQ"){
                         isSetq++;
                     }
-          
-                    if(item.getSize()==0) item = syntax.analyze(newToken, variables);
-                    else compared = syntax.analyze(newToken, variables);
+                   
+                    if(item.getSize()==0){
+                        itemFlag = 1;
+                        item = syntax.analyze(newToken, variables);
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = syntax.analyze(newToken, variables);
+                    }
                     
 
                     newToken.clear();
@@ -860,8 +1016,15 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
                         throw Exception(100);
                     }
                     
-                    if(item.getSize()==0) item = getArr(i, token);
-                    else compared = getArr(i, token);
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item = getArr(i, token);
+                        
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared = getArr(i, token);
+                    } 
 
                     newToken.clear();
                     count++;
@@ -872,8 +1035,21 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
                         delVar(variables, isSetq);
                         throw Exception(100);
                     }
-                    if(item.getSize()==0) item.add(token[i].second);
-                    else compared.add(token[i].second);
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        } 
+                        else{
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else compared.add(token[i].second);
+                        
+                    }
 
                     newToken.clear();
                     count++;
@@ -883,19 +1059,41 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
             
     }    
 
-    if(item.getSize() != 1) throw Exception(103);
-    else if(item.getSize() != 1) throw Exception(104);
-    else{
-        string pnum= item.getHead()->data;
-        string qnum = compared.getHead()->data;
+    if(itemFlag == 1 && comparedFlag ==1){
+        
+    }else if(itemFlag == 0 & comparedFlag == 1){
 
-        if(!isNumber(pnum)) throw Exception(103);
-        else if(!isNumber(qnum)) throw Exception(104);
+        string itemData = item.getHead()->data;
+        item = getValue(variables, itemData);
 
-        if(stof(pnum) >= stof(qnum)) ret.add("T");
-        else ret.add("NIL");
+        if(item.getHead()==NULL) throw Exception(105);
 
+
+    }else if(itemFlag == 1 & comparedFlag == 0){
+        string comparedData = compared.getHead()->data;
+        compared = getValue(variables, comparedData);
+
+        if(compared.getHead()==NULL) throw Exception(106);
+
+    }else if(itemFlag == 0 & comparedFlag == 0){
+        string itemData = item.getHead()->data;
+        string comparedData = compared.getHead()->data;
+
+        item = getValue(variables, itemData);
+        compared = getValue(variables, comparedData);
+
+        if(item.getHead()==NULL) throw Exception(105);      
+        if(compared.getHead()==NULL) throw Exception(106);
     }
+
+    string pnum= item.getHead()->data;
+    string qnum = compared.getHead()->data;
+
+    if(!isNumber(pnum)) throw Exception(103);
+    else if(!isNumber(qnum)) throw Exception(104);
+
+    if(stof(pnum) >= stof(qnum)) ret.add("T");
+    else ret.add("NIL");
 
     return ret;
   
@@ -903,6 +1101,107 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
 
 List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* STRINGP */
+
+
+
+    List ret;
+
+    Syntax syntax;
+    List item;
+    vector< pair<int, string> > newToken;
+
+    int leftCount = 0;
+    int check = 0;
+    int count = 0;
+    int symbolFlag = 0;
+    int isSetq = 0;
+
+    for(int i = 1 ; i < token.size(); i++){
+
+            newToken.push_back(token[i]);
+
+            if(token[i].second=="("){
+                leftCount++;
+            }
+            else if(token[i].second==")"){
+                if(leftCount == 1){
+                    
+                    if(count >= 1 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+
+                    if(newToken[1].second == "SETQ"){
+                        isSetq++;
+                    }
+
+                    item = syntax.analyze(newToken, variables);
+                    symbolFlag = 1;
+                    newToken.clear();
+        
+                    count++;
+                    check++;
+                    leftCount--;
+                }else{
+                    leftCount--;
+                }
+            }else if(leftCount == 0){
+
+                if(token[i].second =="#" || token[i].second == "'" ){
+
+                    if(count >= 1 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+                    symbolFlag = 1;
+                    item = getArr(i, token);
+                    newToken.clear();
+                    count++;
+                }
+                else if(token[i].second!="EOF"){
+
+                    if(count >= 1 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+                    if(token[i].first == 30){
+                        symbolFlag =1;
+                        item.add("IS STRING");
+                    }
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==13 || token[i].second =="NIL"){
+                        symbolFlag =1;
+                        item.add(token[i].second);
+                    }else{
+                        item.add(token[i].second);
+                    }
+                    newToken.clear();
+                    count++;
+                }
+
+            }
+    }
+
+    if(check == 0){
+        string value = item.getHead()->data;
+        if(symbolFlag){
+            if(value == "IS STRING") ret.add("T"); 
+            else ret.add("NIL");
+        }else{
+
+            List temp;
+            temp = getValue(variables, value);
+            if(temp.getHead()==NULL) throw Exception(101);
+            if(temp.getHead()->data == "\"")  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            else    ret.add("NIL");
+        }
+    }else{
+        //함수를 통해 온 인자
+        if(item.getHead()->data == "\"") ret.add("T");
+        else ret.add("NIL");
+    }
+    
+    return ret;
+    /*
     List ret;
 
     Syntax syntax;
@@ -999,4 +1298,5 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
     }
     
     return ret;
+    */
 }
