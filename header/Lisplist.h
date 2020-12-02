@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -144,6 +145,101 @@ class List{
 
         }
 
+        bool isListIn(){
+            NODE* temp = head;
+
+            while(temp != NULL){
+                if(temp->data==list_Check) return true;
+                temp =temp->next;
+            }
+            return false;
+        }
+
+        string getAssoc(string key){
+            NODE* temp = head;
+            NODE* ret;
+            while(temp!= NULL){
+                if(temp->data==list_Check){
+
+                    ret = _getAssoc(key, temp->list);
+                    if(ret != NULL){
+                        NODE* listTemp = temp->list;
+                        string result = "( ";
+                        while(listTemp != NULL){
+                            result.append(listTemp->data);
+                            result.append(" ");
+                            listTemp = listTemp->next;
+                        }
+                        result.append(")");
+                        return result;
+                    }
+                }
+                temp = temp->next;
+            }
+            
+            return "NIL";
+        }
+
+        NODE* _getAssoc(string key, NODE* connected){
+            if(connected->data == key){ 
+                return connected;
+            }
+            else return NULL;
+        }
+
+        List getRemove(string key){
+            List ret;
+            NODE* temp = head;
+            bool addFlag = false;
+
+            if(this->flag == 1){
+                ret.add("(");
+                addFlag = true;
+            }else if(this->flag == 2){
+                ret.add("#(");
+                addFlag = true;
+            }
+
+            while(temp != NULL){
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    _getRemove(ret, newList);
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    _getRemove(ret, newList);
+                }else{
+                    if(temp->data != key) ret.add(temp->data.append(" "));
+                }
+
+                temp = temp->next;
+            }
+
+            if(this->flag != 0){
+                ret.add(") ");
+            }
+            return ret;
+        }
+
+        void _getRemove(List& ret, List input){
+            NODE* temp = input.getHead();
+
+            if(input.flag == 1){
+                ret.add("(");
+            }else if(input.flag == 2){
+                ret.add("#(");
+            }
+
+            while(temp!=NULL){
+                ret.add(temp->data.append(" "));
+                temp = temp->next;
+            }
+
+            ret.add(")");
+        }
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
             node->data = data;

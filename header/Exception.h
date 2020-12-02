@@ -77,7 +77,15 @@ class Exception{
                 /* REVERSE format error */
                 cout << "Array(#) format error" << endl;
                 break;
-            
+
+            case 80:
+                cout << "Right variable is not a LIST." << endl;
+                break;
+                
+            case 81:
+                cout << "There is no LIST variable in LIST." << endl;
+                break;
+
             case 100:
                 cout << "Invalid number of arguments."<< endl;
                 break;
