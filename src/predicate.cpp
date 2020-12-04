@@ -59,7 +59,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
     // ATOM
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
 
@@ -88,7 +88,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
@@ -165,7 +165,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
         * X가 NIL일 때만 참(true)을 반환함. / 변수가 아니면 error */
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
     
@@ -194,7 +194,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
@@ -274,7 +274,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
 
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
     
@@ -303,7 +303,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
@@ -391,7 +391,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
          * X가 0일 때만 참(true)을 반환함. X가 숫자가 아니면 ERROR 발생. */
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
     
@@ -420,7 +420,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
@@ -527,7 +527,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
          * X가 음수일 때만 참(true)을 반환함. X가 숫자가 아니면 ERROR 발생. */
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
     
@@ -555,7 +555,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
@@ -650,7 +650,7 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
          * X와 Y가 같으면 참(true)을 반환함. 아니면 NIL */
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     List compared;
     vector< pair<int, string> > newToken;
@@ -686,11 +686,11 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
                    
                     if(item.getSize()==0){
                         itemFlag = 1;
-                        item = syntax.analyze(newToken, variables);
+                        item = parser.analyze(newToken, variables);
                     } 
                     else{
                         comparedFlag =1;
-                        compared = syntax.analyze(newToken, variables);
+                        compared = parser.analyze(newToken, variables);
                     }
                     
 
@@ -841,7 +841,7 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
 
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     List compared;
     vector< pair<int, string> > newToken;
@@ -877,11 +877,11 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
                    
                     if(item.getSize()==0){
                         itemFlag = 1;
-                        item = syntax.analyze(newToken, variables);
+                        item = parser.analyze(newToken, variables);
                     } 
                     else{
                         comparedFlag =1;
-                        compared = syntax.analyze(newToken, variables);
+                        compared = parser.analyze(newToken, variables);
                     }
                     
 
@@ -1008,7 +1008,7 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
          * X >= Y 이면 참(true)을 반환함. 숫자가 아니면 error */
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     List compared;
     vector< pair<int, string> > newToken;
@@ -1044,11 +1044,11 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
                    
                     if(item.getSize()==0){
                         itemFlag = 1;
-                        item = syntax.analyze(newToken, variables);
+                        item = parser.analyze(newToken, variables);
                     } 
                     else{
                         comparedFlag =1;
-                        compared = syntax.analyze(newToken, variables);
+                        compared = parser.analyze(newToken, variables);
                     }
                     
 
@@ -1177,7 +1177,7 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
 
     List ret;
 
-    Syntax syntax;
+    Parser parser;
     List item;
     vector< pair<int, string> > newToken;
 
@@ -1206,7 +1206,7 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
                         isSetq++;
                     }
 
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                     symbolFlag = 1;
                     newToken.clear();
         
