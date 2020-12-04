@@ -309,7 +309,7 @@ class List{
 
         void insertList(class List list, int index){ // 사이에 리ㅡㅅ트넣기
             NODE* node = new NODE; 
-            node->data = "dummy";
+            node->data = list.getListCheck();
             node->next = NULL;
             node->list = list.head;
 
@@ -358,6 +358,9 @@ class List{
         }
 
         void setHead(NODE *head){
+            if(head == NULL){
+                this->size = 0;
+            }
             this->head = head;
         }
 

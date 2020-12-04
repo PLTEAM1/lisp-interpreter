@@ -78,6 +78,16 @@ class Exception{
                 cout << "Array(#) format error" << endl;
                 break;
 
+            case 15:
+                /* paren count error */
+                cout << "Left, Right paren count is not matched" << endl;
+                break;
+            
+            case 16:
+                /* undefined function error */
+                cout << "Undefined function, check input function name" << endl;
+                break;
+
             case 80:
                 cout << "Right variable is not a LIST." << endl;
                 break;
