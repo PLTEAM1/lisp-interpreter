@@ -83,10 +83,6 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
             /* CDR Function */
             return basic.cdr(token, variables);
 
-        }else if(function_Name == "CADDR"){
-            /* CADDR Function */
-            return basic.caddr(token, variables);
-
         }else if(function_Name == "NTH"){
             /* NTH Function */
             return basic.nth(token, variables);
@@ -151,6 +147,39 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
             return predicate.stringp(token, variables);
 
         }else{
+            /* CADDR Function */
+            if(function_Name.at(0) == 'C' && function_Name.at(1) == 'A'){
+                vector< pair<int, string> > new_token;
+                int count = 0;
+                new_token.push_back(make_pair(20, "("));
+                new_token.push_back(make_pair(23, "CAR"));
+                for(int i=2;i<function_Name.length();i++){
+                    if(function_Name.at(i) != 'D' && i != function_Name.length() - 1){
+                        throw Exception(1);
+                    }else{
+                        if(i == function_Name.length() - 1){
+                            if(function_Name.at(i) == 'R'){
+                                token.erase(token.begin());
+                                new_token.insert(new_token.end(), token.begin(), token.end());
+                            }else{
+                                throw Exception(1);
+                            }
+                        }else{
+                            count++;
+                            new_token.push_back(make_pair(20, "("));
+                            new_token.push_back(make_pair(23, "CDR"));
+                        }
+                    }
+                }
+
+                while(count){
+                    new_token.push_back(make_pair(21, ")"));
+                    count--;
+                }
+
+                return analyze(new_token, variables);
+            }
+
             throw Exception(1);
         }
     }

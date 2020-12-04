@@ -31,7 +31,7 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
             i = ret;
 
         }else if(token[i].second == ")"){
-            return i + 1;
+            return i;
         }else{
             origin.add(token[i].second);
         }
@@ -652,15 +652,6 @@ List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > 
     }
 
     return variable;
-
-}
-
-/**********************************************************/
-/* caddr -  
-        returns List -               */
-/**********************************************************/
-List Basic::caddr(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
 
 }
 

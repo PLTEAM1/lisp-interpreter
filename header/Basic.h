@@ -15,7 +15,6 @@ class Basic{
         List list(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List car(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List cdr(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
-        List caddr(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List nth(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List cons(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
