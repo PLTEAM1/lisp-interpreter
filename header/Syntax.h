@@ -25,7 +25,7 @@ class Syntax {
         void predicate_Function(vector< pair<int, string> > t);
 
         /* 조건문 */
-        void conditional();
+        string conditional(vector< pair<int, string> > t);
 
     public:
         /* syntax 분석 */
