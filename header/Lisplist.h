@@ -358,6 +358,9 @@ class List{
         }
 
         void setHead(NODE *head){
+            if(head == NULL){
+                this->size = 0;
+            }
             this->head = head;
         }
 
