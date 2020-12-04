@@ -6,7 +6,6 @@
 #include "../header/Basic.h"
 #include "../header/Predicate.h"
 #include "../header/Exception.h"
-#include <cctype>
 #include <iostream>
 
 bool Syntax::is_valid_paren(vector<pair<int, string> > t){
