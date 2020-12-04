@@ -1,5 +1,5 @@
-#ifndef _SYNTAX_H
-#define _SYNTAX_H
+#ifndef _PARSER_H
+#define _PARSER_H
 
 #include <utility>
 #include <vector>
@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class Syntax {
+class Parser {
     public:
         /* 괄호의 갯수 확인 함수 */
         bool is_valid_paren(vector< pair<int, string> > t);

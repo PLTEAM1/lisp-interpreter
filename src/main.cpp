@@ -1,6 +1,6 @@
 #include "../header/Lexer.h"
 #include "../header/Lisplist.h"
-#include "../header/Syntax.h"
+#include "../header/Parser.h"
 #include "../header/Exception.h"
 #include <iostream>
 #include <string>
@@ -10,7 +10,7 @@ using namespace std;
 int main(){
 
     Lexer lexer;
-    Syntax syntax;
+    Parser parser;
     vector< pair<string, List> > variables;
     List result;
 
@@ -19,8 +19,8 @@ int main(){
         try{
             vector< pair<int, string> > token = lexer.get_Token();
 
-            if(syntax.is_valid_paren(token)){
-                result = syntax.analyze(token, &variables);
+            if(parser.is_valid_paren(token)){
+                result = parser.analyze(token, &variables);
 
             
                 for(int i=0;i<variables.size();i++){

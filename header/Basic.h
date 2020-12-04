@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include "./Lisplist.h"
-#include "./Syntax.h"
+#include "./Parser.h"
 using namespace std;
 
 class Basic{

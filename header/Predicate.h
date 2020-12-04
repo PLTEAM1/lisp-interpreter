@@ -5,7 +5,7 @@
 #include <vector>
 #include <cctype>
 
-#include "../header/Syntax.h"
+#include "./Parser.h"
 #include "./Lisplist.h"
 
 using namespace std;

@@ -1,6 +1,5 @@
 
 #include "../header/Lexer.h"
-#include "../header/Syntax.h"
 #include <fstream>
 
 /******************************************

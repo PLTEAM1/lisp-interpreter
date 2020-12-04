@@ -1,11 +1,11 @@
-#include "../header/Syntax.h"
+#include "../header/Parser.h"
 #include "../header/Basic.h"
 #include "../header/Predicate.h"
 #include "../header/Exception.h"
 #include <cctype>
 #include <iostream>
 
-bool Syntax::is_valid_paren(vector<pair<int, string> > token){
+bool Parser::is_valid_paren(vector<pair<int, string> > token){
     
     int left_Paren_Count = 0;
     int Right_paren_count = 0;
@@ -31,7 +31,7 @@ bool Syntax::is_valid_paren(vector<pair<int, string> > token){
     }
 }
 
-List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
+List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
     Basic basic;
     Predicate predicate;
