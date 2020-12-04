@@ -59,7 +59,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
     for(int i=2;i<token.size();i++){
         List variable;
-        if(token[i].first == 10 || token[i].first == 12){
+        if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30){
             if(name != ""){
                 variable.add(token[i].second);
 
@@ -193,7 +193,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         //array format error 
                         throw Exception(14);
                     }
-                }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12){
+                }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12 || token[i].first == 30){
                     i += 1;
                     variable.add(token[i].second);
 
@@ -336,11 +336,11 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
     variable.setFlag(1); // set this variable is list
 
     for(int i=1; token.size(); i++){
-        if(token[i].first == 10 || token[i].first == 12){
+        if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30){
             variable.add(token[i].second);
         }else if(token[i].second == "\'"){
             ++i;
-            if(token[i].first == 10 || token[i].first == 11 || token[i].first == 12){
+            if(token[i].first == 10 || token[i].first == 11 || token[i].first == 12 || token[i].first == 30){
                 variable.add(token[i].second);
             }else if(token[i].first == 20){
                 vector< pair<int, string> > new_token;
@@ -673,56 +673,62 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
 
     for(int i=2;i<token.size();i++){
         if(token[i].second == "\'"){
-            List quote_result;
-            i += 1;
-            vector< pair<int, string> > new_token;
-                
-            for(int j=i+1;j<token.size();j++){
-                new_token.push_back(token[j]);
-            }
+            if(token[i+1].first == 20){
+                List quote_result;
+                i += 1;
+                vector< pair<int, string> > new_token;
+                    
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
 
-            i += addQuoteList(new_token, 0, quote_result);
+                i += addQuoteList(new_token, 0, quote_result);
 
-            NODE *head = quote_result.getHead();
+                NODE *head = quote_result.getHead();
 
-            for(int j=0;j<nthIndex;j++){
-                if(head->next != NULL){
-                    head = head->next;
+                for(int j=0;j<nthIndex;j++){
+                    if(head->next != NULL){
+                        head = head->next;
+                    }else{
+                        List nil;
+                        nil.add("NIL");
+                        return nil;
+                    }
+                }
+
+                if(head->data == variable.getListCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+
+                    variable.setFlag(1);
+                }else if(head->data == variable.getArrayCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+                    
+                    variable.setFlag(2);
                 }else{
-                    return List();
+                    variable.add(head->data);
                 }
-            }
-
-            if(head->data == variable.getListCheck()){
-                NODE *tempNode = head->list;
-
-                while(tempNode != NULL){
-                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
-                        variable.addNode(tempNode);
-                    }else{
-                        variable.add(tempNode->data);
-                    }
-
-                    tempNode = tempNode->next;
-                }
-
-                variable.setFlag(1);
-            }else if(head->data == variable.getArrayCheck()){
-                NODE *tempNode = head->list;
-
-                while(tempNode != NULL){
-                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
-                        variable.addNode(tempNode);
-                    }else{
-                        variable.add(tempNode->data);
-                    }
-
-                    tempNode = tempNode->next;
-                }
-                
-                variable.setFlag(2);
             }else{
-                variable.add(head->data);
+                throw Exception(80);
             }
         }else{
             if(token[i].first == 20){
@@ -759,7 +765,9 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                         head = head->next;
                     }else{
                         //리스트 index를 넘어가는 경우 NIL 반환 - 수정 필요
-                        return List();
+                        List nil;
+                        nil.add("NIL");
+                        return nil;
                     }
                 }
 
@@ -809,7 +817,9 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                                 head = head->next;
                             }else{
                                 //리스트 index를 넘어가는 경우 NIL 반환 - 수정 필요
-                                return List();
+                                List nil;
+                                nil.add("NIL");
+                                return nil;
                             }
                         }
 
@@ -879,7 +889,7 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
             i += 1;
-            if(token[i].first == 11 || token[i].first == 10){
+            if(token[i].first == 11 || token[i].first == 10 || token[i].first == 30){
                 if(insert_variable.getSize() == 0){
                     insert_variable.add(token[i].second);
                     
@@ -914,7 +924,11 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
 
                     i += addQuoteList(new_token, 0, variable);
 
-                    variable.insertList(insert_variable, 0);
+                    if(insert_variable.getSize() == 1){
+                        variable.insertValue(insert_variable.front(), 0);
+                    }else{
+                        variable.insertList(insert_variable, 0);
+                    }
                 }else{
                     //error
                     throw Exception(11);
@@ -994,6 +1008,22 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
                 }
 
             }else if(token[i].first == 10){
+                if(insert_variable.getSize() == 0){
+                    insert_variable.add(token[i].second);
+
+                }else if(variable.getSize() == 0){
+                    variable.add(token[i].second);
+
+                    if(insert_variable.getSize() == 1){
+                        variable.insertValue(insert_variable.front(), 0);
+                    }else{
+                        variable.insertList(insert_variable, 0);
+                    }
+                }else{
+                    //error
+                    throw Exception(11);
+                }
+            }else if(token[i].first == 30){
                 if(insert_variable.getSize() == 0){
                     insert_variable.add(token[i].second);
 
