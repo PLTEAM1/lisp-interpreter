@@ -22,7 +22,7 @@ class Syntax {
         void basic_Function(vector< pair<int, string> > token);
 
         /* 조건문 */
-        void conditional();
+        string conditional(vector< pair<int, string> > t);
 
     public:
         /* syntax 분석 */

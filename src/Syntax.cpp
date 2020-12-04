@@ -1,5 +1,9 @@
 #include "../header/Syntax.h"
 #include "../header/Basic.h"
+//#include "../header/Conditional.h"
+#include <cctype>
+//#include "../header/Lisplist.h"
+#include "../header/Basic.h"
 #include "../header/Predicate.h"
 #include "../header/Exception.h"
 #include <cctype>
@@ -24,11 +28,69 @@ bool Syntax::is_valid_paren(vector<pair<int, string> > t){
     else return false;
 }
 
-string Syntax::check_Syntax(vector< pair<int, string> > token){
+string Syntax::check_Syntax(vector< pair<int, string> > t){
 
     /* Syntax 판별 기능 구현 */
-
-    return "1";
+    
+    string ret_string;
+    //넘어온 파라미터의 첫번째가 함수이면 (token.first == 22)
+    if(t[0].first == 23){
+        
+        /*사칙연산, 파라미터로 넘어온 t가 + 5 3)이라고 가정, 어떤 전처리 없이 그대로 arithmetic_Operation에 파라미터로 전달
+          사칙연산 : + , - , *, /
+         */
+        if(t[0].second == "+" || t[0].second == "-" || t[0].second == "*" || t[0].second == "/" ){
+            //ret_string = arithmetic_Operation(t);
+            return ret_string;
+        }
+        
+        /*기본함수, 파라미터로 넘어온 t가 SETQ X (LIST (1 2 3))이라고 가정, 어떤 전처리 없이 그대로 basic_Operation에 파라미터로 전달
+          기본함수 : SETQ, LIST, CAR, CDR, NTH, CONS, REVERSE, APPEND, LENGTH, MEMBER, ASSOC, REMOVE, SUBST
+         */
+        else if(t[0].second == "SETQ" || t[0].second == "LIST" ||t[0].second == "CAR" ||t[0].second == "CDR" ||t[0].second == "NTH" ||t[0].second == "CONS" ||t[0].second == "REVERSE" ||t[0].second == "APPEND" ||t[0].second == "LENGTH" ||t[0].second == "MEMBER" ||t[0].second == "ASSOC" ||t[0].second == "REMOVE" ||t[0].second == "SUBST"){
+            //ret_string = basic_Function(t);
+            return ret_string;
+        }
+        
+        /*Predicate함수, 전처리 없이 그대로 predicate_Function에 파라미터로 전달
+          Predicate함수 : ATOM, NULL, NUMBERP, ZEROP, MINUSP, EQUAL, <, >, <= >=, STRINGP
+         */
+        else if(t[0].second == "ATOM" ||t[0].second == "NULL" ||t[0].second == "NUMBERP" ||t[0].second == "ZEROP" ||t[0].second == "MINUSP" ||t[0].second == "MINUSP" ||t[0].second == "EQUAL" ||t[0].second == "<" ||t[0].second == ">" ||t[0].second == "<=" ||t[0].second == ">=" ||t[0].second == "STRINGP"||t[0].second == "="){
+            //ret_string = predicate_Function(t);
+            //return ret_string;
+            return "TRUE";
+        }
+        
+        /*조건문
+          조건문 : IF,COND
+         */
+        else if(t[0].second == "IF" ||t[0].second == "COND"){
+            
+            /*for(auto &i : t){
+                cout << i.second << " ";
+            }
+            cout << "\n";*/
+            ret_string = conditional(t);
+            cout << ret_string;
+            return ret_string;
+        }
+        
+    }
+    
+    //넘어온 파라미터의 첫번째가 세미콜론이면
+    else if(t[0].first == 22){
+        //그대로 종료?
+        return ret_string = "SEMI";
+    }
+    //EOF이면
+    else if(t[0].first == -1){
+        cout << "\n check_Syntax EOF";
+        return "";
+    }
+    else{
+        return "invalid parameter";
+    }
+    return "error";
 }
 
 void Syntax::arithmetic_Operation(){

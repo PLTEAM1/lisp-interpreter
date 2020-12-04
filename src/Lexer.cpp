@@ -285,7 +285,7 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    ret.clear();
+    /*
     getline(cin, input);
     
     getChar();
@@ -293,8 +293,8 @@ vector<pair<int, string> > Lexer::get_Token(){
     do{
         lex();
     } while (nextToken != EOF);
+    */
     
-    /*
     Syntax syntax;
     vector< pair<string, List> > variables;
     List result;
@@ -332,7 +332,7 @@ vector<pair<int, string> > Lexer::get_Token(){
             result.traverse(result.getHead());
             cout << endl << endl;
         }
-    }*/
+    }
     
     return ret;
 }

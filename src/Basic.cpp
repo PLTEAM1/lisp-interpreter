@@ -330,7 +330,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
             returns List - linked list                    */
 /**********************************************************/
 List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-
     List variable;
     //yae
     variable.setFlag(1); // set this variable is list
@@ -1102,13 +1101,72 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
 
 }
 
+/*
+ 주어진 여러개의 리스트를 하나의 리스트로 만드는 함수
+ (APPEND '(A C) '(B D) '(E F))
+ > (A C B D E F)
+ 
+ */
 List Basic::append(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
+    List variable, result;
+    Syntax syntax;
+    
+    for(int i = 1; i < token.size(); i++){
+        if(token[i].second == "\'"){
+            i += 1;
+            vector< pair<int, string> > new_token;
+                
+            for(int j=i+1;j<token.size();j++){
+                new_token.push_back(token[j]);
+            }
 
+            i += addQuoteList(new_token, 0, variable);
+        }//if end
+        else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+                
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
+
+                    if(token[j].first == 21){
+                        if(left_count == 0 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
+                        }
+                    }
+                }
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                NODE *head = newList.getHead();
+                
+                for(int i = 0;i < newList.getSize(); i++){
+                    variable.add(head->data);
+                    head = head->next;
+                }
+            }//if end
+        }//else end
+
+    }
+    result = variable;
+    return result;
 }
+    
 List Basic::length(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
+    
+    
     return List();
-
 }
 
 List Basic::member(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
