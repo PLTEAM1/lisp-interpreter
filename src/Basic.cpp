@@ -1066,6 +1066,7 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
 List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable, result;
     Syntax syntax;
+    result.setFlag(1);
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
@@ -1078,6 +1079,7 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                 }
 
                 i += addQuoteList(new_token, 0, variable) + 1;
+
             }else{
                 throw Exception(80);
             }

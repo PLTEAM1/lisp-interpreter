@@ -46,10 +46,11 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
         }
         
         throw Exception(2);
-    }
-    else{
+    }else{
         token.erase(token.begin());
         string function_Name = token[0].second;
+
+        transform(function_Name.begin(), function_Name.end(),function_Name.begin(), ::toupper);
         
         if(function_Name == "SETQ"){
             /* SETQ Function ex) SETQ X (1 2 3)); */
