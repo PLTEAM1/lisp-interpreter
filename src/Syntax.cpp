@@ -5,46 +5,30 @@
 #include <cctype>
 #include <iostream>
 
-bool Syntax::is_valid_paren(vector<pair<int, string> > t){
+bool Syntax::is_valid_paren(vector<pair<int, string> > token){
     
-    int Left_paren_count = 0;
+    int left_Paren_Count = 0;
     int Right_paren_count = 0;
-    
-    for(auto &item : t){
 
-        if(item.second == "("){
-            Left_paren_count++;
-        }
-        else if(item.second == ")"){
-            Right_paren_count++;
+    for(int i=0; i<token.size();i++){
+        if(token[i].first == 20){
+            left_Paren_Count++;
+        }else{
+            if(token[i].first == 21){
+                if(left_Paren_Count > 0){
+                    left_Paren_Count--;
+                }else{
+                    return false;
+                }
+            }
         }
     }
-    
-    if(Left_paren_count == Right_paren_count) return true;
-    else return false;
-}
 
-string Syntax::check_Syntax(vector< pair<int, string> > token){
-
-    /* Syntax 판별 기능 구현 */
-
-    return "1";
-}
-
-void Syntax::arithmetic_Operation(){
-
-    /* 산술 연산 기능 구현 */
-}
-
-void Syntax::basic_Function(vector< pair<int, string> > token){
-
-    /* 기본 함수 기능 구현 */
-        
-}
-
-void Syntax::conditional(){
-
-    /* 조건문 구현 */
+    if(left_Paren_Count == 0){
+        return true;
+    }else{
+        return false;
+    }
 }
 
 List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
@@ -180,7 +164,7 @@ List Syntax::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
                 return analyze(new_token, variables);
             }
 
-            throw Exception(1);
+            throw Exception(16);
         }
     }
     throw Exception(1);
