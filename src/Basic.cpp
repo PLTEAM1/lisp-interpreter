@@ -136,7 +136,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         new_token.push_back(token[j]);
                     }
 
-                    i += addQuoteList(new_token, 0, variable);
+                    i += addQuoteList(new_token, 0, variable) + 1;
 
                     int check = 0;
                     for(int j=0;j<variables->size();j++){
@@ -167,7 +167,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                             new_token.push_back(token[j]);
                         }
 
-                        i += addQuoteList(new_token, 0, variable);
+                        i += addQuoteList(new_token, 0, variable) + 1;
 
                         variable.setFlag(2);
 
@@ -233,7 +233,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         new_token.push_back(token[j]);
                     }
 
-                    i += addQuoteList(new_token, 0, variable);
+                    i += addQuoteList(new_token, 0, variable) +1;
 
                     variable.setFlag(2);
 
@@ -351,7 +351,7 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
 
                 List newList;
 
-                i += addQuoteList(new_token, 0, newList);
+                i += addQuoteList(new_token, 0, newList) + 1;
 
                 variable.addList(newList);
             }
@@ -398,48 +398,52 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
-            List quote_result;
-            i += 1;
-            vector< pair<int, string> > new_token;
-                
-            for(int j=i+1;j<token.size();j++){
-                new_token.push_back(token[j]);
-            }
-
-            i += addQuoteList(new_token, 0, quote_result);
-
-            NODE *head = quote_result.getHead();
-
-            if(head->data == variable.getListCheck()){
-                NODE *tempNode = head->list;
-
-                while(tempNode != NULL){
-                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
-                        variable.addNode(tempNode);
-                    }else{
-                        variable.add(tempNode->data);
-                    }
-
-                    tempNode = tempNode->next;
+            if(token[i+1].first == 20){
+                List quote_result;
+                i += 1;
+                vector< pair<int, string> > new_token;
+                    
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
                 }
 
-                variable.setFlag(1);
-            }else if(head->data == variable.getArrayCheck()){
-                NODE *tempNode = head->list;
+                i += addQuoteList(new_token, 0, quote_result) + 1;
 
-                while(tempNode != NULL){
-                    if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
-                        variable.addNode(tempNode);
-                    }else{
-                        variable.add(tempNode->data);
+                NODE *head = quote_result.getHead();
+
+                if(head->data == variable.getListCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
                     }
 
-                    tempNode = tempNode->next;
+                    variable.setFlag(1);
+                }else if(head->data == variable.getArrayCheck()){
+                    NODE *tempNode = head->list;
+
+                    while(tempNode != NULL){
+                        if(tempNode->data == variable.getListCheck() || tempNode->data == variable.getArrayCheck()){
+                            variable.addNode(tempNode);
+                        }else{
+                            variable.add(tempNode->data);
+                        }
+
+                        tempNode = tempNode->next;
+                    }
+                    
+                    variable.setFlag(2);
+                }else{
+                    variable.add(head->data);
                 }
-                
-                variable.setFlag(2);
             }else{
-                variable.add(head->data);
+                throw Exception(80);
             }
         }else{
             if(token[i].first == 20){
@@ -578,19 +582,23 @@ List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > 
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
-            List quote_result;
-            i += 1;
-            vector< pair<int, string> > new_token;
-                
-            for(int j=i+1;j<token.size();j++){
-                new_token.push_back(token[j]);
+            if(token[i+1].first == 20){
+                List quote_result;
+                i += 1;
+                vector< pair<int, string> > new_token;
+                    
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
+
+                i += addQuoteList(new_token, 0, quote_result) + 1;
+
+                NODE *head = quote_result.getHead()->next;
+
+                variable.setHead(head);
+            }else{
+                throw Exception(80);
             }
-
-            i += addQuoteList(new_token, 0, quote_result);
-
-            NODE *head = quote_result.getHead()->next;
-
-            variable.setHead(head);
         }else{
             if(token[i].first == 20){
                 vector< pair<int, string> > new_token;
@@ -682,7 +690,7 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                     new_token.push_back(token[j]);
                 }
 
-                i += addQuoteList(new_token, 0, quote_result);
+                i += addQuoteList(new_token, 0, quote_result) + 1;
 
                 NODE *head = quote_result.getHead();
 
@@ -913,7 +921,7 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
                         new_token.push_back(token[j]);
                     }
 
-                    i += addQuoteList(new_token, 0, insert_variable);
+                    i += addQuoteList(new_token, 0, insert_variable) + 1;
 
                 }else if(variable.getSize() == 0){
                     vector< pair<int, string> > new_token;
@@ -1061,14 +1069,18 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
-            i += 1;
-            vector< pair<int, string> > new_token;
-                
-            for(int j=i+1;j<token.size();j++){
-                new_token.push_back(token[j]);
-            }
+            if(token[i+1].first == 20){
+                i += 1;
+                vector< pair<int, string> > new_token;
+                    
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
 
-            i += addQuoteList(new_token, 0, variable);
+                i += addQuoteList(new_token, 0, variable) + 1;
+            }else{
+                throw Exception(80);
+            }
         }else{
             if(token[i].first == 20){
                 vector< pair<int, string> > new_token;
