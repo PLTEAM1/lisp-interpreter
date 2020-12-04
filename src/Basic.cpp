@@ -1142,8 +1142,197 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
 }
 
 List Basic::member(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    return List();
+    List data;
+    List nilCheck;
+    List variable;
+    Syntax syntax;
 
+    for(int i=1; i< token.size(); i++){
+        if(token[i].second == "\'"){
+            if(token[i+1].first == 20){
+                if(data.getSize() == 0){
+                    i += 1;
+                    List newList;
+                    vector< pair<int, string> > new_token;
+                        
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    i += addQuoteList(new_token, 0, newList) + 1;
+                    
+                    data.add("NIL");
+                    nilCheck.add("NIL");
+                }else if(variable.getSize() == 0){
+                    i += 1;
+                    List newList;
+                    vector< pair<int, string> > new_token;
+                        
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    i += addQuoteList(new_token, 0, newList) + 1;
+
+                    string find_Data = data.front();
+                    NODE *head = newList.getHead();
+
+                    while(head != NULL){
+                        if(head->data != find_Data){
+                            head = head->next;
+                        }else{
+                            variable.setHead(head);
+                            variable.setFlag(1);
+                            break;
+                        }
+                    }
+
+                    if(head == NULL){
+                        if(nilCheck.getSize()==0){
+                            nilCheck.add("NIL");
+                        }
+                    }
+                }else{
+                    throw Exception(11);
+                }
+            }else{
+                i+=1;
+                if(data.getSize() == 0){
+                    data.add(token[i].second);
+                }else{
+                    throw Exception(80);
+                }
+            }
+        }else{
+            if(token[i].first == 20){
+                vector< pair<int, string> > new_token;
+                int left_count = 0;
+                int check =0;
+                int index = 0;
+
+                for(int j=i;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                    index++;
+                    if(token[j].first == 20){
+                        left_count++;
+                    }
+
+                    if(token[j].first == 21){
+                        if(left_count == 1 && check == 0){
+                            i+=index;
+                            check = 1;
+                        }else{
+                            left_count--;
+                        }
+                    }
+                }
+
+                List newList;
+
+                newList = syntax.analyze(new_token, variables);
+
+                if(data.getSize() == 0){
+                    if(newList.getFlag() == 0){
+                        data = newList;
+                    }else{
+                        data.add("NIL");
+                        nilCheck.add("NIL");
+                    }
+                }else if(variable.getSize() == 0){
+                    if(newList.getFlag() == 1){
+                        string find_Data = data.front();
+                        NODE *head = newList.getHead();
+
+                        while(head != NULL){
+                            if(head->data != find_Data){
+                                head = head->next;
+                            }else{
+                                variable.setHead(head);
+                                variable.setFlag(1);
+                                break;
+                            }
+                        }
+
+                        if(head == NULL){
+                            if(nilCheck.getSize()==0){
+                                nilCheck.add("NIL");
+                            }
+                        }
+                    }else{
+                        throw Exception(80);
+                    }
+                }else{
+                    throw Exception(11);
+                }
+            }else if(token[i].first == 11){
+                int check = 0;
+                List newList;
+                for(int j=0; variables->size();j++){
+                    if((*variables)[j].first == token[i].second){
+                        check = 1;
+
+                        newList = (*variables)[j].second;
+
+                        break;
+                    }
+                }
+
+                if(check == 0){
+                    //error
+                    throw Exception(2);
+                }
+
+                if(data.getSize() == 0){
+                    if(newList.getFlag() == 0){
+                        data = newList;
+                    }else{
+                        data.add("NIL");
+                        nilCheck.add("NIL");
+                    }
+                }else if(variable.getSize() == 0){
+                    if(newList.getFlag() == 1){
+                        string find_Data = data.front();
+                        NODE *head = newList.getHead();
+
+                        while(head != NULL){
+                            if(head->data != find_Data){
+                                head = head->next;
+                            }else{
+                                variable.setHead(head);
+                                variable.setFlag(1);
+                                break;
+                            }
+                        }
+
+                        if(head == NULL){
+                            if(nilCheck.getSize() == 0){
+                                nilCheck.add("NIL");
+                            }
+                        }
+                    }else{
+                        throw Exception(80);
+                    }
+                }else{
+                    throw Exception(11);
+                }
+
+            }else if(token[i].first == 21 || token[i].first == -1){
+                break;
+            }else{
+                if(data.getSize() == 0){
+                    data.add(token[i].second);
+                }else{
+                    throw Exception(80);
+                }
+            }
+        }
+    }
+
+    if(nilCheck.getSize() == 1){
+        return nilCheck;
+    }else{
+        return variable;
+    }
 }
 
 //yaewon
