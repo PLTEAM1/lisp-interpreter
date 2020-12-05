@@ -157,6 +157,10 @@ string Lexer::removeZeroFloat(string str){
     while(ret[ret.length()-1] == '0'){
         ret.erase(ret.length()-1);
     }
+    if(ret[ret.length()-1] == '.'){
+        //ret.erase(ret.length()-1);
+        ret += "0";
+    }
     return ret;
 }
 
