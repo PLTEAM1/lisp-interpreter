@@ -1795,6 +1795,7 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                     compared.add(token[i+1].second);
                     i++;
                 }
+                newToken.clear();
                 count++;
             }else if(token[i].second!="EOF"){
                 
