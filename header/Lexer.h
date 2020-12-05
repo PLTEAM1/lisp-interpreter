@@ -44,9 +44,7 @@ class Lexer {
         char lexeme [100];
         char nextChar;
         int lexLen;
-        int token;
         string input;
-        int inputIndex;
 
         vector<pair<int, string> > ret;
 
@@ -59,11 +57,12 @@ class Lexer {
         int lookup(char ch);
         int is_Function();
     
-        string removeZeroInt(string str);
-        string removeZeroFloat(string str);
+
 
     public: 
         vector<pair<int, string> > get_Token();
+        string removeZeroInt(string str);
+        string removeZeroFloat(string str);
 
 }; 
 
