@@ -42,11 +42,19 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     
     List error;
     
-    if(token[0].second != "("){
-        for(int i = 0 ; i < (*variables).size() ; i++){
+    if(token[0].second != "(" || token[0].second == "'" ){
+
+        if(token[0].second == "'"){
+            List ret;
+            ret.add(token[1].second);
+            return ret;
+        }else{
+            for(int i = 0 ; i < (*variables).size() ; i++){
             if((*variables)[i].first == token[0].second){
                 return (*variables)[i].second;
+                }
             }
+        
         }
         
         throw Exception(2);
