@@ -319,6 +319,7 @@ vector<pair<int, string> > Lexer::get_Token(){
 
     
     ret.clear();
+    cout << "* ";
     getline(cin, input);
     
     getChar();
