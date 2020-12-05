@@ -5,10 +5,11 @@
 #include <iostream>
 #include <string>
 
+#include <list>
 using namespace std;
 
 int main(){
-
+    
     Lexer lexer;
     Parser parser;
     vector< pair<string, List> > variables;
