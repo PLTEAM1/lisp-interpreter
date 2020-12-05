@@ -109,7 +109,6 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
     }
     
     for(int i=2;i<token.size();i++){
-        cout << token[i].second << endl;
         List variable;
         if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30 || token[i].first == 13){
             if(name != ""){
@@ -443,14 +442,14 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
             }
         }else if(token[i].first == 11){
             int check = 0;
-            for(int j=0; variables->size();j++){
+            for(int j=0; j < variables->size();j++){
                 if((*variables)[j].first == token[i].second){
                     check = 1;
                     
                     List temp = (*variables)[j].second;
                     
                     if(temp.getFlag() == 0){
-                        variable.add(temp.back());
+                        variable.add(temp.front());
                     }else{
                         variable.addList(temp);
                     }
@@ -463,6 +462,28 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
                 //error
                 throw Exception(2);
             }
+        }else if(token[i].first == 26){
+            if(token[i+1].first == 20){
+                i += 1;
+                vector< pair<int, string> > new_token;
+                    
+                for(int j=i+1;j<token.size();j++){
+                    new_token.push_back(token[j]);
+                }
+
+                List new_list;
+
+                i += addQuoteList(new_token, 0, new_list) +1;
+
+                new_list.setFlag(2);
+                
+                variable.addList(new_list);
+                
+            }else{
+                //array format error
+                throw Exception(14);
+            }
+
         }else if(token[i].first == 21 || token[i].first == -1){
             break;
         }else if(token[i].first == 20){
@@ -672,12 +693,16 @@ List Basic::car(vector< pair<int, string> > token, vector< pair<string, List> > 
                 
                 if(check == 0){
                     //error
-                    throw Exception(2);
+                    if(token[i].second == "NIL"){
+                        variable.add("NIL");
+                    }else{
+                        throw Exception(2);
+                    }
                 }
             }else if(token[i].first == 21 || token[i].first == -1){
                 break;
             }else{
-                throw Exception(6);
+                throw Exception(80);
             }
             
         }
@@ -766,12 +791,16 @@ List Basic::cdr(vector< pair<int, string> > token, vector< pair<string, List> > 
                 
                 if(check == 0){
                     //error
-                    throw Exception(2);
+                    if(token[i].second == "NIL"){
+                        variable.add("NIL");
+                    }else{
+                        throw Exception(2);
+                    }
                 }
             }else if(token[i].first == 21 || token[i].first == -1){
                 break;
             }else{
-                throw Exception(7);
+                throw Exception(80);
             }
             
         }
@@ -1168,6 +1197,7 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
     result.setFlag(1);
 
     for(int i=1;i<token.size();i++){
+        cout << token[i].second << endl;
         if(token[i].second == "\'"){
             if(token[i+1].first == 20){
                 i += 1;
@@ -1178,6 +1208,8 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                 }
 
                 i += addQuoteList(new_token, 0, variable) + 1;
+
+                variable.traverse(variable.getHead());
 
             }else{
                 throw Exception(80);
