@@ -56,7 +56,7 @@ List Conditional::_IF(vector< pair<int, string> > token, vector< pair<string, Li
         throw Exception(56);
     }
     
-    cout << "param size : " << params.size() << endl;
+    //cout << "param size : " << params.size() << endl;
     List condition;
     condition = parser.analyze(params[0], variables);
     

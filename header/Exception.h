@@ -113,7 +113,6 @@ public:
                 cout << "Only list parameters are allowed for APPEND function." << endl;
                 break;
                 
-                
             //용열 55 ~ conditional exception
             case 55:
                 cout << "Only T or NIL can be included in the conditional statement." << endl;
@@ -128,6 +127,19 @@ public:
                 break;
                 
             case 58:
+                cout << "" << endl;
+                break;
+                
+            //용열 60 ~ Arithmetic error
+            case 60:
+                cout << "Only Number can be included in the add/sub/mul/div Function." << endl;
+                break;
+                
+            case 61:
+                cout << "Error - divide by zero" << endl;
+                break;
+                
+            case 62:
                 cout << "" << endl;
                 break;
                 

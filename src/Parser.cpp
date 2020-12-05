@@ -3,6 +3,7 @@
 #include "../header/Predicate.h"
 #include "../header/Exception.h"
 #include "../header/Conditional.h"
+#include "../header/Arithmetic.h"
 #include <cctype>
 #include <iostream>
 
@@ -37,7 +38,8 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     Basic basic;
     Predicate predicate;
     Conditional conditional;
-
+    Arithmetic arithmetic;
+    
     List error;
     
     if(token[0].second != "("){
@@ -138,6 +140,18 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
             
         }else if(function_Name == "COND"){
             return conditional._COND(token, variables);
+            
+        }else if(function_Name == "+"){
+            return arithmetic.add(token, variables);
+            
+        }else if(function_Name == "-"){
+            return arithmetic.sub(token, variables);
+
+        }else if(function_Name == "*"){
+            return arithmetic.mul(token, variables);
+
+        }else if(function_Name == "/"){
+            return arithmetic.div(token, variables);
 
         }else{
             /* CADDR Function */
