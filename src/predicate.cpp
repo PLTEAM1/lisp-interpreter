@@ -168,9 +168,11 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
     return ret;
 }
 
+/**********************************************************/
+/* null - return T when the variable is NIL */
+/**********************************************************/
 List Predicate::null(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    /* NULL 
-        * X가 NIL일 때만 참(true)을 반환함. / 변수가 아니면 error */
+
     List ret;
 
     Parser parser;
@@ -256,7 +258,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
     if(check == 0){
         string value = item.getHead()->data;
         if(symbolFlag){
-            if(value == "NIL") ret.add("T"); //리스트
+            if(value == "NIL") ret.add("T"); 
             else ret.add("NIL");
         }else{
 
@@ -264,11 +266,11 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
             temp = getValue(variables, value);
 
             if(temp.getHead()==NULL) throw Exception(101);
-            if(temp.getHead()->data == "NIL")  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            if(temp.getHead()->data == "NIL")  ret.add("T");
             else    ret.add("NIL");
         }
     }else{
-        //함수를 통해 온 인자
+
         if(item.getHead()->data == "NIL") ret.add("T");
         else ret.add("NIL");
     }
@@ -276,6 +278,10 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
     return ret;
 }
 
+/**********************************************************/
+/* numberp - return T when the variable is number 
+        return NIL when the parameter is not a number */
+/**********************************************************/
 List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* NUMBERP
          * X가 숫자일 때만 참(true)을 반환함. */
@@ -369,7 +375,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
     if(check == 0){
         string value = item.getHead()->data;
         if(symbolFlag){
-            if(value == "IS NUMBER") ret.add("T"); //리스트
+            if(value == "IS NUMBER") ret.add("T");
             else ret.add("NIL");
         }else{
 
@@ -394,6 +400,10 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
         
 }
 
+/**********************************************************/
+/* null - return T when the variable is ZERO(0)
+        return error when the parameter is not a number */
+/**********************************************************/
 List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* ZEROP 
          * X가 0일 때만 참(true)을 반환함. X가 숫자가 아니면 ERROR 발생. */
@@ -467,13 +477,11 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                     }
                     
                     if(token[i].first == 10){
-                        //일반 정수
                         symbolFlag = 1;
                         if(token[i].second == "0") item.add("IS ZERO");
                         else item.add("IS NUMBER");
 
                     }else if(token[i].first == 12){
-                        //실수
                         symbolFlag = 1;
                         if(token[i].second[0] == '0' && token[i].second[2]== '0' && token[i].second.length() ==3 ) item.add("IS ZERO");
                         else item.add("IS NUMBER");
@@ -495,7 +503,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
     if(check == 0){
         string value = item.getHead()->data;
         if(symbolFlag){
-            if(value == "IS ZERO") ret.add("T"); //리스트
+            if(value == "IS ZERO") ret.add("T"); 
             else if(value == "IS NUMBER") ret.add("NIL");
             else throw Exception(102);
         }else{
@@ -530,6 +538,10 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
     return ret;
 }
 
+/**********************************************************/
+/* minusp - return T when the variable is negative
+        return error when the parameter is not a number */
+/**********************************************************/
 List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     /* MINUSP 
          * X가 음수일 때만 참(true)을 반환함. X가 숫자가 아니면 ERROR 발생. */
@@ -622,7 +634,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
     if(check == 0){
         string value = item.getHead()->data;
         if(symbolFlag){
-            if(value == "IS MINUS") ret.add("T"); //리스트
+            if(value == "IS MINUS") ret.add("T"); 
             else if(value == "IS NUMBER") ret.add("NIL");
             else throw Exception(102);
         }else{
@@ -653,9 +665,13 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
     
 }
 
+
+/**********************************************************/
+/* equal - return T when first and second parameter is same
+        return NIL when they are different  */
+/**********************************************************/
 List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    /* EQAUL 
-         * X와 Y가 같으면 참(true)을 반환함. 아니면 NIL */
+
     List ret;
 
     Parser parser;
@@ -663,7 +679,6 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
     List compared;
     vector< pair<int, string> > newToken;
 
-    // 0 = not symbol, 1 = symbol
     int itemFlag = 0;
     int comparedFlag = 0;
 
@@ -785,7 +800,6 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
         if(item.compare(item.getHead(), compared.getHead())) ret.add("T");
         else ret.add("NIL");
     }else if(itemFlag == 0 & comparedFlag == 1){
-        // Left가 변수일 때
         string itemData = item.getHead()->data;
         item = getValue(variables, itemData);
 
@@ -843,9 +857,12 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
     return ret;
 }
 
+/**********************************************************/
+/* < - return T when first param is less than second one.
+        return NIL when they are not. 
+        return error when they are not a number.   */
+/**********************************************************/
 List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    /* < 
-         * X < Y 이면 참(true)을 반환함. 숫자가 아니면 error */
 
     List ret;
 
@@ -1012,9 +1029,13 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
     
 }
 
+/**********************************************************/
+/* >= - return T when first param is greater than second one.
+        return NIL when they are not. 
+        return error when they are not a number.   */
+/**********************************************************/
 List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    /* >=
-         * X >= Y 이면 참(true)을 반환함. 숫자가 아니면 error */
+
     List ret;
 
     Parser parser;
@@ -1022,7 +1043,6 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
     List compared;
     vector< pair<int, string> > newToken;
 
-    // 0 = not symbol, 1 = symbol
     int itemFlag = 0;
     int comparedFlag = 0;
 
@@ -1180,10 +1200,12 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
   
 }
 
+
+/**********************************************************/
+/* stringp - return T when the variable is string.
+        return NIL when they are not.   */
+/**********************************************************/
 List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    /* STRINGP */
-
-
 
     List ret;
 
@@ -1279,11 +1301,10 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
             List temp;
             temp = getValue(variables, value);
             if(temp.getHead()==NULL) throw Exception(101);
-            if(temp.getHead()->data[0] == '\"')  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            if(temp.getHead()->data[0] == '\"')  ret.add("T"); 
             else    ret.add("NIL");
         }
     }else{
-        //함수를 통해 온 인자
         if(item.getHead()->data == "\"") ret.add("T");
         else ret.add("NIL");
     }
