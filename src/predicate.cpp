@@ -46,6 +46,7 @@ List Predicate::getArr(int& index, vector< pair<int, string> > token){
             }
         }
     }
+    return ret;
 }
 
 void Predicate::delVar(vector< pair<string, List> > *variables, int count){
@@ -1269,7 +1270,7 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
             List temp;
             temp = getValue(variables, value);
             if(temp.getHead()==NULL) throw Exception(101);
-            if(temp.getHead()->data == "\"")  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            if(temp.getHead()->data[0] == '\"')  ret.add("T"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
             else    ret.add("NIL");
         }
     }else{

@@ -1374,12 +1374,15 @@ List getArr(int& index, vector< pair<int, string> > token){
         if(token[i].second==")"){
             if(leftCount==1){
                 index = i;
-                return ret;
+                break;
             }else{
                 leftCount--;
             }
         }
     }
+    
+
+    return ret;
 }
 
 void delVar(vector< pair<string, List> > *variables, int count){
@@ -1457,7 +1460,6 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                         itemFlag = 1;
                         if(token[i].second == "'"){ 
                             i = addQuoteList(token, i+2, item);
-                            i--;
                         }           
                         else item = getArr(i, token);
          
@@ -1466,7 +1468,6 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                         comparedFlag =1;
                         if(token[i].second == "'"){
                             i = addQuoteList(token, i+2, compared);
-                            i--;
                         }         
                         else compared = getArr(i, token);   
                     } 
@@ -1616,7 +1617,6 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                         if(token[i].second == "'"){ 
                             i = addQuoteList(token, i+2, item);
                             item.setFlag(1);
-                            i--;
                         }           
                         else item = getArr(i, token);
          
@@ -1626,7 +1626,6 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                         if(token[i].second == "'"){
                             i = addQuoteList(token, i+2, compared);
                             compared.setFlag(1);
-                            i--;
                         }         
                         else compared = getArr(i, token);   
                     } 
@@ -1713,6 +1712,7 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
     List change;
     vector< pair<int, string> > newToken;
 
+
     // 0 = not symbol, 1 = symbol
     int itemFlag = 0;
     int comparedFlag = 0;
@@ -1777,7 +1777,6 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                         if(token[i].second == "'"){ 
                             i = addQuoteList(token, i+2, item);
                             item.setFlag(1);
-                            i--;
                         }           
                         else item = getArr(i, token);
          
@@ -1786,7 +1785,6 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                         if(token[i].second == "'"){
                             i = addQuoteList(token, i+2, compared);
                             compared.setFlag(1);
-                            i--;
                         }         
                         else compared = getArr(i, token);   
                     }else{
@@ -1794,12 +1792,10 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                         if(token[i].second == "'"){
                             i = addQuoteList(token, i+2, change);
                             change.setFlag(1);
-                            i--;
                         }         
-                        else{
-                            change = getArr(i, token);   
-                            change.setFlag(2);
-                        } 
+                        else change = getArr(i, token);
+
+                    
                     } 
 
                     newToken.clear();
@@ -1857,9 +1853,7 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
         delVar(variables, isSetq);
         throw Exception(100);
     }
-    
-    
-    
+
     if(itemFlag == 0){
         string itemData = item.getHead()->data;
         item = getValue(variables, itemData);
@@ -1879,11 +1873,12 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
 
         if(change.getHead()==NULL) throw Exception(106);
     }
-    if(change.getFlag() ==2) return change;
+
+
+    if(change.getFlag() ==2 || change.getHead()->data == "#") return change;
     if(compared.getSize() != 1) return change;
 
-    change.find(compared.getHead()->data, item);
-    
-    return change;
+    ret.add(change.find(compared.getHead()->data, item));
 
+    return ret;
 }
