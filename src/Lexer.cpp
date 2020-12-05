@@ -328,20 +328,20 @@ vector<pair<int, string> > Lexer::get_Token(){
     } while (nextToken != EOF);
     
     //find semi
-    int semi_index = 0;
-    for(int i = 0; ret.size(); i++){
+    int semi_index = 101;
+    for(int i = 0; i < ret.size(); i++){
         if(ret[i].first == SEMI){
             semi_index = i;
             break;
         }
     }
-    ret.erase(ret.begin()+semi_index, ret.end());
-    
-    for(auto &i: ret){
-        cout << i.second << " ";
-    }
-    
 
+    if(semi_index != 101){
+        ret.erase(ret.begin()+semi_index, ret.end());
+        if(ret.size() == 0){
+            ret.push_back(make_pair(nextToken, "EOF"));
+        }
+    }
 
     return ret;
 }
