@@ -10,6 +10,9 @@ using namespace std;
 class Basic{
     private:
         int addQuoteList(vector< pair<int, string> > token, int index, class List& origin);
+        List getValue(vector< pair<string, List> > *variables, string isSymbol);
+        List getArr(int& index, vector< pair<int, string> > token);
+        void delVar(vector< pair<string, List> > *variables, int count);
     public:
         List setq(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List list(vector< pair<int, string> > token, vector< pair<string, List> > *variables);

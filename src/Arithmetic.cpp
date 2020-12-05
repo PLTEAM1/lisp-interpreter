@@ -11,10 +11,10 @@
 #include "../header/Exception.h"
 
 
-List Arithmetic::add(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Arithmetic::add(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     Lexer lexer;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int, string> > > params;
     vector<double> sum_param;
     List result;
     
@@ -23,7 +23,7 @@ List Arithmetic::add(vector <pair<int, string>> token, vector <pair<string, List
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -41,12 +41,12 @@ List Arithmetic::add(vector <pair<int, string>> token, vector <pair<string, List
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
         else if(token[i].first == 10 || token[i].first == 12){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
@@ -57,7 +57,7 @@ List Arithmetic::add(vector <pair<int, string>> token, vector <pair<string, List
     }
     
     for(int i = 0; i < params.size(); i++){
-        vector<pair<int,string>> param;
+        vector< pair<int, string> > param;
         if(params[i].size() == 1){// 파라미터가 변수이름, number일때
             if(params[i][0].first == 11){// 변수일때
                 List param_list = parser.analyze(params[i], variables);
@@ -102,10 +102,10 @@ List Arithmetic::add(vector <pair<int, string>> token, vector <pair<string, List
     return result;
 }
 
-List Arithmetic::sub(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Arithmetic::sub(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     Lexer lexer;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int, string> > > params;
     vector<double> sum_param;
     List result;
     
@@ -114,7 +114,7 @@ List Arithmetic::sub(vector <pair<int, string>> token, vector <pair<string, List
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -132,12 +132,12 @@ List Arithmetic::sub(vector <pair<int, string>> token, vector <pair<string, List
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
         else if(token[i].first == 10 || token[i].first == 12){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
@@ -148,7 +148,7 @@ List Arithmetic::sub(vector <pair<int, string>> token, vector <pair<string, List
     }
     
     for(int i = 0; i < params.size(); i++){
-        vector<pair<int,string>> param;
+        vector< pair<int, string> > param;
         if(params[i].size() == 1){// 파라미터가 변수이름, number일때
             if(params[i][0].first == 11){// 변수일때
                 List param_list = parser.analyze(params[i], variables);
@@ -196,10 +196,10 @@ List Arithmetic::sub(vector <pair<int, string>> token, vector <pair<string, List
     return result;
 }
 
-List Arithmetic::mul(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Arithmetic::mul(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     Lexer lexer;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int, string> > > params;
     vector<double> sum_param;
     List result;
     
@@ -208,7 +208,7 @@ List Arithmetic::mul(vector <pair<int, string>> token, vector <pair<string, List
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -226,12 +226,12 @@ List Arithmetic::mul(vector <pair<int, string>> token, vector <pair<string, List
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
         else if(token[i].first == 10 || token[i].first == 12){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
@@ -242,7 +242,7 @@ List Arithmetic::mul(vector <pair<int, string>> token, vector <pair<string, List
     }
     
     for(int i = 0; i < params.size(); i++){
-        vector<pair<int,string>> param;
+        vector< pair<int, string> > param;
         if(params[i].size() == 1){// 파라미터가 변수이름, number일때
             if(params[i][0].first == 11){// 변수일때
                 List param_list = parser.analyze(params[i], variables);
@@ -289,10 +289,10 @@ List Arithmetic::mul(vector <pair<int, string>> token, vector <pair<string, List
     return result;
 }
 
-List Arithmetic::div(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Arithmetic::div(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     Lexer lexer;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int,string> > > params;
     vector<double> sum_param;
     List result;
     
@@ -301,7 +301,7 @@ List Arithmetic::div(vector <pair<int, string>> token, vector <pair<string, List
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -319,12 +319,12 @@ List Arithmetic::div(vector <pair<int, string>> token, vector <pair<string, List
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
         else if(token[i].first == 10 || token[i].first == 12){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
@@ -335,7 +335,7 @@ List Arithmetic::div(vector <pair<int, string>> token, vector <pair<string, List
     }
     
     for(int i = 0; i < params.size(); i++){
-        vector<pair<int,string>> param;
+        vector< pair<int, string> > param;
         if(params[i].size() == 1){// 파라미터가 변수이름, number일때
             if(params[i][0].first == 11){// 변수일때
                 List param_list = parser.analyze(params[i], variables);

@@ -4,11 +4,16 @@
 #include "../header/Exception.h"
 #include <iostream>
 
+void Predicate::delVar(vector< pair<string, List> > *variables, int count){
+    for(int k = 0 ; k < count ;k++){
+        variables->pop_back();
+    }
+}  
+
 /**********************************************************/
 /* isNumber, getValue, getArr, delVar
    - Sub functions to helping predicate's functions.  */
 /**********************************************************/
-
 bool Predicate::isNumber(string str){
     bool flag = true;
         for(int i = 0 ; i < str.size() ; i++){
@@ -53,12 +58,6 @@ List Predicate::getArr(int& index, vector< pair<int, string> > token){
     }
     return ret;
 }
-
-void Predicate::delVar(vector< pair<string, List> > *variables, int count){
-    for(int k = 0 ; k < count ;k++){
-        variables->pop_back();
-    }
-}  
 
 /**********************************************************/
 /* atom - returns T when the variable is symbol  
