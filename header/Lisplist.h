@@ -237,49 +237,6 @@ class List{
 
             ret.add(")");
         }
-        /*
-        void find(string key, List replaced){
-            NODE* temp = head;
-
-            while(temp != NULL){
-                cout << "HEY  : " << temp->data << endl;
-                if(temp->data == list_Check){
-                    List newList;
-                    newList.setHead(temp->list);
-                    newList.setFlag(1);
-                    newList.find(key, replaced);
-                }else if(temp->data == array_Check){
-                    List newList;
-                    newList.setHead(temp->list);
-                    newList.setFlag(2);
-                    newList.find(key, replaced);
-                }else{
-                    if(temp->data == key){
-                        NODE* pChange = replaced.getHead();
-                        string result = "";
-                        
-                        if(replaced.getFlag() == 1 ) result.append("(");
-                        else if(replaced.getFlag()==2) result.append("#(");
-
-                        while(pChange != NULL){
-                            result.append(pChange->data);
-                            result.append(" ");
-                            pChange = pChange->next;
-                        }
-                        
-                        //cout << "BEFORE : " << temp->data << " ";
-                        
-                        temp->data = result;
-                        //cout << "AFTER : " << temp->data << endl;
-                        
-                    }
-                }
-
-                temp = temp->next;
-            }
-     
-        }
-        */
        
         string find(string key, List replaced){
             NODE* temp = head;

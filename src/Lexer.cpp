@@ -293,45 +293,6 @@ vector<pair<int, string> > Lexer::get_Token(){
         lex();
     } while (nextToken != EOF);
     
-    /*
-    Syntax syntax;
-    vector< pair<string, List> > variables;
-    List result;
-    
-    //test.in파일을 통해 테스트
-    ifstream readFile;
-    
-    readFile.open("test.in");
-    if(readFile.is_open()){
-        while(!readFile.eof()){
-            ret.clear();
-            getline(readFile,input);
-            cout << "> " << input << "\n";
-            getChar();
-            
-            do{
-                lex();
-            } while (nextToken != EOF);
-            
-            if(ret.size() > 3){
-                ret.erase(ret.begin());
-            }
-            
-            result = syntax.analyze(ret, &variables);
-
-            for(int i=0;i<variables.size();i++){
-                cout << variables[i].first << " : ";
-
-                variables[i].second.traverse(variables[i].second.getHead());
-
-                cout << endl;
-            }
-
-            cout << "result : ";
-            result.traverse(result.getHead());
-            cout << endl << endl;
-        }
-    }*/
     
     return ret;
 }

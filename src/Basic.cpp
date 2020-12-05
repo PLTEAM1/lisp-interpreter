@@ -1478,7 +1478,6 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
     List compared;
     vector< pair<int, string> > newToken;
 
-    // 0 = not symbol, 1 = symbol
     int itemFlag = 0;
     int comparedFlag = 0;
 
@@ -1551,13 +1550,11 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
 
                     newToken.clear();
                     count++;
-                }else if(token[i].second == "'"){
-                    
+                }else if(token[i].second == "\'"){
                     if(item.getSize()==0){ 
                         itemFlag = 1;
                         item.add(token[i+1].second);
                         i++;
-                        
                     } 
                     else{
                         comparedFlag =1;
@@ -1565,6 +1562,8 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                         i++;
                     } 
                     count++;
+                    newToken.clear();
+
                 }else if(token[i].second!="EOF"){
 
                     if(count >= 2 ){
@@ -1723,6 +1722,7 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                         i++;
                     } 
                     count++;
+                    newToken.clear();
                 }else if(token[i].second!="EOF"){
 
                     if(count >= 2 ){
@@ -1894,6 +1894,7 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                         i++;
                     } 
                     count++;
+                    newToken.clear();
                 }else if(token[i].second!="EOF"){
 
                     if(count >= 3 ){

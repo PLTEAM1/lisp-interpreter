@@ -111,7 +111,7 @@ class Exception{
                 break;
             
             case 101:
-                cout << "The variable is unbound." << endl;
+                cout << "The variable is unbound" << endl;
                 break;
 
             case 102:

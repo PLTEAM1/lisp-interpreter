@@ -116,7 +116,7 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();
                     count++;
                 }
                 else if(token[i].second!="EOF"){
@@ -223,7 +223,7 @@ List Predicate::null(vector< pair<int, string> > token, vector< pair<string, Lis
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();
                     count++;
                 }
                 else if(token[i].second!="EOF"){
@@ -332,7 +332,7 @@ List Predicate::numberp(vector< pair<int, string> > token, vector< pair<string, 
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();
                     count++;
                 }
                 else if(token[i].second!="EOF"){
@@ -449,7 +449,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();
                     count++;
                 }
                 else if(token[i].second!="EOF"){
@@ -584,7 +584,7 @@ List Predicate::minusp(vector< pair<int, string> > token, vector< pair<string, L
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();
                     count++;
                 }
                 else if(token[i].second!="EOF"){
@@ -730,7 +730,7 @@ List Predicate::equal(vector< pair<int, string> > token, vector< pair<string, Li
                         itemFlag = 1;
                         item.add(token[i+1].second);
                         i++;
-                        
+                        newToken.clear();
                     } 
                     else{
                         comparedFlag =1;
@@ -929,6 +929,7 @@ List Predicate::isLess(vector< pair<int, string> > token, vector< pair<string, L
                         i++;
                     } 
                     count++;
+                    newToken.clear();
                 }
                 else if(token[i].second!="EOF"){
 
@@ -1095,6 +1096,7 @@ List Predicate::isGreater(vector< pair<int, string> > token, vector< pair<string
                         compared.add(token[i+1].second);
                         i++;
                     } 
+                    newToken.clear();
                     count++;
                 }else if(token[i].second!="EOF"){
 
@@ -1234,7 +1236,7 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
                     symbolFlag = 1;
                     item.add(token[i+1].second);
                     i++;
-                        
+                    newToken.clear();    
                     count++;
                 }
                 else if(token[i].second!="EOF"){
