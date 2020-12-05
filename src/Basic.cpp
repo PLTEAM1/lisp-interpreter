@@ -1766,7 +1766,6 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                     itemFlag = 1;
                     if(token[i].second == "'"){
                         i = addQuoteList(token, i+2, item);
-                        i--;
                     }
                     else item = getArr(i, token);
                     
@@ -1775,7 +1774,6 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                     comparedFlag =1;
                     if(token[i].second == "'"){
                         i = addQuoteList(token, i+2, compared);
-                        i--;
                     }
                     else compared = getArr(i, token);
                 }
