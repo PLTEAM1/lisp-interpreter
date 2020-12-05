@@ -17,9 +17,9 @@
             ((= X 0) (+ X 2))  ; X 가 0이면 X 값에 2을 더함
             ((< X 0) (+ X 3)))
  */
-List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Conditional::_IF(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int, string> > > params;
     List result;
 
     for(int i = 1; i < token.size(); i++){
@@ -27,7 +27,7 @@ List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, Lis
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -45,7 +45,7 @@ List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, Lis
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
@@ -91,9 +91,9 @@ List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, Lis
     return result;
 }
 
-List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+List Conditional::_COND(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
-    vector<vector<pair<int,string>>> params;
+    vector< vector< pair<int, string> > > params;
     List result;
     int nil_check = 0;
 
@@ -102,7 +102,7 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
         
         if(token[i].second == "("){
             Paren++;
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             for(int j = i+1; j < token.size(); j++){
                 if(Paren == 0){
@@ -120,22 +120,22 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
             params.push_back(param);
         }
         else if(token[i].first == 11){
-            vector<pair<int,string>> param;
+            vector< pair<int, string> > param;
             param.push_back(token[i]);
             params.push_back(param);
         }
     }
     
     for(int i = 0; i < params.size(); i++){
-        vector<pair<int, string>> condition;
-        vector<vector<pair<int, string>>> temp, statement;
+        vector< pair<int, string> > condition;
+        vector< vector< pair<int, string> > > temp, statement;
         
         for(int j = 1; j < params[i].size(); j++){
             int Paren = 0;
             
             if(params[i][j].second == "("){
                 Paren++;
-                vector<pair<int,string>> param;
+                vector< pair<int, string> > param;
                 param.push_back(params[i][j]);
                 for(int k = j+1; j < params[i].size(); k++){
                     if(Paren == 0){
@@ -153,7 +153,7 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
                 temp.push_back(param);
             }
             else if(params[i][j].first == 11){
-                vector<pair<int,string>> param;
+                vector< pair<int, string> > param;
                 param.push_back(params[i][j]);
                 temp.push_back(param);
             }
