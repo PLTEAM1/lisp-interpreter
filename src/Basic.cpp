@@ -372,8 +372,9 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
 
     List variable;
-    //yae
-    variable.setFlag(1); // set this variable is list
+    Parser parser;
+
+    variable.setFlag(1);
 
     for(int i=1; token.size(); i++){
         if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30){
@@ -417,8 +418,40 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
                 //error
                 throw Exception(2);
             }
-        }else if(token[i].first == 21){
+        }else if(token[i].first == 21 || token[i].first == -1){
             break;
+        }else if(token[i].first == 20){
+            vector< pair<int, string> > new_token;
+            int left_count = 0;
+            int check = 0;
+            int index = 0;
+
+            for(int j=i;j<token.size();j++){
+                new_token.push_back(token[j]);
+                index++;
+                if(token[j].first == 20){
+                    left_count++;
+                }
+
+                if(token[j].first == 21){
+                    if(left_count == 1 && check == 0){
+                        i+=index - 1;
+                        check = 1;
+                    }else{
+                        left_count--;
+                    }
+                }
+            }
+
+            List newList;
+
+            newList = parser.analyze(new_token, variables);
+
+            if(newList.getFlag() == 0){
+                variable.add(newList.back());
+            }else{
+                variable.addList(newList);
+            }
         }else{
             //error
             throw Exception(5);
@@ -812,7 +845,6 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                     if(head->next != NULL){
                         head = head->next;
                     }else{
-                        //리스트 index를 넘어가는 경우 NIL 반환 - 수정 필요
                         List nil;
                         nil.add("NIL");
                         return nil;
@@ -864,7 +896,6 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
                             if(head->next != NULL){
                                 head = head->next;
                             }else{
-                                //리스트 index를 넘어가는 경우 NIL 반환 - 수정 필요
                                 List nil;
                                 nil.add("NIL");
                                 return nil;
@@ -1195,6 +1226,12 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
 
 }
 
+/**********************************************************/
+/* member - a function to returns a list from the found data
+             to the last element 
+        returns List - a list from the found data
+                        to the last element               */
+/**********************************************************/
 List Basic::member(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List data;
     List nilCheck;
