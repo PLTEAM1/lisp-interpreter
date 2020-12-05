@@ -7,7 +7,7 @@
 #include <cctype>
 #include <iostream>
 
-bool Parser::is_valid_paren(vector<pair<int, string> > token){
+bool Parser::is_valid_paren(vector< pair<int, string> > token){
     
     int left_Paren_Count = 0;
     int Right_paren_count = 0;

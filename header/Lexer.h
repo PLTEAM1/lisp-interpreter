@@ -46,7 +46,7 @@ class Lexer {
         int lexLen;
         string input;
 
-        vector<pair<int, string> > ret;
+        vector< pair<int, string> > ret;
 
         /* Local Function declarations */
         void addChar();
@@ -60,7 +60,7 @@ class Lexer {
 
 
     public: 
-        vector<pair<int, string> > get_Token();
+        vector< pair<int, string> > get_Token();
         string removeZeroInt(string str);
         string removeZeroFloat(string str);
 
