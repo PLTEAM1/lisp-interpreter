@@ -1111,7 +1111,7 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
                     
                     if(token[j].first == 21){
                         if(left_count == 1 && check == 0){
-                            i+=index;
+                            i+=index - 1;
                             check = 1;
                         }else{
                             left_count--;
@@ -1163,6 +1163,41 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
                 if(check == 0){
                     //error
                     throw Exception(2);
+                }
+                
+            }else if(token[i].first == 26){
+                if(token[i+1].first == 20){
+                    i += 1;
+                    vector< pair<int, string> > new_token;
+                    
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+
+                    if(insert_variable.getSize() == 0){
+                        i += addQuoteList(new_token, 0, insert_variable) + 1;
+                        insert_variable.setFlag(2);
+                    }else if(variable.getSize() == 0){
+                        List newList;
+
+                        i += addQuoteList(new_token, 0, newList) + 1;
+                        newList.setFlag(2);
+                        
+                        if(insert_variable.getSize() == 1){
+                            variable.add(insert_variable.front());
+                            variable.addList(newList);
+                        }else{
+                            variable.addList(insert_variable);
+                            variable.addList(newList);
+                        }
+
+                        variable.setFlag(1);
+                    }else{
+                        //error
+                        throw Exception(11);
+                    }
+                }else{
+                    throw Exception(14);
                 }
                 
             }else if(token[i].first == 10 || token[i].first == 12 || token[i].first == 13 || token[i].first == 30){
@@ -1634,7 +1669,7 @@ List Basic::member(vector< pair<int, string> > token, vector< pair<string, List>
 
                     if(token[j].first == 21){
                         if(left_count == 1 && check == 0){
-                            i+=index;
+                            i+=index - 1;
                             check = 1;
                         }else{
                             left_count--;
