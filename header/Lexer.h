@@ -58,6 +58,9 @@ class Lexer {
 
         int lookup(char ch);
         int is_Function();
+    
+        string removeZeroInt(string str);
+        string removeZeroFloat(string str);
 
     public: 
         vector<pair<int, string> > get_Token();
