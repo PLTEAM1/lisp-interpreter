@@ -60,7 +60,7 @@ class List{
             size++;
         }
         
-        void addList(class List list){
+        void addList(class List list){ß
             if(list.getFlag() == 1){
                 add(list_Check);
             }else{
@@ -414,8 +414,16 @@ class List{
         void setHead(NODE *head){
             if(head == NULL){
                 this->size = 0;
+                this->head = NULL;
+            }else{
+                this->head = head;
+                this->size = 0;
+
+                while(head->next != NULL){
+                    this->size++;
+                    head = head->next;
+                }
             }
-            this->head = head;
         }
 
         int getSize(){
