@@ -109,8 +109,9 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
     }
     
     for(int i=2;i<token.size();i++){
+        cout << token[i].second << endl;
         List variable;
-        if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30){
+        if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30 || token[i].first == 13){
             if(name != ""){
                 variable.add(token[i].second);
                 
@@ -208,7 +209,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                 }else if(token[i].second == "T"){
                     throw Exception(18);
                 }else{
-                    name = token[1].second;
+                    name = token[i].second;
                 }
             }
         }else if(token[i].second == "\'"){
@@ -278,7 +279,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                         //array format error
                         throw Exception(14);
                     }
-                }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12 || token[i].first == 30){
+                }else if(token[i+1].first == 11 || token[i+1].first == 10 || token[i].first == 12  || token[i].first == 13 || token[i].first == 30){
                     i += 1;
                     variable.add(token[i].second);
                     
@@ -421,11 +422,11 @@ List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> >
     variable.setFlag(1);
 
     for(int i=1; token.size(); i++){
-        if(token[i].first == 10 || token[i].first == 12 || token[i].first == 30){
+        if(token[i].first == 10 || token[i].first == 12  || token[i].first == 13 || token[i].first == 30){
             variable.add(token[i].second);
         }else if(token[i].second == "\'"){
             ++i;
-            if(token[i].first == 10 || token[i].first == 11 || token[i].first == 12 || token[i].first == 30){
+            if(token[i].first == 10 || token[i].first == 11 || token[i].first == 12  || token[i].first == 13 || token[i].first == 30){
                 variable.add(token[i].second);
             }else if(token[i].first == 20){
                 vector< pair<int, string> > new_token;
@@ -1012,7 +1013,7 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
             i += 1;
-            if(token[i].first == 11 || token[i].first == 10 || token[i].first == 30){
+            if(token[i].first == 11 || token[i].first == 10  || token[i].first == 12  || token[i].first == 13 || token[i].first == 30){
                 if(insert_variable.getSize() == 0){
                     insert_variable.add(token[i].second);
                     
@@ -1130,29 +1131,13 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
                     throw Exception(2);
                 }
                 
-            }else if(token[i].first == 10){
+            }else if(token[i].first == 10 || token[i].first == 12 || token[i].first == 13 || token[i].first == 30){
                 if(insert_variable.getSize() == 0){
                     insert_variable.add(token[i].second);
                     
                 }else if(variable.getSize() == 0){
                     variable.add(token[i].second);
                     
-                    if(insert_variable.getSize() == 1){
-                        variable.insertValue(insert_variable.front(), 0);
-                    }else{
-                        variable.insertList(insert_variable, 0);
-                    }
-                }else{
-                    //error
-                    throw Exception(11);
-                }
-            }else if(token[i].first == 30){
-                if(insert_variable.getSize() == 0){
-                    insert_variable.add(token[i].second);
-
-                }else if(variable.getSize() == 0){
-                    variable.add(token[i].second);
-
                     if(insert_variable.getSize() == 1){
                         variable.insertValue(insert_variable.front(), 0);
                     }else{
