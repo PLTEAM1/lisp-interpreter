@@ -22,17 +22,8 @@ int main(){
 
             if(parser.is_valid_paren(token)){
                 result = parser.analyze(token, &variables);
-
-            
-                for(int i=0;i<variables.size();i++){
-                    cout << variables[i].first << " : ";
-
-                    variables[i].second.traverse(variables[i].second.getHead());
-
-                    cout << endl;
-                }
                 
-                cout << "ret : ";
+                cout << "> ";
                 result.traverse(result.getHead());
                 cout << endl;
             }else{

@@ -98,9 +98,9 @@ class List{
             NODE* temp = head;
 
             if(this->flag == 1){
-                cout << "(";
+                cout << "( ";
             }else if(this->flag == 2){
-                cout << "#(";
+                cout << "#( ";
             }
 
             while(temp != NULL){
