@@ -1400,9 +1400,15 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
             for(int j=i+1;j<token.size();j++){
                 new_token.push_back(token[j]);
             }
-            
             i += addQuoteList(new_token, 0, variable) + 1;
-            ret += variable.getSize();
+            //ret += variable.getSize();
+            NODE* get = variable.getHead();
+            
+            while(get != NULL){
+                ret++;
+                get = get->next;
+            }
+            
         }
         else if(token[i].first == 11){
             if(check != 0){
@@ -1449,6 +1455,7 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
                 }
                 
                 i += addQuoteList(new_token, 0, variable) + 1;
+                
                 ret += variable.getSize();
             }else{
                 //array format error
