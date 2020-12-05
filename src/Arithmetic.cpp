@@ -18,7 +18,10 @@ List Arithmetic::add(vector< pair<int, string> > token, vector< pair<string, Lis
     vector<double> sum_param;
     List result;
     
-    for(int i = 1; i < token.size()-2; i++){
+    if(token.back().second == "EOF"){
+        token.pop_back();
+    }
+    for(int i = 1; i < token.size()-1; i++){
         int Paren = 0;
         
         if(token[i].second == "("){
@@ -109,7 +112,10 @@ List Arithmetic::sub(vector< pair<int, string> > token, vector< pair<string, Lis
     vector<double> sum_param;
     List result;
     
-    for(int i = 1; i < token.size()-2; i++){
+    if(token.back().second == "EOF"){
+        token.pop_back();
+    }
+    for(int i = 1; i < token.size()-1; i++){
         int Paren = 0;
         
         if(token[i].second == "("){
@@ -203,7 +209,10 @@ List Arithmetic::mul(vector< pair<int, string> > token, vector< pair<string, Lis
     vector<double> sum_param;
     List result;
     
-    for(int i = 1; i < token.size()-2; i++){
+    if(token.back().second == "EOF"){
+        token.pop_back();
+    }
+    for(int i = 1; i < token.size()-1; i++){
         int Paren = 0;
         
         if(token[i].second == "("){
@@ -296,7 +305,10 @@ List Arithmetic::div(vector< pair<int, string> > token, vector< pair<string, Lis
     vector<double> sum_param;
     List result;
     
-    for(int i = 1; i < token.size()-2; i++){
+    if(token.back().second == "EOF"){
+        token.pop_back();
+    }
+    for(int i = 1; i < token.size()-1; i++){
         int Paren = 0;
         
         if(token[i].second == "("){

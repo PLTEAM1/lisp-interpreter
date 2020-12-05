@@ -170,7 +170,7 @@ List Conditional::_COND(vector< pair<int, string> > token, vector< pair<string, 
             }
             else{ // 그 외의 경우
                 for(int i = 0; i < statement.size(); i++){
-                    parser.analyze(statement[i], variables);
+                    result = parser.analyze(statement[i], variables);
                     if(i == statement.size()-1)
                         result = parser.analyze(statement[i], variables);
                 }
