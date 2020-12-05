@@ -93,6 +93,11 @@ class Exception{
                 cout << "NIL is a constant and thus can't be set." << endl;
                 break;
 
+            case 18:
+                /* T is a constant */
+                cout << "T is a constant and thus can't be set." << endl;
+                break;
+
             case 80:
                 cout << "Right variable is not a LIST." << endl;
                 break;

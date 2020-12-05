@@ -53,6 +53,8 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
     if(token[1].first == 11){
         if(token[1].second == "NIL"){
             throw Exception(17);
+        }else if(token[1].second == "T"){
+            throw Exception(18);
         }else{
             name = token[1].second;
         }
@@ -91,9 +93,13 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
             }
         }else if(token[i].first == 11){
             if(name != ""){
-                if(token[i].second == "NIL"){
+                if(token[i].second == "NIL" || token[i].second == "T"){
                     int check = 0;
-                    variable.add("NIL");
+                    if(token[i].second == "NIL"){
+                        variable.add("NIL");
+                    }else{
+                        variable.add("T");
+                    }
 
                     check = 0;
 
@@ -152,8 +158,10 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
                     }
                 }
             }else{
-                if(token[1].second == "NIL"){
+                if(token[i].second == "NIL"){
                     throw Exception(17);
+                }else if(token[i].second == "T"){
+                    throw Exception(18);
                 }else{
                     name = token[1].second;
                 }
