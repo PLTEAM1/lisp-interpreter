@@ -41,6 +41,51 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
 }
 
 /**********************************************************/
+/* getValue, getArr, delVar
+     - a sub function for helping ASSOC, REMOVE, SUBST */
+/**********************************************************/
+List Basic::getValue(vector< pair<string, List> > *variables, string isSymbol){
+    int check = 0;
+    
+    for(int i = 0 ; i < (*variables).size() ; i++){
+        if((*variables)[i].first == isSymbol){
+            return (*variables)[i].second;
+        }
+    }
+    return List();
+}
+
+List Basic::getArr(int& index, vector< pair<int, string> > token){
+    int leftCount = 0;
+    List ret;
+    
+    for(int i = index ; i < token.size() ; i++){
+        ret.add(token[i].second);
+        
+        if(token[i].second == "("){
+            leftCount++;
+        }
+        if(token[i].second==")"){
+            if(leftCount==1){
+                index = i;
+                break;
+            }else{
+                leftCount--;
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+void Basic::delVar(vector< pair<string, List> > *variables, int count){
+    for(int k = 0 ; k < count ;k++){
+        variables->pop_back();
+    }
+}  
+
+/**********************************************************/
 /* setq - a function to set variable(symbol and list) 
  returns List - linked list
  symbol also a list with one node      */
@@ -1648,52 +1693,6 @@ List Basic::member(vector< pair<int, string> > token, vector< pair<string, List>
         return variable;
     }
 }
-
-
-/**********************************************************/
-/* getValue, getArr, delVar
-     - a sub function for helping ASSOC, REMOVE, SUBST */
-/**********************************************************/
-List getValue(vector< pair<string, List> > *variables, string isSymbol){
-    int check = 0;
-    
-    for(int i = 0 ; i < (*variables).size() ; i++){
-        if((*variables)[i].first == isSymbol){
-            return (*variables)[i].second;
-        }
-    }
-    return List();
-}
-
-List getArr(int& index, vector< pair<int, string> > token){
-    int leftCount = 0;
-    List ret;
-    
-    for(int i = index ; i < token.size() ; i++){
-        ret.add(token[i].second);
-        
-        if(token[i].second == "("){
-            leftCount++;
-        }
-        if(token[i].second==")"){
-            if(leftCount==1){
-                index = i;
-                break;
-            }else{
-                leftCount--;
-            }
-        }
-    }
-
-    return ret;
-}
-
-
-void delVar(vector< pair<string, List> > *variables, int count){
-    for(int k = 0 ; k < count ;k++){
-        variables->pop_back();
-    }
-}  
 
 /**********************************************************/
 /* assoc - a function to returns a list when the second variable 
