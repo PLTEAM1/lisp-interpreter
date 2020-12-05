@@ -4,6 +4,11 @@
 #include "../header/Exception.h"
 #include <iostream>
 
+/**********************************************************/
+/* isNumber, getValue, getArr, delVar
+   - Sub functions to helping predicate's functions.  */
+/**********************************************************/
+
 bool Predicate::isNumber(string str){
     bool flag = true;
         for(int i = 0 ; i < str.size() ; i++){
@@ -55,9 +60,12 @@ void Predicate::delVar(vector< pair<string, List> > *variables, int count){
     }
 }  
 
-
+/**********************************************************/
+/* atom - returns T when the variable is symbol  
+            returns NIL when the variable is a list   */
+/**********************************************************/
 List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
-    // ATOM
+ 
     List ret;
 
     Parser parser;
@@ -142,18 +150,17 @@ List Predicate::atom(vector< pair<int, string> > token, vector< pair<string, Lis
     if(check == 0){
         string value = item.getHead()->data;
         if(symbolFlag){
-            if(value == "'") ret.add("NIL"); //리스트
+            if(value == "'") ret.add("NIL");
             else ret.add("T");
         }else{
 
             List temp;
             temp = getValue(variables, value);
             if(temp.getHead()==NULL) throw Exception(101);
-            if(temp.getFlag() == 1)  ret.add("NIL"); // var에 저장되어있었다는건 어떤 symbol이라는 뜻
+            if(temp.getFlag() == 1)  ret.add("NIL"); 
             else    ret.add("T");
         }
     }else{
-        //함수를 통해 온 인자
         if(item.getFlag()==1) ret.add("NIL");
         else ret.add("T");
     }

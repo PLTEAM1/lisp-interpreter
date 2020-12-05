@@ -1426,7 +1426,11 @@ List Basic::member(vector< pair<int, string> > token, vector< pair<string, List>
     }
 }
 
-//yaewon
+
+/**********************************************************/
+/* getValue, getArr, delVar
+     - a sub function for helping ASSOC, REMOVE, SUBST */
+/**********************************************************/
 List getValue(vector< pair<string, List> > *variables, string isSymbol){
     int check = 0;
 
@@ -1462,15 +1466,20 @@ List getArr(int& index, vector< pair<int, string> > token){
     return ret;
 }
 
+
 void delVar(vector< pair<string, List> > *variables, int count){
     for(int k = 0 ; k < count ;k++){
         variables->pop_back();
     }
 }  
 
-
+/**********************************************************/
+/* assoc - a function to returns a list when the second variable 
+    in the function has the same first element in the list.  */
+/**********************************************************/
 List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     
+
     List ret;
 
     Parser parser;
@@ -1625,6 +1634,10 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
     return ret;
 
 }
+
+/****************************************************************************/
+/* remove - remove a variable that is in the list which is second parameter.*/
+/****************************************************************************/
 List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List ret;
 
@@ -1780,6 +1793,11 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
     return ret;
 
 }
+
+/*****************************************************************/
+/* subst - a function to find a second variable 
+    in the third variable and replace it with first parameter.  */
+/****************************************************************/
 List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List ret;
 
