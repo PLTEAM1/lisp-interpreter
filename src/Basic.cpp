@@ -2,6 +2,7 @@
 #include "../header/Exception.h"
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 /**********************************************************/
 /* addQuoteList - a function to add quote list '(1 2 (3 4))
@@ -1198,7 +1199,6 @@ List Basic::cons(vector< pair<int, string> > token, vector< pair<string, List> >
 List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable, result;
     Parser parser;
-    result.setFlag(1);
 
     for(int i=1;i<token.size();i++){
         if(token[i].second == "\'"){
@@ -1261,7 +1261,32 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                 
                 if(check == 0){
                     //error
-                    throw Exception(2);
+                    if(token[i].second == "NIL"){
+                        variable.add("NIL");
+                    }else{
+                        throw Exception(2);
+                    }
+                }
+            }else if(token[i].first == 30){
+                string temp = token[i].second;
+
+                std::reverse(temp.begin(), temp.end());
+
+                variable.add(temp);
+
+            }else if(token[i].first == 26){
+                if(token[i+1].first == 20){
+                    i += 1;
+                    vector< pair<int, string> > new_token;
+                    
+                    for(int j=i+1;j<token.size();j++){
+                        new_token.push_back(token[j]);
+                    }
+                    
+                    i += addQuoteList(new_token, 0, variable) + 1;
+                    variable.setFlag(2);
+                }else{
+                    throw Exception(14);
                 }
             }else if(token[i].first == 21 || token[i].first == -1){
                 break;
@@ -1271,8 +1296,16 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
             }
         }
     }
-    
-    variable.reverse(result, variable.getHead());
+
+    if(variable.getFlag() == 2){
+        variable.reverse(result, variable.getHead());
+        result.setFlag(2);
+    }else if(variable.getFlag() == 1){
+        variable.reverse(result, variable.getHead());
+        result.setFlag(1);
+    }else{
+        variable.reverse(result, variable.getHead());
+    }
     
     return result;
     

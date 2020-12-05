@@ -70,7 +70,7 @@ public:
                 
             case 13:
                 /* REVERSE format error */
-                cout << "REVERSE format error" << endl;
+                cout << "The value is not of type SEQUENCE." << endl;
                 break;
                 
             case 14:
