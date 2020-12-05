@@ -1,6 +1,1 @@
-(APPEND '(1 2) (LIST 'X 5 7))
 (SETQ Xayde -123)
-(SETQ Y 4)
-(SETQ Z 3.3)
-(SETQ A '(1 2 3))
-(APPEND A '(3))

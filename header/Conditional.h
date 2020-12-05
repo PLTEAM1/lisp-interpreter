@@ -18,8 +18,8 @@ class Conditional{
     private:
     
     public:
-        string _IF(vector<pair<int,string>> token, vector< pair<string, List> > *variables);
-        string _COND(vector<pair<int,string>> token, vector< pair<string, List> > *variables);
+        List _IF(vector<pair<int,string>> token, vector< pair<string, List> > *variables);
+        List _COND(vector<pair<int,string>> token, vector< pair<string, List> > *variables);
 };
 
 #endif /* conditional_hpp */
