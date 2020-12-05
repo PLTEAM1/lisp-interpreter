@@ -1,6 +1,7 @@
 
 #include "../header/Lexer.h"
 #include "../header/Syntax.h"
+#include "../header/Exception.h"
 #include <fstream>
 
 /******************************************
@@ -82,7 +83,7 @@ void Lexer::addChar() {
         lexeme[lexLen++] = nextChar;
         lexeme[lexLen] = 0; // '\0'
     } else {
-        printf("Error - lexeme is too long \n");
+        throw Exception(65);
     }
 }
 
@@ -198,7 +199,7 @@ int Lexer::lex() {
                 addChar();
                 getChar();
             }else{
-                printf("Error - String is NOT completed\n");
+                throw Exception(66);
             }
            
             nextToken = STRING;
@@ -220,8 +221,7 @@ int Lexer::lex() {
                     i++;
                 }
                 if(i == 0){
-                    printf("%s is Error \n", lexeme);
-                    cout << "Lexer error only #\\\n";
+                    throw Exception(67);
                 }
                 nextToken = SHARP_LETTER;
                 break;
@@ -231,8 +231,7 @@ int Lexer::lex() {
                 break;
             }
             else{
-                cout << "Error " << nextChar << " can't come after #\n";
-                exit(0);
+                throw Exception(68);
             }
             
         case ARITHMETIC:
@@ -274,7 +273,7 @@ int Lexer::lex() {
             break;
     } /* End of switch */
 
-    printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
+    //printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
 
     string str(lexeme);
 
@@ -285,7 +284,8 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    /*
+    
+    ret.clear();
     getline(cin, input);
     
     getChar();
@@ -293,8 +293,9 @@ vector<pair<int, string> > Lexer::get_Token(){
     do{
         lex();
     } while (nextToken != EOF);
-    */
     
+    
+    /*
     Syntax syntax;
     vector< pair<string, List> > variables;
     List result;
@@ -332,7 +333,7 @@ vector<pair<int, string> > Lexer::get_Token(){
             result.traverse(result.getHead());
             cout << endl << endl;
         }
-    }
+    }*/
     
     return ret;
 }

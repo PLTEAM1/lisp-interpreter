@@ -46,6 +46,7 @@ List Predicate::getArr(int& index, vector< pair<int, string> > token){
             }
         }
     }
+    return ret;
 }
 
 void Predicate::delVar(vector< pair<string, List> > *variables, int count){

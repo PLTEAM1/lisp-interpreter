@@ -1,143 +1,195 @@
-////
-////  conditional.cpp
-////  pl
-////
-////  Created by 최용렬 on 2020/11/17.
-////
 //
-//#include "../header/Conditional.h"
-//#include "../header/Syntax.h"
-//#include "../header/Lisplist.h"
-//#include <iostream>
+//  conditional.cpp
+//  pl
 //
-///*  IF또는 COND를 봤을때 넘어온다고 가정
-//    ex) IF (> X 3) (PRINT X))
-//    ex) COND ((> X 0) (+ X 1))  ; X 가 0보다 크면 X 값에 1을 더함
-//            ((= X 0) (+ X 2))  ; X 가 0이면 X 값에 2을 더함
-//            ((< X 0) (+ X 3)))
-// */
-//string Conditional::_IF(vector< pair<int, string> > t,vector< pair<string, List> > *variables){
-//    Syntax syntax;
+//  Created by 최용렬 on 2020/11/17.
 //
-//    /* IF */
-//
-//    /* 파라미터로 넘어온 토큰중 조건문, 수행문을 괄호에 맞춰서 스택에 넣는 작업
-//        ex) token = (> X 3) // syntax_check를 위해서 pair<int,string>으로 추가
-//        ex) stack[0] = (> X 3) <- token의 형식(즉, pair<int,string>
-//            stack[1] = (+ X 1)
-//     */
-//    vector<pair<int,string>> token;
-//    vector<vector<pair<int,string>>> stack;
-//
-//    for(int i = 0; i < t.size(); i++){
-//        if(t[i].second == "("){
-//            for(int j = i; j < t.size(); j++){
-//                if(t[j].second == ")"){
-//                    token.push_back(t[j]);
-//                    stack.push_back(token);
-//                    token.clear();
-//                    i = j;
-//                    break;
-//                }//if ) end
-//                token.push_back(t[j]);
-//            }//for loop end
-//        }//if ( end
-//        else if(t[i].second == ")"){
-//            break;
-//        }//else if ) end
-//    }//for loop end
-//
-//    //넘겨줄때는 > X 0)을 넘겨줌
-//    stack[0].erase(stack[0].begin());
-//
-//    //파라미터가 2개일때, 즉 참이면 수행문, 거짓이면 NIL 출력
-//    if(stack.size() == 2){
-//        cout << "\n파라미터 2개";
-//        if(syntax.analyze(stack[0], variables) == "TRUE"){
-//            cout << "조건문 TRUE\n";
-//            stack[1].erase(stack[1].begin());
-//            syntax.analyze(stack[1], variables);
-//        }//if true end
-//        else if(syntax.analyze(stack[0], variables) == "FALSE"){
-//            cout << "NIL\n";
-//        }//else if false end
-//    }//파라미터가 2개일때 if end
-//
-//    //파라미터가 3개일때, 즉 참이면 참 수행문, 거짓이면 거짓 수행문
-//    else if(stack.size() == 3){
-//        cout << "파라미터 3개\n";
-//        if(syntax.analyze(stack[0], variables) == "TRUE"){
-//            cout << "조건문 TRUE\n";
-//            stack[1].erase(stack[1].begin());
-//            syntax.analyze(stack[1], variables);
-//        }//if true end
-//        else if(syntax.analyze(stack[0], variables) == "FALSE"){
-//            cout << "조건문 FALSE\n";
-//            stack[2].erase(stack[2].begin());
-//            syntax.analyze(stack[2], variables);
-//        }//else if false end
-//    }//파라미터가 3개일때 else if end
-//
-//    return "";
-//}
-//
-//string Conditional::_COND(vector< pair<int, string> > t,vector< pair<string, string> > *variables){
-//
-//    /* COND */
-//    Syntax syntax;
-//
-//    /* 파라미터로 넘어온 토큰중 조건문, 수행문을 괄호에 맞춰서 스택에 넣는 작업
-//        ex) token = (> X 3) // syntax_check를 위해서 pair<int,string>으로 추가
-//        ex) stack[0] = (> X 3) <- token의 형식(즉, pair<int,string>
-//            stack[1] = (+ X 1)
-//        ex) stack_COND[0] = (> X 0) (+ X 1) <- stack_COND[0][0] = (> X 0), stack_COND[0][1] = (+ X 1)
-//            stack_COND[1] = (= X 0) (+ X 2)
-//            stack_COND[2] = (< X 0) (+ X 3)
-//     */
-//    vector<pair<int,string>> token;
-//    vector<vector<pair<int,string>>> stack;
-//    vector<vector<vector<pair<int,string>>>> stack_COND;
-//
-//    for(int i = 0; i < t.size(); i++){
-//        if(t[i].second == "("){
-//            for(int j = i; j < t.size(); j++){
-//                if(t[j].second == ")"){
-//                    token.push_back(t[j]);
-//                    stack.push_back(token);
-//                    token.clear();
-//                    i = j;
-//                    break;
-//                }//if ) end
-//                token.push_back(t[j]);
-//            }//for loop end
-//        }//if ( end
-//        else if(t[i].second == ")"){
-//            if(t[i+1].second == "("){
-//                stack[0].erase(stack[0].begin());
-//                stack_COND.push_back(stack);
-//                stack.clear();
-//            }//if ( end
-//            else if(t[i+1].second == ")"){
-//                stack[0].erase(stack[0].begin());
-//                stack_COND.push_back(stack);
-//                break;
-//            }//if ) end
-//        }//else if ) end
-//    }//for loop end
-//
-//    for(int i = 0; i <= stack_COND.size(); i++){
-//        if(i == stack_COND.size()){
-//            cout << "맞는 조건이 없음 return 은 생각 해봐야함\n";
-//            return "CONDITIONAL ERROR";
-//            break;
-//        }//if stack_COND.size() end
-//        stack_COND[i][0].erase(stack_COND[i][0].begin());
-//        if(syntax.analyze(stack_COND[i][0], variables) == "TRUE"){
-//            stack_COND[i][1].erase(stack_COND[i][1].begin());
-//            syntax.analyze(stack_COND[i][1], variables);// 수행문 실행
-//            break;
-//        }//if TRUE end
-//    }//for loop end
-//    return "";
-//}
-//
+
+#include "../header/Conditional.h"
+#include "../header/Syntax.h"
+#include "../header/Lisplist.h"
+#include "../header/Exception.h"
+#include <iostream>
+
+/*
+    ex) (IF (> X 3) (PRINT X))
+    ex) (COND ((> X 0) (+ X 1))  ; X 가 0보다 크면 X 값에 1을 더함
+            ((= X 0) (+ X 2))  ; X 가 0이면 X 값에 2을 더함
+            ((< X 0) (+ X 3)))
+ */
+List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+    Syntax syntax;
+    vector<vector<pair<int,string>>> params;
+    List result;
+
+    for(int i = 1; i < token.size(); i++){
+        int Paren = 0;
+        
+        if(token[i].second == "("){
+            Paren++;
+            vector<pair<int,string>> param;
+            param.push_back(token[i]);
+            for(int j = i+1; j < token.size(); j++){
+                if(Paren == 0){
+                    i = j-1;
+                    break;
+                }
+                else
+                    param.push_back(token[j]);
+                
+                if(token[j].second == "(")
+                    Paren++;
+                else if(token[j].second == ")")
+                    Paren--;
+            }
+            params.push_back(param);
+        }
+        else if(token[i].first == 11){
+            vector<pair<int,string>> param;
+            param.push_back(token[i]);
+            params.push_back(param);
+        }
+    }
+    
+    if(!(params.size() == 2 || params.size() == 3)){
+        //error 파라미터 개수는 2개 또는 3개만 가능
+        throw Exception(56);
+    }
+    
+    cout << "param size : " << params.size() << endl;
+    List condition;
+    condition = syntax.analyze(params[0], variables);
+    
+    if(params.size() == 2){ // 파라미터의 개수가 2개일때
+        if(condition.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
+            if(condition.getHead()->data == "NIL"){
+                //NIL을 출력
+                result.add("NIL");
+            }
+            else{ // 그 외의 경우
+                result = syntax.analyze(params[1], variables);
+            }
+        }
+        else{ // 그 외의 경우
+            result = syntax.analyze(params[1], variables);
+        }
+    }
+    else if(params.size() == 3){ // 파라미터의 개수가 3개일때
+        if(condition.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
+            if(condition.getHead()->data == "NIL"){
+                //NIL일때의 statement실행
+                result = syntax.analyze(params[2], variables);
+            }
+            else{ // 그 외의 경우
+                result = syntax.analyze(params[1], variables);
+            }
+        }
+        else{ // 그 외의 경우
+            result = syntax.analyze(params[1], variables);
+        }
+    }
+    return result;
+}
+
+List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
+    Syntax syntax;
+    vector<vector<pair<int,string>>> params;
+    List result;
+    int nil_check = 0;
+
+    for(int i = 0; i < token.size(); i++){
+        int Paren = 0;
+        
+        if(token[i].second == "("){
+            Paren++;
+            vector<pair<int,string>> param;
+            param.push_back(token[i]);
+            for(int j = i+1; j < token.size(); j++){
+                if(Paren == 0){
+                    i = j-1;
+                    break;
+                }
+                else
+                    param.push_back(token[j]);
+                
+                if(token[j].second == "(")
+                    Paren++;
+                else if(token[j].second == ")")
+                    Paren--;
+            }
+            params.push_back(param);
+        }
+        else if(token[i].first == 11){
+            vector<pair<int,string>> param;
+            param.push_back(token[i]);
+            params.push_back(param);
+        }
+    }
+    
+    for(int i = 0; i < params.size(); i++){
+        vector<pair<int, string>> condition;
+        vector<vector<pair<int, string>>> temp, statement;
+        
+        for(int j = 1; j < params[i].size(); j++){
+            int Paren = 0;
+            
+            if(params[i][j].second == "("){
+                Paren++;
+                vector<pair<int,string>> param;
+                param.push_back(params[i][j]);
+                for(int k = j+1; j < params[i].size(); k++){
+                    if(Paren == 0){
+                        j = k-1;
+                        break;
+                    }
+                    else
+                        param.push_back(params[i][k]);
+                    
+                    if(params[i][k].second == "(")
+                        Paren++;
+                    else if(params[i][k].second == ")")
+                        Paren--;
+                }
+                temp.push_back(param);
+            }
+            else if(params[i][j].first == 11){
+                vector<pair<int,string>> param;
+                param.push_back(params[i][j]);
+                temp.push_back(param);
+            }
+        }
+        condition = temp[0];
+        for(int i = 1; i < temp.size(); i++){
+            statement.push_back(temp[i]);
+        }
+        List con_list = syntax.analyze(condition, variables);
+
+        if(con_list.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
+            if(con_list.getHead()->data == "NIL"){
+                //NIL을 출력
+            }
+            else{ // 그 외의 경우
+                for(int i = 0; i < statement.size(); i++){
+                    syntax.analyze(statement[i], variables);
+                    if(i == statement.size()-1)
+                        result = syntax.analyze(statement[i], variables);
+                }
+                nil_check++;
+                break;
+            }
+        }
+        else{ // 그 외의 경우
+            for(int i = 0; i < statement.size(); i++){
+                syntax.analyze(statement[i], variables);
+                if(i == statement.size()-1)
+                    result = syntax.analyze(statement[i], variables);
+            }            nil_check++;
+            break;
+        }
+    }
+    if(nil_check == 0){
+        result.add("NIL");
+    }
+    
+    return result;
+}

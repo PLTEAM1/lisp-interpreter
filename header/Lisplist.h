@@ -125,6 +125,7 @@ class List{
                 cout << ") ";
             }
         }
+    
         
         bool compare(NODE* pHead,NODE* qHead){
             NODE* origin = pHead;
