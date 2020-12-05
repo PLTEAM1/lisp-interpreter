@@ -238,49 +238,98 @@ class List{
 
             ret.add(")");
         }
-
-        void find(string key, List replaced){
+       
+        string find(string key, List replaced){
             NODE* temp = head;
+            string tempResult = "";
+            string result = "";
+
+            if(getFlag() == 1 ) result.append("(");
+            else if(getFlag()==2) result.append("#(");
 
             while(temp != NULL){
-
+                
                 if(temp->data == list_Check){
+                    
                     List newList;
                     newList.setHead(temp->list);
                     newList.setFlag(1);
-                    newList.find(key, replaced);
+                    string ptemp = newList.find(key, replaced);  
+                    result.append(ptemp);
+                    
                 }else if(temp->data == array_Check){
                     List newList;
                     newList.setHead(temp->list);
                     newList.setFlag(2);
-                    newList.find(key, replaced);
+                    string ptemp = newList.find(key, replaced);
+                    result.append(ptemp);
                 }else{
+
                     if(temp->data == key){
-                        NODE* pChange = replaced.getHead();
-                        string result = "";
                         
-                        if(replaced.getFlag() == 1 ) result.append("(");
-                        else if(replaced.getFlag()==2) result.append("#(");
+                        NODE* pChange = replaced.getHead();
+
+                        if(replaced.getFlag() == 1 ) tempResult.append("(");
+                        else if(replaced.getFlag()==2) tempResult.append("#(");
 
                         while(pChange != NULL){
-                            result.append(pChange->data);
-                            result.append(" ");
+                            tempResult.append(pChange->data);
+                            tempResult.append(" ");
                             pChange = pChange->next;
                         }
                         
-                        cout << "BEFORE : " << temp->data << " ";
-                        if(replaced.getFlag() == 1 || replaced.getFlag()==2) result.append(")");
-                        temp->data = result;
-                        cout << "AFTER : " << temp->data << endl;
-                        
-                    }
-                }
+                        if(replaced.getFlag() == 1 || replaced.getFlag()==2) tempResult.append(")");
 
+                        result.append(tempResult);
+                        tempResult.clear();
+
+                    }else{
+                        result.append(temp->data);
+                    }
+                    result.append(" ");
+                }
+                
                 temp = temp->next;
             }
-     
-        }
+            if(getFlag() == 1 || getFlag()==2) result.append(")");
 
+            return result;
+        }
+        
+        /*
+        string find(string key, List replaced){
+            NODE* temp = head;
+            string newData = "";
+
+            if(getFlag()==1) newData.append("(");
+            if(getFlag()==2) newData.append("#(");
+
+            while(temp!=NULL){
+                if(temp->data == list_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    string ptemp = newList.find(key, replaced);  
+                    newData.append(ptemp);  
+                    
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    string qtemp = newList.find(key, replaced);
+                    newData.append(qtemp);
+                }else{
+                    newData.append(temp->data);
+                }
+                newData.append(" ");
+            }
+
+            if(getFlag() != 0 ) newData.append(")");
+            return newData;
+
+        }
+        */
+        
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
             node->data = data;

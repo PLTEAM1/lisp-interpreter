@@ -39,7 +39,7 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     Conditional conditional;
 
     List error;
-
+    
     if(token[0].second != "("){
         for(int i = 0 ; i < (*variables).size() ; i++){
             if((*variables)[i].first == token[0].second){

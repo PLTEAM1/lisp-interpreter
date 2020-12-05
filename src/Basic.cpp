@@ -1649,7 +1649,11 @@ List Basic::member(vector< pair<int, string> > token, vector< pair<string, List>
     }
 }
 
-//yaewon
+
+/**********************************************************/
+/* getValue, getArr, delVar
+     - a sub function for helping ASSOC, REMOVE, SUBST */
+/**********************************************************/
 List getValue(vector< pair<string, List> > *variables, string isSymbol){
     int check = 0;
     
@@ -1674,14 +1678,16 @@ List getArr(int& index, vector< pair<int, string> > token){
         if(token[i].second==")"){
             if(leftCount==1){
                 index = i;
-                return ret;
+                break;
             }else{
                 leftCount--;
             }
         }
     }
+
     return ret;
 }
+
 
 void delVar(vector< pair<string, List> > *variables, int count){
     for(int k = 0 ; k < count ;k++){
@@ -1689,17 +1695,20 @@ void delVar(vector< pair<string, List> > *variables, int count){
     }
 }  
 
-
+/**********************************************************/
+/* assoc - a function to returns a list when the second variable 
+    in the function has the same first element in the list.  */
+/**********************************************************/
 List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     
+
     List ret;
 
     Parser parser;
     List item;
     List compared;
     vector< pair<int, string> > newToken;
-    
-    // 0 = not symbol, 1 = symbol
+
     int itemFlag = 0;
     int comparedFlag = 0;
     
@@ -1805,9 +1814,75 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                         compared = parser.analyze(newToken, variables);
                     }
                 }else{
-                    if(item.getSize()==0) item.add(token[i].second);
-                    else compared.add(token[i].second);
+
+                    leftCount--;
+                }
+            }else if(leftCount == 0){
+
+                if((token[i].second =="#" &&token[i+1].second =="(") || (token[i].second == "'" &&token[i+1].second =="(" ) ){
+
+                    if(count >= 2 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
                     
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        if(token[i].second == "'"){ 
+                            i = addQuoteList(token, i+2, item);
+                        }           
+                        else item = getArr(i, token);
+         
+                    } 
+                    else{
+                        comparedFlag =1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, compared);
+                        }         
+                        else compared = getArr(i, token);   
+                    } 
+
+                    newToken.clear();
+                    count++;
+                }else if(token[i].second == "\'"){
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item.add(token[i+1].second);
+                        i++;
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared.add(token[i+1].second);
+                        i++;
+                    } 
+                    count++;
+                    newToken.clear();
+
+                }else if(token[i].second!="EOF"){
+
+                    if(count >= 2 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        } 
+                        else{
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else compared.add(token[i].second);
+                        
+                    }
+
+                    newToken.clear();
+                    count++;
+
                 }
                 
                 newToken.clear();
@@ -1849,6 +1924,10 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
     return ret;
     
 }
+
+/****************************************************************************/
+/* remove - remove a variable that is in the list which is second parameter.*/
+/****************************************************************************/
 List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List ret;
 
@@ -1968,6 +2047,67 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                     if(item.getSize()==0) item.add(token[i].second);
                     else compared.add(token[i].second);
                     
+
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        if(token[i].second == "'"){ 
+                            i = addQuoteList(token, i+2, item);
+                            item.setFlag(1);
+                        }           
+                        else item = getArr(i, token);
+         
+                    } 
+                    else{
+                        comparedFlag =1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, compared);
+                            compared.setFlag(1);
+                        }         
+                        else compared = getArr(i, token);   
+                    } 
+
+                    newToken.clear();
+                    count++;
+                }else if(token[i].second == "'"){
+                    
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item.add(token[i+1].second);
+                        i++;
+                        
+                    } 
+                    else{
+                        comparedFlag =1;
+                        compared.add(token[i+1].second);
+                        i++;
+                    } 
+                    count++;
+                    newToken.clear();
+                }else if(token[i].second!="EOF"){
+
+                    if(count >= 2 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        } 
+                        else{
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else compared.add(token[i].second);
+                        
+                    }
+
+                    newToken.clear();
+                    count++;
+
                 }
                 
                 newToken.clear();
@@ -2005,6 +2145,11 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
     return ret;
     
 }
+
+/*****************************************************************/
+/* subst - a function to find a second variable 
+    in the third variable and replace it with first parameter.  */
+/****************************************************************/
 List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List ret;
 
@@ -2013,89 +2158,35 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
     List compared;
     List change;
     vector< pair<int, string> > newToken;
-    
+
+
     // 0 = not symbol, 1 = symbol
     int itemFlag = 0;
     int comparedFlag = 0;
     int changeFlag = 0;
-    
+
     int leftCount = 0;
     int check = 0;
     int count = 0;
     
     int isSetq = 0;
-    
+
     for(int i = 1 ; i < token.size(); i++){
-        
-        newToken.push_back(token[i]);
-        if(token[i].second=="("){
-            leftCount++;
-        }
-        else if(token[i].second==")"){
-            if(leftCount == 1){
-                
-                if(count >= 3 ){
-                    delVar(variables, isSetq);
-                    throw Exception(100);
-                }
-                
-                if(newToken[1].second == "SETQ"){
-                    isSetq++;
-                }
-                
-                if(item.getSize()==0){
-                    itemFlag = 1;
-                    item = parser.analyze(newToken, variables);
-                }
-                else if(compared.getSize()==0){
-                    comparedFlag =1;
-                    compared = parser.analyze(newToken, variables);
-                }else{
-                    changeFlag =1;
-                    change = parser.analyze(newToken, variables);
-                }
-                
-                
-                newToken.clear();
-                
-                count++;
-                check++;
-                leftCount--;
-            }else{
-                leftCount--;
+
+            newToken.push_back(token[i]);
+            if(token[i].second=="("){
+                leftCount++;
             }
-        }else if(leftCount == 0){
-            
-            if((token[i].second =="#" &&token[i+1].second =="(") || (token[i].second == "'" &&token[i+1].second =="(" ) ){
-                
-                if(count >= 3 ){
-                    delVar(variables, isSetq);
-                    throw Exception(100);
-                }
-                
-                if(item.getSize()==0){
-                    itemFlag = 1;
-                    if(token[i].second == "'"){
-                        i = addQuoteList(token, i+2, item);
-                        item.setFlag(1);
-                        i--;
-                    }
-                    else item = getArr(i, token);
+            else if(token[i].second==")"){
+                if(leftCount == 1){
                     
-                }else if(compared.getSize()==0){
-                    comparedFlag =1;
-                    if(token[i].second == "'"){
-                        i = addQuoteList(token, i+2, compared);
-                        compared.setFlag(1);
-                        i--;
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
                     }
-                    else compared = getArr(i, token);
-                }else{
-                    changeFlag=1;
-                    if(token[i].second == "'"){
-                        i = addQuoteList(token, i+2, change);
-                        change.setFlag(1);
-                        i--;
+
+                    if(newToken[1].second == "SETQ"){
+                        isSetq++;
                     }
                    
                     if(item.getSize()==0){
@@ -2109,90 +2200,133 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                         changeFlag =1;
                         change = parser.analyze(newToken, variables);
                     }
-                }
-                
-                newToken.clear();
-                count++;
-            }else if(token[i].second == "'"){
-                
-                if(item.getSize()==0){
-                    itemFlag = 1;
-                    item.add(token[i+1].second);
-                    i++;
                     
-                }else if(compared.getSize()==0){
-                    comparedFlag =1;
-                    compared.add(token[i+1].second);
-                    i++;
+
+                    newToken.clear();
+        
+                    count++;
+                    check++;
+                    leftCount--;
                 }else{
-                    changeFlag =1;
-                    change.add(token[i+1].second);
-                    i++;
+                    leftCount--;
                 }
-                count++;
-            }else if(token[i].second!="EOF"){
-                
-                if(count >= 3 ){
-                    delVar(variables, isSetq);
-                    throw Exception(100);
-                }
-                
-                if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
-                    if(item.getSize()==0){
+            }else if(leftCount == 0){
+
+                if((token[i].second =="#" &&token[i+1].second =="(") || (token[i].second == "'" &&token[i+1].second =="(" ) ){
+
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
+                    
+                    if(item.getSize()==0){ 
                         itemFlag = 1;
-                        item.add(token[i].second);
+                        if(token[i].second == "'"){ 
+                            i = addQuoteList(token, i+2, item);
+                            item.setFlag(1);
+                        }           
+                        else item = getArr(i, token);
+         
                     }else if(compared.getSize()==0){
-                        comparedFlag = 1;
-                        compared.add(token[i].second);
+                        comparedFlag =1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, compared);
+                            compared.setFlag(1);
+                        }         
+                        else compared = getArr(i, token);   
+                    }else{
+                        changeFlag=1;
+                        if(token[i].second == "'"){
+                            i = addQuoteList(token, i+2, change);
+                            change.setFlag(1);
+                        }         
+                        else change = getArr(i, token);
+
+                    
+                    } 
+
+                    newToken.clear();
+                    count++;
+                }else if(token[i].second == "'"){
+                    
+                    if(item.getSize()==0){ 
+                        itemFlag = 1;
+                        item.add(token[i+1].second);
+                        i++;
+                        
+                    }else if(compared.getSize()==0){
+                        comparedFlag =1;
+                        compared.add(token[i+1].second);
+                        i++;
                     }else{
                         changeFlag =1;
-                        change.add(token[i].second);
+                        change.add(token[i+1].second);
+                        i++;
+                    } 
+                    count++;
+                    newToken.clear();
+                }else if(token[i].second!="EOF"){
+
+                    if(count >= 3 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
                     }
-                }else{
-                    if(item.getSize()==0) item.add(token[i].second);
-                    else if(compared.getSize()==0) compared.add(token[i].second);
-                    else change.add(token[i].second);
+
+                    if(token[i].first == 10 || token[i].first == 12 || token[i].first ==30 ||token[i].first == 13 || token[i].second == "NIL"){
+                        if(item.getSize()==0){
+                            itemFlag = 1;
+                            item.add(token[i].second);
+                        }else if(compared.getSize()==0){
+                            comparedFlag = 1;
+                            compared.add(token[i].second);
+                        }else{
+                            changeFlag =1;
+                            change.add(token[i].second);
+                        }
+                    }else{
+                        if(item.getSize()==0) item.add(token[i].second);
+                        else if(compared.getSize()==0) compared.add(token[i].second);
+                        else change.add(token[i].second);
+                    }
+
+                    newToken.clear();
+                    count++;
                 }
-                
-                newToken.clear();
-                count++;
+
             }
             
-        }
-        
-    }
+    }    
     
     if(count <= 2){
         delVar(variables, isSetq);
         throw Exception(100);
     }
-    
-    
-    
+
     if(itemFlag == 0){
         string itemData = item.getHead()->data;
         item = getValue(variables, itemData);
         if(item.getHead()==NULL) throw Exception(105);
-        
+
     }
     if(comparedFlag==0){
         string comparedData = compared.getHead()->data;
         compared = getValue(variables, comparedData);
-        
+
         if(compared.getHead()==NULL) throw Exception(106);
-        
+       
     }
     if(changeFlag==0){
         string changeData = change.getHead()->data;
         change = getValue(variables, changeData);
-        
+
         if(change.getHead()==NULL) throw Exception(106);
     }
-    if(change.getFlag() ==2) return change;
+
+
+    if(change.getFlag() ==2 || change.getHead()->data == "#") return change;
     if(compared.getSize() != 1) return change;
-    
-    change.find(compared.getHead()->data, item);
-    
-    return change;
-    
+
+    ret.add(change.find(compared.getHead()->data, item));
+
+    return ret;
 }
