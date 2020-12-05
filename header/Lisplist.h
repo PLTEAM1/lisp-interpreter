@@ -362,8 +362,12 @@ class List{
         }
 
         void insertList(class List list, int index){ // 사이에 리ㅡㅅ트넣기
-            NODE* node = new NODE; 
-            node->data = list.getListCheck();
+            NODE* node = new NODE;
+            if(list.getFlag() == 1){
+                node->data = list.getListCheck();
+            }else{
+                node->data = list.getArrayCheck();
+            }
             node->next = NULL;
             node->list = list.head;
 
