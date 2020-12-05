@@ -17,9 +17,13 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
             i = ret;
             
         }else if(token[i].second == "\'"){
-            List newList;
-            int ret = addQuoteList(token, i, newList);
-            origin.addList(newList);
+            List newList1, newList2;
+            newList1.add(token[i].second);
+
+            int ret = addQuoteList(token, i+2, newList2);
+            newList1.addList(newList2);
+            newList1.setFlag(1);
+            origin.addList(newList1);
             i = ret;
             
         }else if(token[i].first == 26){
@@ -1197,7 +1201,6 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
     result.setFlag(1);
 
     for(int i=1;i<token.size();i++){
-        cout << token[i].second << endl;
         if(token[i].second == "\'"){
             if(token[i+1].first == 20){
                 i += 1;
@@ -1208,8 +1211,6 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
                 }
 
                 i += addQuoteList(new_token, 0, variable) + 1;
-
-                variable.traverse(variable.getHead());
 
             }else{
                 throw Exception(80);

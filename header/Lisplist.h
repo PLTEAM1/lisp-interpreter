@@ -98,7 +98,9 @@ class List{
             NODE* temp = head;
 
             if(this->flag == 1){
-                cout << "( ";
+                if(this->front() != "\'"){
+                    cout << "( ";
+                }
             }else if(this->flag == 2){
                 cout << "#( ";
             }
@@ -122,7 +124,9 @@ class List{
             }
 
             if(this->flag != 0){
-                cout << ") ";
+                if(this->front() != "\'"){
+                    cout << ") ";
+                }
             }
         }
     
