@@ -50,6 +50,9 @@ int Lexer::lookup(char ch) {
             addChar();
             nextToken = SHARP;
             break;
+        case '.':
+            throw Exception(69);
+            break;
         default:
             addChar();
             nextToken = EOF;
@@ -131,6 +134,30 @@ void Lexer::getChar() {
 void Lexer::getNonBlank() {
     while (isspace(nextChar))
       getChar();
+}
+
+/**
+   remove Zeroi
+ */
+
+string Lexer::removeZeroInt(string str){
+    int i = stoi(str);
+        
+    return to_string(i);
+}
+
+/**
+   remove ZeroFloat
+ */
+
+string Lexer::removeZeroFloat(string str){
+    double i = stod(str);
+    string ret =to_string(i);
+    
+    while(ret[ret.length()-1] == '0'){
+        ret.erase(ret.length()-1);
+    }
+    return ret;
 }
 
 /*****************************************************/
@@ -273,11 +300,17 @@ int Lexer::lex() {
             break;
     } /* End of switch */
 
-    //printf("Next token is: %d, Next lexeme is %s\n", nextToken, lexeme);
 
     string str(lexeme);
-
-    ret.push_back(make_pair(nextToken, lexeme));
+    
+    if(nextToken == 10)
+        str = removeZeroInt(str);
+    else if(nextToken == 12)
+        str = removeZeroFloat(str);
+    
+    //printf("Next token is: %d, Next lexeme is %s\n", nextToken, str.c_str);
+    //cout << "Next token is: " << nextToken << ", Next lexeme is " << str << endl;
+    ret.push_back(make_pair(nextToken, str));
 
     return nextToken;
 }

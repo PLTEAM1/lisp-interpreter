@@ -128,7 +128,7 @@ public:
                 break;
                 
             case 69:
-                cout << "" << endl;
+                cout << "Error - floating point error" << endl;
                 break;
                 
             case 70:
