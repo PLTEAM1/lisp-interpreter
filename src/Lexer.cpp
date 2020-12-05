@@ -1,6 +1,6 @@
 
 #include "../header/Lexer.h"
-#include "../header/Syntax.h"
+#include "../header/Parser.h"
 #include "../header/Exception.h"
 #include <fstream>
 
@@ -317,7 +317,7 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    /*
+    
     ret.clear();
     getline(cin, input);
     
@@ -326,8 +326,7 @@ vector<pair<int, string> > Lexer::get_Token(){
     do{
         lex();
     } while (nextToken != EOF);
-    
-    
+        
     /*
     Syntax syntax;
     vector< pair<string, List> > variables;

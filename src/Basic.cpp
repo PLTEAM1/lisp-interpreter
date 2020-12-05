@@ -1226,7 +1226,7 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
  */
 List Basic::append(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable, result;
-    Syntax syntax;
+    Parser parser;
     
     for(int i = 1; i < token.size(); i++){
         if(token[i].second == "\'"){
@@ -1305,7 +1305,7 @@ List Basic::append(vector< pair<int, string> > token, vector< pair<string, List>
                 }
                 List newList;
                 
-                newList = syntax.analyze(new_token, variables);
+                newList = parser.analyze(new_token, variables);
                 
                 NODE *head = newList.getHead();
                 
@@ -1322,7 +1322,7 @@ List Basic::append(vector< pair<int, string> > token, vector< pair<string, List>
 
 List Basic::length(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable, result;
-    Syntax syntax;
+    Parser parser;
     int ret = 0;
     int check = 0;
     for(int i = 1; i < token.size(); i++){
@@ -1424,7 +1424,7 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
             }
             List newList;
             
-            newList = syntax.analyze(new_token, variables);
+            newList = parser.analyze(new_token, variables);
             
             if(newList.getFlag() == 1 || newList.getFlag() == 2){
                 NODE* get = newList.getHead();
@@ -1729,11 +1729,11 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                 
                 if(item.getSize()==0){
                     itemFlag = 1;
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                 }
                 else{
                     comparedFlag =1;
-                    compared = syntax.analyze(newToken, variables);
+                    compared = parser.analyze(newToken, variables);
                 }
                 
                 
@@ -1887,11 +1887,11 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                 
                 if(item.getSize()==0){
                     itemFlag = 1;
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                 }
                 else{
                     comparedFlag =1;
-                    compared = syntax.analyze(newToken, variables);
+                    compared = parser.analyze(newToken, variables);
                 }
                 
                 
@@ -2045,14 +2045,14 @@ List Basic::subst(vector< pair<int, string> > token, vector< pair<string, List> 
                 
                 if(item.getSize()==0){
                     itemFlag = 1;
-                    item = syntax.analyze(newToken, variables);
+                    item = parser.analyze(newToken, variables);
                 }
                 else if(compared.getSize()==0){
                     comparedFlag =1;
-                    compared = syntax.analyze(newToken, variables);
+                    compared = parser.analyze(newToken, variables);
                 }else{
                     changeFlag =1;
-                    change = syntax.analyze(newToken, variables);
+                    change = parser.analyze(newToken, variables);
                 }
                 
                 

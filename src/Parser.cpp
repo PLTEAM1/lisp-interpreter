@@ -2,6 +2,7 @@
 #include "../header/Basic.h"
 #include "../header/Predicate.h"
 #include "../header/Exception.h"
+#include "../header/Conditional.h"
 #include <cctype>
 #include <iostream>
 
@@ -35,6 +36,7 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
 
     Basic basic;
     Predicate predicate;
+    Conditional conditional;
 
     List error;
 
@@ -130,6 +132,12 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
 
         }else if(function_Name == "STRINGP"){
             return predicate.stringp(token, variables);
+            
+        }else if(function_Name == "IF"){
+            return conditional._IF(token, variables);
+            
+        }else if(function_Name == "COND"){
+            return conditional._COND(token, variables);
 
         }else{
             /* CADDR Function */

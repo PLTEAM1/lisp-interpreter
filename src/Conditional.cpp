@@ -6,7 +6,7 @@
 //
 
 #include "../header/Conditional.h"
-#include "../header/Syntax.h"
+#include "../header/Parser.h"
 #include "../header/Lisplist.h"
 #include "../header/Exception.h"
 #include <iostream>
@@ -18,7 +18,7 @@
             ((< X 0) (+ X 3)))
  */
 List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
-    Syntax syntax;
+    Parser parser;
     vector<vector<pair<int,string>>> params;
     List result;
 
@@ -58,7 +58,7 @@ List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, Lis
     
     cout << "param size : " << params.size() << endl;
     List condition;
-    condition = syntax.analyze(params[0], variables);
+    condition = parser.analyze(params[0], variables);
     
     if(params.size() == 2){ // 파라미터의 개수가 2개일때
         if(condition.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
@@ -67,32 +67,32 @@ List Conditional::_IF(vector <pair<int, string>> token, vector <pair<string, Lis
                 result.add("NIL");
             }
             else{ // 그 외의 경우
-                result = syntax.analyze(params[1], variables);
+                result = parser.analyze(params[1], variables);
             }
         }
         else{ // 그 외의 경우
-            result = syntax.analyze(params[1], variables);
+            result = parser.analyze(params[1], variables);
         }
     }
     else if(params.size() == 3){ // 파라미터의 개수가 3개일때
         if(condition.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
             if(condition.getHead()->data == "NIL"){
                 //NIL일때의 statement실행
-                result = syntax.analyze(params[2], variables);
+                result = parser.analyze(params[2], variables);
             }
             else{ // 그 외의 경우
-                result = syntax.analyze(params[1], variables);
+                result = parser.analyze(params[1], variables);
             }
         }
         else{ // 그 외의 경우
-            result = syntax.analyze(params[1], variables);
+            result = parser.analyze(params[1], variables);
         }
     }
     return result;
 }
 
 List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, List>> *variables){
-    Syntax syntax;
+    Parser parser;
     vector<vector<pair<int,string>>> params;
     List result;
     int nil_check = 0;
@@ -162,7 +162,7 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
         for(int i = 1; i < temp.size(); i++){
             statement.push_back(temp[i]);
         }
-        List con_list = syntax.analyze(condition, variables);
+        List con_list = parser.analyze(condition, variables);
 
         if(con_list.getFlag() == 0){ // 심볼이면서 값이 "NIL"일때
             if(con_list.getHead()->data == "NIL"){
@@ -170,9 +170,9 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
             }
             else{ // 그 외의 경우
                 for(int i = 0; i < statement.size(); i++){
-                    syntax.analyze(statement[i], variables);
+                    parser.analyze(statement[i], variables);
                     if(i == statement.size()-1)
-                        result = syntax.analyze(statement[i], variables);
+                        result = parser.analyze(statement[i], variables);
                 }
                 nil_check++;
                 break;
@@ -180,9 +180,9 @@ List Conditional::_COND(vector <pair<int, string>> token, vector <pair<string, L
         }
         else{ // 그 외의 경우
             for(int i = 0; i < statement.size(); i++){
-                syntax.analyze(statement[i], variables);
+                parser.analyze(statement[i], variables);
                 if(i == statement.size()-1)
-                    result = syntax.analyze(statement[i], variables);
+                    result = parser.analyze(statement[i], variables);
             }            nil_check++;
             break;
         }
