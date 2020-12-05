@@ -317,7 +317,6 @@ int Lexer::lex() {
 
 vector<pair<int, string> > Lexer::get_Token(){
 
-    
     ret.clear();
     cout << "* ";
     getline(cin, input);
@@ -327,6 +326,22 @@ vector<pair<int, string> > Lexer::get_Token(){
     do{
         lex();
     } while (nextToken != EOF);
+    
+    //find semi
+    int semi_index = 0;
+    for(int i = 0; ret.size(); i++){
+        if(ret[i].first == SEMI){
+            semi_index = i;
+            break;
+        }
+    }
+    ret.erase(ret.begin()+semi_index, ret.end());
+    
+    for(auto &i: ret){
+        cout << i.second << " ";
+    }
+    
+
 
     return ret;
 }
