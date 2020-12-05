@@ -88,6 +88,11 @@ class Exception{
                 cout << "Undefined function, check input function name" << endl;
                 break;
 
+            case 17:
+                /* NIL is a constant */
+                cout << "NIL is a constant and thus can't be set." << endl;
+                break;
+
             case 80:
                 cout << "Right variable is not a LIST." << endl;
                 break;
