@@ -76,7 +76,7 @@ List Arithmetic::add(vector< pair<int, string> > token, vector< pair<string, Lis
             }
         }
         else{// 파라미터의 길이가 1이 아닐때, 괄호로 묶인 함수가 나오는 경우
-            List param_list = parser.analyze(params[0], variables);
+            List param_list = parser.analyze(params[i], variables);
             if(param_list.getFlag() == 0){//변수를 확인해서 변수에 number가 들어가 있을때
                 sum_param.push_back(stod(param_list.getHead()->data));
             }
@@ -167,7 +167,7 @@ List Arithmetic::sub(vector< pair<int, string> > token, vector< pair<string, Lis
             }
         }
         else{// 파라미터의 길이가 1이 아닐때, 괄호로 묶인 함수가 나오는 경우
-            List param_list = parser.analyze(params[0], variables);
+            List param_list = parser.analyze(params[i], variables);
             if(param_list.getFlag() == 0){//변수를 확인해서 변수에 number가 들어가 있을때
                 sum_param.push_back(stod(param_list.getHead()->data));
             }
@@ -261,7 +261,7 @@ List Arithmetic::mul(vector< pair<int, string> > token, vector< pair<string, Lis
             }
         }
         else{// 파라미터의 길이가 1이 아닐때, 괄호로 묶인 함수가 나오는 경우
-            List param_list = parser.analyze(params[0], variables);
+            List param_list = parser.analyze(params[i], variables);
             if(param_list.getFlag() == 0){//변수를 확인해서 변수에 number가 들어가 있을때
                 sum_param.push_back(stod(param_list.getHead()->data));
             }
@@ -354,7 +354,7 @@ List Arithmetic::div(vector< pair<int, string> > token, vector< pair<string, Lis
             }
         }
         else{// 파라미터의 길이가 1이 아닐때, 괄호로 묶인 함수가 나오는 경우
-            List param_list = parser.analyze(params[0], variables);
+            List param_list = parser.analyze(params[i], variables);
             if(param_list.getFlag() == 0){//변수를 확인해서 변수에 number가 들어가 있을때
                 sum_param.push_back(stod(param_list.getHead()->data));
             }
