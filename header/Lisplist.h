@@ -60,7 +60,7 @@ class List{
             size++;
         }
         
-        void addList(class List list){ß
+        void addList(class List list){
             if(list.getFlag() == 1){
                 add(list_Check);
             }else{
