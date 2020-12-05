@@ -51,7 +51,13 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
     Parser parser;
 
     if(token[1].first == 11){
-        name = token[1].second;
+        if(token[1].second == "NIL"){
+            throw Exception(17);
+        }else if(token[1].second == "T"){
+            throw Exception(18);
+        }else{
+            name = token[1].second;
+        }
     }else{
         //variable name error
         throw Exception(1);
@@ -87,44 +93,78 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
             }
         }else if(token[i].first == 11){
             if(name != ""){
-
-                int check = 0;
-                for(int j=0;j<variables->size();j++){
-                    if((*variables)[j].first == token[i].second){
-                        variable = (*variables)[j].second;
-
-                        check = 1;
-
-                        break;
+                if(token[i].second == "NIL" || token[i].second == "T"){
+                    int check = 0;
+                    if(token[i].second == "NIL"){
+                        variable.add("NIL");
+                    }else{
+                        variable.add("T");
                     }
-                }
 
-                if(check == 0){
-                    //unbound variable
-                    throw Exception(2);
-                }
+                    check = 0;
 
-                check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
 
-                for(int j=0;j<variables->size();j++){
-                    if((*variables)[j].first == name){
-                        (*variables)[j].second = variable;
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
 
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
                         return_Variable = variable;
-                        check = 1;
                         name = "";
-
-                        break;
                     }
-                }
+                }else{
+                    int check = 0;
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == token[i].second){
+                            variable = (*variables)[j].second;
 
-                if(check == 0){
-                    variables->push_back(make_pair(name, variable));
-                    return_Variable = variable;
-                    name = "";
+                            check = 1;
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        //unbound variable
+                        throw Exception(2);
+                    }
+
+                    check = 0;
+
+                    for(int j=0;j<variables->size();j++){
+                        if((*variables)[j].first == name){
+                            (*variables)[j].second = variable;
+
+                            return_Variable = variable;
+                            check = 1;
+                            name = "";
+
+                            break;
+                        }
+                    }
+
+                    if(check == 0){
+                        variables->push_back(make_pair(name, variable));
+                        return_Variable = variable;
+                        name = "";
+                    }
                 }
             }else{
-                name = token[i].second;
+                if(token[i].second == "NIL"){
+                    throw Exception(17);
+                }else if(token[i].second == "T"){
+                    throw Exception(18);
+                }else{
+                    name = token[1].second;
+                }
             }
         }else if(token[i].second == "\'"){
             if(name != ""){
