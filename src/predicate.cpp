@@ -482,7 +482,7 @@ List Predicate::zerop(vector< pair<int, string> > token, vector< pair<string, Li
 
                     }else if(token[i].first == 12){
                         symbolFlag = 1;
-                        if(token[i].second[0] == '0' ) item.add("IS ZERO");
+                        if(token[i].second[0] == '0' && token[i].second[2]== '0' && token[i].second.length() == 3) item.add("IS ZERO");
                         else item.add("IS NUMBER");
 
                     }else if(token[i].first == 13 || token[i].first == 30 || token[i].second == "NIL"){
