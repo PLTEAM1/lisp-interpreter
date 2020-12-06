@@ -1348,12 +1348,9 @@ List Basic::reverse(vector< pair<int, string> > token, vector< pair<string, List
 
 /*
  주어진 여러개의 리스트를 하나의 리스트로 만드는 함수
+ 파라미터로는 리스트만 올 수 있다.
  (APPEND '(A C) '(B D) '(E F))
  > (A C B D E F)
- append 할때
- (append '(1 2) #(3 4))
- > (1 2 . #(3 4))
- 로나옴 이유 모름
  */
 List Basic::append(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable, result;
@@ -1477,6 +1474,13 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
                 get = get->next;
             }
             
+        }else if(token[i].first == 30){
+            if(check != 0){
+                //error throw
+                throw Exception(50);
+            }
+            ret += token[i].second.length()-2;
+            check++;
         }
         else if(token[i].first == 11){
             if(check != 0){
@@ -1514,6 +1518,10 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
             }
         }
         else if(token[i].first == 26){
+            if(check != 0){
+                //error throw
+                throw Exception(50);
+            }
             if(token[i+1].first == 20){
                 i += 1;
                 vector< pair<int, string> > new_token;
@@ -1525,6 +1533,7 @@ List Basic::length(vector< pair<int, string> > token, vector< pair<string, List>
                 i += addQuoteList(new_token, 0, variable) + 1;
                 
                 ret += variable.getSize();
+                check++;
             }else{
                 //array format error
                 throw Exception(14);
