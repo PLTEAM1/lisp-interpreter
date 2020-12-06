@@ -50,7 +50,7 @@ int Lexer::lookup(char ch) {
             addChar();
             nextToken = SHARP;
             break;
-        case '.':
+        case '.': // float point error
             throw Exception(69);
             break;
         default:
@@ -72,7 +72,6 @@ int Lexer::is_Function(){
       return FUNCTION;
    }
    else if(!strcmp(lexeme,"\'")){
-       //printf("quote");
        return FUNCTION;
    }
    else return IDENT;
@@ -82,10 +81,10 @@ int Lexer::is_Function(){
 /* addChar - a function to add nextChar to lexeme */
 /**************************************************/
 void Lexer::addChar() {
-    if (lexLen <= 98) {  // max length of Lexime is 99
+    if (lexLen <= 98) {  // max length of Lexeme is 99
         lexeme[lexLen++] = nextChar;
         lexeme[lexLen] = 0; // '\0'
-    } else {
+    } else { // lexeme size error
         throw Exception(65);
     }
 }
@@ -137,7 +136,8 @@ void Lexer::getNonBlank() {
 }
 
 /**
-   remove Zeroi
+    remove ZeroInt
+    0001등 정수에서 앞에 쓸모없는 0을 제거해주는 함수
  */
 
 string Lexer::removeZeroInt(string str){
@@ -147,7 +147,9 @@ string Lexer::removeZeroInt(string str){
 }
 
 /**
-   remove ZeroFloat
+    remove ZeroFloat
+    00.10000등 실수자료에서 쓸모없는 0을 제거하는 함수
+    ex) 0.0, 6.0000이 들어오면 0.0, 6.0으로 변환한다.
  */
 
 string Lexer::removeZeroFloat(string str){
@@ -265,6 +267,7 @@ int Lexer::lex() {
                 throw Exception(68);
             }
             
+        /* Integer, floating point number */
         case ARITHMETIC:
             addChar();
             getChar();
@@ -288,7 +291,6 @@ int Lexer::lex() {
                 nextToken = INT_LIT;
             break;
 
-        /* Parentheses and operators */
         case UNKNOWN:
             lookup(nextChar);
             getChar();
@@ -331,7 +333,10 @@ vector<pair<int, string> > Lexer::get_Token(){
         lex();
     } while (nextToken != EOF);
     
-    //find semi
+    /* Find semicolon and remove after semi
+        세미콜론 이후의 토큰은 모두 주석 처리가 되어 analyze되지 않아야 한다.
+        먼저 세미콜론의 위치를 찾는다. 그리고 그 뒤의 토큰들을 모두 제거한다.
+     */
     int semi_index = 101;
     for(int i = 0; i < ret.size(); i++){
         if(ret[i].first == SEMI){
@@ -342,7 +347,7 @@ vector<pair<int, string> > Lexer::get_Token(){
 
     if(semi_index != 101){
         ret.erase(ret.begin()+semi_index, ret.end());
-        if(ret.size() == 0){
+        if(ret.size() == 0){ // 입력( ;something) 와 같이 세미콜론 이전에 어떤 입력도 없을때, EOF를 추가해준다.
             ret.push_back(make_pair(nextToken, "EOF"));
         }
     }
