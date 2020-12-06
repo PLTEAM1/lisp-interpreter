@@ -42,13 +42,16 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     
     List error;
     
-    if(token[0].second != "(" || token[0].second == "'" ){
-
+    if(token[0].second != "(" ){
+        List ret;
         if(token[0].second == "'"){
-            List ret;
             ret.add(token[1].second);
             return ret;
-        }else{
+        }else if(token[0].first == 10 || token[0].first == 12){
+            ret.add(token[0].second);
+            return ret;
+        }
+            else{
             for(int i = 0 ; i < (*variables).size() ; i++){
             if((*variables)[i].first == token[0].second){
                 return (*variables)[i].second;
@@ -61,7 +64,12 @@ List Parser::analyze(vector< pair<int, string> > token, vector< pair<string, Lis
     }else{
         token.erase(token.begin());
         string function_Name = token[0].second;
-
+        
+        if(function_Name== ")"){
+            List ret;
+            ret.add("NIL");
+            return ret;
+        }
         transform(function_Name.begin(), function_Name.end(),function_Name.begin(), ::toupper);
         
         if(function_Name == "SETQ"){
