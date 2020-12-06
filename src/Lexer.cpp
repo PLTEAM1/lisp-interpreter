@@ -351,6 +351,13 @@ vector<pair<int, string> > Lexer::get_Token(){
             ret.push_back(make_pair(nextToken, "EOF"));
         }
     }
+    
+    /*
+     대소문자 구별이 없게 하기 위해, 모든 토큰의 스트링을 전부 대문자로 바꿔준다.
+     */
+    for(auto it = ret.begin(); it != ret.end(); it++){
+        transform(it->second.begin(), it->second.end(), it->second.begin(), ::toupper);
+    }
 
     return ret;
 }
