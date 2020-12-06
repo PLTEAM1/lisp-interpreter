@@ -28,4 +28,4 @@ class Conditional{
         List _COND(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
 };
 
-#endif /* conditional_hpp */
+#endif
