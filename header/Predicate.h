@@ -10,6 +10,12 @@
 
 using namespace std;
 
+/** 
+ * Class that performs the predicate functions of the interpreter.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Predicate{
     private:
         void delVar(vector< pair<string, List> > *variables, int count);
@@ -27,7 +33,5 @@ class Predicate{
         List isGreater(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
         List stringp(vector< pair<int, string> > token, vector< pair<string, List> > *variables);
 };
-
-
 
 #endif

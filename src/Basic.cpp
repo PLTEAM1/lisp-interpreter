@@ -6,7 +6,7 @@
 
 /**********************************************************/
 /* addQuoteList - a function to add quote list '(1 2 (3 4))
- returns next token index                      */
+            returns next token index                      */
 /**********************************************************/
 int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List& origin){
     origin.setFlag(1);
@@ -92,8 +92,8 @@ void Basic::delVar(vector< pair<string, List> > *variables, int count){
 
 /**********************************************************/
 /* setq - a function to set variable(symbol and list) 
- returns List - linked list
- symbol also a list with one node      */
+        returns List - linked list
+                    symbol also a list with one node      */
 /**********************************************************/
 List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     string name = "";

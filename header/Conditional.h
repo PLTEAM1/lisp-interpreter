@@ -14,6 +14,12 @@
 
 using namespace std;
 
+/** 
+ * Class that performs the conditional functions of the interpreter.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Conditional{
     private:
     

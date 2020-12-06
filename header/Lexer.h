@@ -36,6 +36,12 @@
 
 using namespace std;
 
+/** 
+ * Class that tokenizes the received LISP code and returns.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Lexer {
     private:
         /* Global Variable */

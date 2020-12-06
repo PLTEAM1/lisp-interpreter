@@ -14,6 +14,12 @@
 
 using namespace std;
 
+/** 
+ * Class that performs the arithmetic functions of the interpreter.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Arithmetic {
 public:
     /* Add */
