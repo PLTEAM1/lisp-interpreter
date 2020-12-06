@@ -12,17 +12,19 @@
 #include <iostream>
 
 /*
-    ex) (IF (> X 3) (PRINT X))
-    ex) (COND ((> X 0) (+ X 1))  ; X 가 0보다 크면 X 값에 1을 더함
-            ((= X 0) (+ X 2))  ; X 가 0이면 X 값에 2을 더함
-            ((< X 0) (+ X 3)))
+    IF함수 (조건문) (수행문) 으로 이루어져 있다.
+    조건문에서 NIL이 아닌, 변수, 리스트, 배열 등은 모두 참이라고 간주한다.
+    파라미터가 2개인 경우 참이면 수행문 수행, 거짓이면 NIL 반환
+    ex) (IF (> X 3) (+ X 3))
+    파라미터가 3개인 경우 참이면 첫번째 수행문 수행, 거짓이면 두번째 수행문 수행
+    ex) (IF (> X 3) (+ X 3) (+ X 4))
  */
 List Conditional::_IF(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     vector< vector< pair<int, string> > > params;
     List result;
 
-    for(int i = 1; i < token.size(); i++){
+    for(int i = 1; i < token.size(); i++){//파라미터들을 벡터에넣는 작업
         int Paren = 0;
         
         if(token[i].second == "("){
@@ -91,13 +93,23 @@ List Conditional::_IF(vector< pair<int, string> > token, vector< pair<string, Li
     return result;
 }
 
+/*
+    COND함수는 ((조건문 1) (수행문 1) ...) ((조건문 2) (수행문 2) ...) ...)
+    으로 이루어져 있다. 조건문의 개수는 정해져 있지 않으며, 조건문이 참이면 그 조건문에 맞는 수행문을 모두 수행한다.
+    조건문은 앞에서 부터 검사를 하고 참이면 즉시 반환한다.
+    모든 조건문을 검사 했을, 전부 거짓이면 NIL을 반환한다.
+ 
+    ex) (COND ((> X 0) (+ X 1))  ; X 가 0보다 크면 X 값에 1을 더함
+              ((= X 0) (+ X 2))  ; X 가 0이면 X 값에 2을 더함
+              ((< X 0) (+ X 3)))
+ */
 List Conditional::_COND(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     Parser parser;
     vector< vector< pair<int, string> > > params;
     List result;
     int nil_check = 0;
 
-    for(int i = 0; i < token.size(); i++){
+    for(int i = 0; i < token.size(); i++){//파라미터들을 벡터에넣는 작업, (조건문, 수행문...)쌍
         int Paren = 0;
         
         if(token[i].second == "("){
@@ -126,7 +138,7 @@ List Conditional::_COND(vector< pair<int, string> > token, vector< pair<string, 
         }
     }
     
-    for(int i = 0; i < params.size(); i++){
+    for(int i = 0; i < params.size(); i++){// (조건문, 수행문...)쌍을 각각 나누어서 temp에 추가
         vector< pair<int, string> > condition;
         vector< vector< pair<int, string> > > temp, statement;
         
@@ -158,8 +170,8 @@ List Conditional::_COND(vector< pair<int, string> > token, vector< pair<string, 
                 temp.push_back(param);
             }
         }
-        condition = temp[0];
-        for(int i = 1; i < temp.size(); i++){
+        condition = temp[0]; // temp에서 첫번째는 무조건 조건문
+        for(int i = 1; i < temp.size(); i++){// 두번째 부터 모두 수행문
             statement.push_back(temp[i]);
         }
         List con_list = parser.analyze(condition, variables);
