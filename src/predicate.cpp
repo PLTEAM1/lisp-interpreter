@@ -1304,7 +1304,7 @@ List Predicate::stringp(vector< pair<int, string> > token, vector< pair<string, 
             else    ret.add("NIL");
         }
     }else{
-        if(item.getHead()->data == "\"") ret.add("T");
+        if(item.getHead()->data[0] == '\"') ret.add("T");
         else ret.add("NIL");
     }
     

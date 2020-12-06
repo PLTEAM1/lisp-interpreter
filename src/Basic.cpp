@@ -1881,7 +1881,11 @@ List Basic::assoc(vector< pair<int, string> > token, vector< pair<string, List> 
                 newToken.clear();
                 count++;
             }else if(token[i].second == "'"){
-                
+                if(count >= 2 ){
+                    delVar(variables, isSetq);
+                    throw Exception(100);
+                }
+
                 if(item.getSize()==0){
                     itemFlag = 1;
                     item.add(token[i+1].second);
@@ -2094,7 +2098,10 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                             i = addQuoteList(token, i+2, item);
                             item.setFlag(1);
                         }           
-                        else item = getArr(i, token);
+                        else{
+                            item = getArr(++i, token);
+                            item.setFlag(2);
+                        }
          
                     } 
                     else{
@@ -2103,12 +2110,19 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
                             i = addQuoteList(token, i+2, compared);
                             compared.setFlag(1);
                         }         
-                        else compared = getArr(i, token);   
+                        else {
+                            i = addQuoteList(token, i+2, compared);
+                            compared.setFlag(2);
+                        }   
                     } 
 
                     newToken.clear();
                     count++;
                 }else if(token[i].second == "'"){
+                    if(count >= 2 ){
+                        delVar(variables, isSetq);
+                        throw Exception(100);
+                    }
                     
                     if(item.getSize()==0){ 
                         itemFlag = 1;
@@ -2157,7 +2171,7 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
         delVar(variables, isSetq);
         throw Exception(100);
     }
-  
+
     if(itemFlag == 0){
         string itemData = item.getHead()->data;
         item = getValue(variables, itemData);
@@ -2172,9 +2186,13 @@ List Basic::remove(vector< pair<int, string> > token, vector< pair<string, List>
        
     }
 
+    if(compared.getFlag() != 1 && compared.getFlag() != 2) throw Exception(13);
+
     if(item.getSize() != 1 ) return compared;
     else{
-        ret = compared.getRemove(item.getHead()->data);
+        //ret = compared.getRemove(item.getHead()->data);
+        
+        ret.add(compared.getRemove(item.getHead()->data));
     }
     return ret;
 

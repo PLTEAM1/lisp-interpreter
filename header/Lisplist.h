@@ -197,7 +197,7 @@ class List{
             }
             else return NULL;
         }
-
+        /*
         List getRemove(string key){
             List ret;
             NODE* temp = head;
@@ -248,7 +248,41 @@ class List{
 
             ret.add(")");
         }
-       
+       */
+      
+        string getRemove(string key){
+            NODE* temp = head;
+            string result = "";
+            
+            if(getFlag() == 1 ) result.append("(");
+            else if(getFlag()==2) result.append("#(");
+
+            while(temp != NULL){
+                if(temp->data == list_Check){
+                    
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(1);
+                    string ptemp = newList.getRemove(key);  
+                    result.append(ptemp);
+                    
+                }else if(temp->data == array_Check){
+                    List newList;
+                    newList.setHead(temp->list);
+                    newList.setFlag(2);
+                    string ptemp = newList.getRemove(key);
+                    result.append(ptemp);
+                }else{
+                    if(key != temp->data) result.append(temp->data);
+                    result.append(" ");
+                }
+                temp =temp->next;
+            }
+            if(getFlag() == 1 || getFlag()==2) result.append(")");
+
+            return result;
+        }
+        
         string find(string key, List replaced){
             NODE* temp = head;
             string tempResult = "";
@@ -305,40 +339,6 @@ class List{
 
             return result;
         }
-        
-        /*
-        string find(string key, List replaced){
-            NODE* temp = head;
-            string newData = "";
-
-            if(getFlag()==1) newData.append("(");
-            if(getFlag()==2) newData.append("#(");
-
-            while(temp!=NULL){
-                if(temp->data == list_Check){
-                    List newList;
-                    newList.setHead(temp->list);
-                    newList.setFlag(1);
-                    string ptemp = newList.find(key, replaced);  
-                    newData.append(ptemp);  
-                    
-                }else if(temp->data == array_Check){
-                    List newList;
-                    newList.setHead(temp->list);
-                    newList.setFlag(2);
-                    string qtemp = newList.find(key, replaced);
-                    newData.append(qtemp);
-                }else{
-                    newData.append(temp->data);
-                }
-                newData.append(" ");
-            }
-
-            if(getFlag() != 0 ) newData.append(")");
-            return newData;
-
-        }
-        */
         
         void insertValue(string data, int index){ // 값 하나 , 인덱스에 (사이에) 넣기
             NODE* node = new NODE;
