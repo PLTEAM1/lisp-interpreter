@@ -23,8 +23,6 @@
 #define IDENT 11
 #define FLOAT 12
 #define SHARP_LETTER 13
-
-/* Arithmetic Operations */
 #define LEFT_PAREN 20
 #define RIGHT_PAREN 21
 #define SEMI 22
@@ -44,7 +42,6 @@ using namespace std;
  */
 class Lexer {
     private:
-        /* Global Variable */
         int nextToken;
         int charClass;
         char lexeme [100];
