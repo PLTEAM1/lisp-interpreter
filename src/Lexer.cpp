@@ -222,7 +222,7 @@ int Lexer::lex() {
             addChar();
             getChar();
             
-            while(charClass == LETTER || charClass == DIGIT){
+            while(charClass == LETTER || charClass == DIGIT || nextChar == ' '){
                 addChar();
                 getChar();
             }
@@ -230,7 +230,7 @@ int Lexer::lex() {
                 addChar();
                 getChar();
             }else{
-                throw Exception(66);
+                //throw Exception(66);
             }
            
             nextToken = STRING;
@@ -313,7 +313,7 @@ int Lexer::lex() {
         str = removeZeroFloat(str);
     
     //printf("Next token is: %d, Next lexeme is %s\n", nextToken, str.c_str);
-    //cout << "Next token is: " << nextToken << ", Next lexeme is " << str << endl;
+    cout << "Next token is: " << nextToken << ", Next lexeme is " << str << endl;
     ret.push_back(make_pair(nextToken, str));
 
     return nextToken;
