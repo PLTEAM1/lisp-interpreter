@@ -7,6 +7,12 @@
 #include "./Parser.h"
 using namespace std;
 
+/** 
+ * Class that performs the basic functions of the interpreter.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Basic{
     private:
         int addQuoteList(vector< pair<int, string> > token, int index, class List& origin);

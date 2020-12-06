@@ -9,6 +9,12 @@
 
 using namespace std;
 
+/** 
+ * Class that checks token syntax and returns the result of function execution.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class Parser {
     public:
         /* 괄호의 갯수 확인 함수 */

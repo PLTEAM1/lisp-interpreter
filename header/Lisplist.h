@@ -15,6 +15,12 @@ typedef struct NODE{
     struct NODE* list;
 }NODE;
 
+/** 
+ * Data structure class to store the result of interpreter execution.
+ * 
+ * @date 2020.11.29
+ * @version 1.0
+ */
 class List{
     private:
         NODE *head, *tail;
