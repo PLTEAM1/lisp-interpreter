@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/* The structure to be made up of the linked list */
 typedef struct NODE{
     string data;
     struct NODE* next;

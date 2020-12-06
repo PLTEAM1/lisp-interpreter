@@ -47,7 +47,7 @@ int Basic::addQuoteList(vector< pair<int, string> > token, int index, class List
 
 /**********************************************************/
 /* getValue, getArr, delVar
-     - a sub function for helping ASSOC, REMOVE, SUBST */
+        - a sub function for helping ASSOC, REMOVE, SUBST */
 /**********************************************************/
 List Basic::getValue(vector< pair<string, List> > *variables, string isSymbol){
     int check = 0;
@@ -417,7 +417,7 @@ List Basic::setq(vector< pair<int, string> > token, vector< pair<string, List> >
 
 /**********************************************************/
 /* list - a function to create list  
- returns List - linked list                    */
+            returns List - linked list                    */
 /**********************************************************/
 List Basic::list(vector< pair<int, string> > token, vector< pair<string, List> > *variables){
     List variable;
@@ -827,7 +827,6 @@ List Basic::nth(vector< pair<int, string> > token, vector< pair<string, List> > 
     if(token[1].first == 10){
         nthIndex = stoi(token[1].second);
     }else{
-        /* 변수가 들어오면 변수에 담긴 값을 보고 판단해야함을 발견 - 수정 필요 */
         throw Exception(9);
     }
     
