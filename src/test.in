@@ -1,0 +1,21 @@
+(SETQ Xayde -123)
+(COND (X (SETQ Y 5)))
+(COND ((< 4 3) (SETQ Y 5)))
+
+(IF (< 3 5) (SETQ X 5))
+
+(IF (< 5 3) (SETQ X 5)) ; 참일때 (SETQ X 5) 거짓일때 NIL반환
+(IF (< 5 3) (SETQ X 5) (SETQ Y 6) (SETQ Z 7)) ; 참일때 (SETQ X 5), 거짓일때 (SETQ Y 6) 실행
+
+(SETQ X 5) ; 조건문 비교 위해서 하나 변수 저장
+(COND ((< X 10) (SETQ A 1) (SETQ B 2))) ; 참이면 2개다 실행
+(COND ((< X 3) (+ 3 3)) ((< X 2) (- 3 3)) ((>= X 3) (* 3 3))) ; 각각의 조건문에 맞춰서 실행 모두 거짓이면 NIL반환
+
+(SETQ X 3)
+(IF X (SETQ C 10)) ; 조건문에 NIL이 아닌 변수, 리스트, 배열이 들어가면 모두 참이라 간주
+(SETQ X '(1 2))
+(IF X (SETQ C 10)) ; 조건문에 NIL이 아닌 변수, 리스트, 배열이 들어가면 모두 참이라 간주
+(SETQ X #(1 2))
+(IF X (SETQ C 10)) ; 조건문에 NIL이 아닌 변수, 리스트, 배열이 들어가면 모두 참이라 간주
+
+(LENGTH '((A B C)))
