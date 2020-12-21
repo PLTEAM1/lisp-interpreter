@@ -23,7 +23,8 @@ Tech Stack : C++
 
 #### List Class
 
-LISP 코드는 그 자체로 하나의 리스트이다. Interpreter를 사용하는 동안에, 사용자에게 보여 줄 수행 결과들 또한 리스트로 저장하고, 이용하기 위해서 Linked List 클래스를 구현하였다.
+LISP 코드는 그 자체로 하나의 리스트이다.  
+Interpreter를 사용하는 동안에, 사용자에게 보여 줄 수행 결과들 또한 리스트로 저장하고, 이용하기 위해서 Linked List 클래스를 구현하였다.
 
 #### Lexer Class 
 
@@ -35,23 +36,23 @@ LISP 코드는 그 자체로 하나의 리스트이다. Interpreter를 사용하
 
 #### Arithmetic Class
 
-Interpreter 사칙연산 함수를 담당하는 Arithmetic 클래스를 구현하였다.
-기본적으로 사칙연산의 모든 파라미터는 정수, 실수여야 한다.
+Interpreter 사칙연산 함수를 담당하는 Arithmetic 클래스를 구현하였다.  
+기본적으로 사칙연산의 모든 파라미터는 정수, 실수여야 한다.  
 덧셈, 뺄셈, 곱셈은 예외가 없지만, 나눗셈은 0으로 나누는 경우 예외처리를 해주도록 구현 하였다.
 
 #### Basic Class
 
-Interpreter 기본 함수를 담당하는 Basic 클래스를 구현하였다.
+Interpreter 기본 함수를 담당하는 Basic 클래스를 구현하였다.  
 (SETQ, LIST, CAR, CDR, NTH, CONS, REVERSE, APPEND, LENGTH, MEMBER, ASSOC, REMOVE, SUBST)
 
 #### Predicate Class
 
-Interpreter Predicate 함수를 담당하는 Predicate 클래스를 구현하였다.
+Interpreter Predicate 함수를 담당하는 Predicate 클래스를 구현하였다.  
 (ATOM, NULL, NUMBERP, ZEROP, MINUSP, EQUAL, <, >=, STRINGP)
 
 #### Conditional Class
 
-Interpreter 조건 함수를 담당하는 Conditional 클래스를 구현하였다.
+Interpreter 조건 함수를 담당하는 Conditional 클래스를 구현하였다.  
 (IF, COND)
 
 #### Exception Class
