@@ -60,3 +60,11 @@ Interpreter 조건 함수를 담당하는 Conditional 클래스를 구현하였�
 Interpreter의 여러 예외처리를 위한 Exception 클래스를 구현하였다.
 
 ## Interpreter 구현 결과
+
+<img width="689" alt="스크린샷 2020-12-21 오후 6 08 08" src="https://user-images.githubusercontent.com/33109677/102759550-9ef71080-43b7-11eb-8961-0d2c8cb2cab2.png">
+
+<img width="548" alt="스크린샷 2020-12-21 오후 6 08 24" src="https://user-images.githubusercontent.com/33109677/102759572-a5858800-43b7-11eb-9935-1c44a576e7d2.png">
+
+<img width="549" alt="스크린샷 2020-12-21 오후 6 08 37" src="https://user-images.githubusercontent.com/33109677/102759580-a9190f00-43b7-11eb-8a0f-760f03b29875.png">
+
+<img width="544" alt="스크린샷 2020-12-21 오후 6 08 53" src="https://user-images.githubusercontent.com/33109677/102759589-ac13ff80-43b7-11eb-84e9-2c32c31db331.png">
